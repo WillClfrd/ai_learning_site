@@ -205,33 +205,49 @@ bking.src = "images/bK.svg";
 
 console.log(pieces);
 
+var currP;
+
 board.addEventListener('mousedown', function(event){
     var mouseX = event.clientX - board.getBoundingClientRect().left;
     var mouseY = event.clientY - board.getBoundingClientRect().top;
 
     if(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] !== '.'){
         console.log(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].name + " clicked");
+        currP = pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)];
         pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].isDragging = true;
+        pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = '.';
     }
 });
+
 board.addEventListener('mouseup', function(event){
     var mouseX = event.clientX - board.getBoundingClientRect().left;
     var mouseY = event.clientY - board.getBoundingClientRect().top;
 
-    if(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] !== '.'){
-        pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW)].isDragging = false;
+    if(currP !== '.'){
+        currP.isDragging = false;
         console.log(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].name + " unclicked");
+
+        currP.x = Math.floor(currP.x / pW) * pW;
+        currP.y = Math.floor(currP.y / pH) * pH;
+
+        pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = currP;
+        drawBoard(ctx,pieces);
+        
     }
 });
 
 document.addEventListener('mousemove', function(event){
     var mouseX = event.clientX - board.getBoundingClientRect().left;
     var mouseY = event.clientY - board.getBoundingClientRect().top;
+
     if(mouseX >= 0 && mouseX <= board.width && mouseY >= 0 && mouseY <= board.height){
-        if(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW)] !== '.' && pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW)].isDragging == true){
-            pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW)].x = mouseX - (pW / 2);
-            pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW)].y = mouseY - (pH / 2);
+        if(currP != null && currP !== '.' && currP.isDragging == true){
+            //console.log("mouseX: " + mouseX + " | mouseY: " + mouseY + " | globalX: " + event.clientX + " | globalY: " + event.clientY);
+            currP.x = mouseX - (pW / 2);
+            currP.y = mouseY - (pH / 2);
+
             drawBoard(ctx,pieces);
+            ctx.drawImage(currP.image, currP.x, currP.y, pW, pH);
         }
     }
 });
