@@ -206,6 +206,7 @@ bking.src = "images/bK.svg";
 console.log(pieces);
 
 var currP;
+var tempCoord; // use to track square that clicked piece currently occupies
 
 board.addEventListener('mousedown', function(event){
     var mouseX = event.clientX - board.getBoundingClientRect().left;
@@ -227,9 +228,11 @@ board.addEventListener('mouseup', function(event){
         currP.isDragging = false;
         console.log(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].name + " unclicked");
 
-        currP.x = Math.floor(currP.x / pW) * pW;
-        currP.y = Math.floor(currP.y / pH) * pH;
+        currP.x = Math.floor((currP.x + (pW / 2)) / pW) * pW;
+        currP.y = Math.floor((currP.y + (pH / 2)) / pH) * pH;
 
+        console.log("GridX: " + Math.floor(currP.x + (pW / 2) / pW) + " | GridY: " + Math.floor(currP.y / pH));
+        
         pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = currP;
         drawBoard(ctx,pieces);
         
