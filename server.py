@@ -50,21 +50,21 @@ asyncio.run(main())
 #       {"result": "true"}
 
 #---------------------------------------------#
-# getMinimaxMove
+# getminimaxmove
 #   get a move for a minimax ai
 #   
 #   Request Format:
-#       {"method": "getMinimaxMove"}
+#       {"method": "getminimaxmove"}
 #   Return Format:
 #       {"move": {"from": [row,col],
 #                 "to": [row,col]}}
 
 #---------------------------------------------#
-# getEval
+# geteval
 #   return evaluation for non-engine player
 #
 #   Request Format:
-#       {"method": "getEval",
+#       {"method": "geteval",
 #        "player": "w"}
 #   Response Format:
 #       {"eval": "0.0"}
