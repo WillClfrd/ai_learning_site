@@ -10,7 +10,21 @@ async def echo(websocket):
     # catches input from websocket
     async for message in websocket:
         # returns every input received from websocket
-        await websocket.send(message)
+
+        # parse message into python dictionary
+        # if req[method] == 'ismovelegal'
+            # set me.board as req[board]
+            # call me.ismovelegal with (req[move][from][0],req[move][from][1]) as src and (req[move][to][0],req[move][to][1]) as dest
+        # else if req[method] == 'getminimaxmove'
+            # set me.board as req[board]
+            # call me.GetMinMaxMove with req[player] as player
+        # else if req[method] == 'geteval':
+        #   call me.evl with req[player] as player
+        # else:
+        #   return error message and handle error on client side
+
+        print(message)
+        #await websocket.send(message)
 
 async def handle_request(websocket):
     # catches input from websocket
@@ -46,15 +60,24 @@ asyncio.run(main())
 #                 ['R','N','B','Q','K','B','N','R']],
 #        "move": {"from": [row,col],
 #                "to": [row,col]}}
-#   Return Format:
+#   Return Format (example):
 #       {"result": "true"}
 
 #---------------------------------------------#
 # getminimaxmove
 #   get a move for a minimax ai
 #   
-#   Request Format:
-#       {"method": "getminimaxmove"}
+#   Request Format (example):
+#       {"method": "getminimaxmove",
+#        "board": [['r','n','b','q','k','b','n','r'],
+#                 ['p','p','p','p','p','p','p','p'],
+#                 ['.','.','.','.','.','.','.','.'],
+#                 ['.','.','.','.','.','.','.','.'],
+#                 ['.','.','.','.','.','.','.','.'],
+#                 ['.','.','.','.','.','.','.','.'],
+#                 ['P','P','P','P','P','P','P','P'],
+#                 ['R','N','B','Q','K','B','N','R']],
+#        "player": "b"}
 #   Return Format:
 #       {"move": {"from": [row,col],
 #                 "to": [row,col]}}
@@ -63,7 +86,7 @@ asyncio.run(main())
 # geteval
 #   return evaluation for non-engine player
 #
-#   Request Format:
+#   Request Format (example):
 #       {"method": "geteval",
 #        "player": "w"}
 #   Response Format:
