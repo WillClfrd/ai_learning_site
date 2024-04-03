@@ -203,7 +203,7 @@ bking.onload = function () {
 }
 bking.src = "images/bK.svg";
 
-console.log(pieces);
+//console.log(pieces);
 
 var currP;
 var tempCoord; // use to track square that clicked piece currently occupies
@@ -213,7 +213,7 @@ board.addEventListener('mousedown', function(event){
     var mouseY = event.clientY - board.getBoundingClientRect().top;
 
     if(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] !== '.'){
-        console.log(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].name + " clicked");
+        //console.log(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].name + " clicked");
         currP = pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)];
         pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].isDragging = true;
         pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = '.';
@@ -226,16 +226,15 @@ board.addEventListener('mouseup', function(event){
 
     if(currP !== '.'){
         currP.isDragging = false;
-        console.log(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].name + " unclicked");
+        //console.log(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].name + " unclicked");
 
         currP.x = Math.floor((currP.x + (pW / 2)) / pW) * pW;
         currP.y = Math.floor((currP.y + (pH / 2)) / pH) * pH;
 
-        console.log("GridX: " + Math.floor(currP.x + (pW / 2) / pW) + " | GridY: " + Math.floor(currP.y / pH));
+        //console.log("GridX: " + Math.floor(currP.x + (pW / 2) / pW) + " | GridY: " + Math.floor(currP.y / pH));
         
         pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = currP;
         drawBoard(ctx,pieces);
-        
     }
 });
 
@@ -254,3 +253,13 @@ document.addEventListener('mousemove', function(event){
         }
     }
 });
+
+function isMovePossible(){
+    // check move for low level validity
+    // check move for being on same color piece
+    
+    // if move would capture own piece return false
+    // else 
+        // make call to server to check move for deeper validity
+        // return value of call
+}
