@@ -4,38 +4,38 @@ from websockets.server import serve
 import json
 
 # define websocket here to make calls to minimax_engine methods and return call results
+async def handle_req(websocket):
+    # catches input from websocket
+    async for message in websocket:
+        res = {}
+        # returns every input received from websocket
+        req = json.loads(message)
+        # check exact format for parsing json into function parameters and for assigning function return values
+        if req["method"] == "ismovelegal":
+            me.board = req["board"]
+            res["result"] = me.ismovelegal((req["move"]["from"][0],req["move"]["from"][1]), (req["move"]["to"][0],req["move"]["to"][1]))
+        elif req["method"] == "getminimaxmove":
+            me.board = req["board"]
+            # check exact return format for GetMinMaxMove
+            move = me.GetMinMaxMove(req["player"])
+            res["move"] = {}
+            res["move"]["from"] = move[0]
+            res["move"]["to"] = move[1]
+        elif req["method"] == "geteval":
+            res["eval"] = me.evl(req["player"])
+        else:
+            res["error"] = "invalid command"
 
-# this function echos back messages received from the websocket
+        await websocket.send(res)
+
+# use to test if websocket is listening, obtaining messages, and responding correctly
 async def echo(websocket):
-    # catches input from websocket
     async for message in websocket:
-        # returns every input received from websocket
-
-        # parse message into python dictionary
-        # if req[method] == 'ismovelegal'
-            # set me.board as req[board]
-            # call me.ismovelegal with (req[move][from][0],req[move][from][1]) as src and (req[move][to][0],req[move][to][1]) as dest
-        # else if req[method] == 'getminimaxmove'
-            # set me.board as req[board]
-            # call me.GetMinMaxMove with req[player] as player
-        # else if req[method] == 'geteval':
-        #   call me.evl with req[player] as player
-        # else:
-        #   return error message and handle error on client side
-
-        print(message)
-        #await websocket.send(message)
-
-async def handle_request(websocket):
-    # catches input from websocket
-    async for message in websocket:
-        # set up message formats and handle message requests according to established formatting
-        # returns every input received from websocket
         await websocket.send(message)
 
 async def main():
     # sets hostname to listen on, function to handle requests, and port to listen on
-    async with serve(echo, "localhost", 8765):
+    async with serve(handle_req, "localhost", 11111):
         # awaits future requests (will run forever unless stopped manually or erroring out)
         await asyncio.Future()
 
@@ -61,7 +61,8 @@ asyncio.run(main())
 #        "move": {"from": [row,col],
 #                "to": [row,col]}}
 #   Return Format (example):
-#       {"result": "true"}
+#       {"result": true, 
+#        "error": "none"}
 
 #---------------------------------------------#
 # getminimaxmove
@@ -80,7 +81,8 @@ asyncio.run(main())
 #        "player": "b"}
 #   Return Format:
 #       {"move": {"from": [row,col],
-#                 "to": [row,col]}}
+#                 "to": [row,col]},
+#        "error": "none"}
 
 #---------------------------------------------#
 # geteval
@@ -90,4 +92,10 @@ asyncio.run(main())
 #       {"method": "geteval",
 #        "player": "w"}
 #   Response Format:
-#       {"eval": "0.0"}
+#       {"eval": 0.0,
+#        "error": "none"}
+
+#---------------------------------------------#
+# error
+# Response Format:
+#       {"error": "errorMessage"}
