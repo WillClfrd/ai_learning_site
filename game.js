@@ -210,12 +210,15 @@ bking.src = "images/bK.svg";
 // NEED TO FIGURE OUT PROCESS FLOW
 // ASYNCHRONOUS NATURE OF EVENT HANDLERS MAKES IT DIFFICULT
 // I don't think the semaphore method will work correctly since the code might be arbitrarily executed
+// wrap everything in a class called game
+    // game will have a board, pieces, currplayer
 var currP;
 var tempCoord; // use to track square that clicked piece currently occupies
 var res;
 var req;
 var waiting = false;
 var isCheckmate = false;
+var message;
 const ws = new WebSocket("ws://localhost:11111");
 ws.addEventListener("open", (event) => {
     console.log("Connection opened");
@@ -316,6 +319,8 @@ function showEval(){
 
 }
 
+drawBoard(ctx,pieces);
+
 newGameButton = Document.getElementById("newGameButton");
 choiceDiv = Document.getElementById("colorChoiceDiv");
 
@@ -326,48 +331,61 @@ newGameButton.addEventListener("clicked", () => {
 
     whiteButton.addEventListener("clicked", () => {
         isCheckmate = false;
-        let player = 'w';
+        let human = 'w';
         let ai = 'b';
 
-        while(!isCheckmate){
-            //if player is 'player'
-                //wait for player to make legal move
-            //else (player is 'ai')
-                //wait for minimax move to be made
+        choiceDiv.innerHTMl = "";
 
+        let player = human;
+        while(!isCheckmate){
+            if(player == human){
+                waiting = true;
+                //wait for player to make move
+                while(waiting){
+                    sleep(10);
+                }
+                player = ai;
+            }
+            else{
+                waiting = true;
+                //wait for minimax move
+                while(waiting){
+                    sleep(10);
+                }
+                player = human;
+            }
             //swap player
         }
     });
     blackButton.addEventListener("clicked", () => {
         isCheckmate = false;
         //let player choose which side to play on;
-        let player = 'b';
+        let human = 'b';
         let ai = 'w';
 
-        while(!isCheckmate){
-            //if player is 'player'
-                //wait for player to make legal move
-            //else (player is 'ai')
-                //wait for minimax move to be made
+        choiceDiv.innerHTML = "";
 
-            //swap player
+        let player = ai;
+        while(!isCheckmate){
+            if(player == human){
+                waiting = true;
+                //wait for player to make move
+                while(waiting){
+                    sleep(10);
+                }
+                player = ai;
+            }
+            else{
+                waiting = true;
+                //send minimax move
+                ws.send(); //add format here
+                //wait for minimax move
+                while(waiting){
+                    sleep(10);
+                }
+                player = human;
+            }
         }
     });
 });
 //make this into an event handler for a button on the page
-var isPlaying = true;
-do{
-    isCheckmate = false;
-    //let player choose which side to play on;
-    let player = 'w';
-    let ai = 'b';
-
-    while(!isCheckmate){
-        //if player is 'player'
-            //wait for player to make legal move
-        //else (player is 'ai')
-            //wait for minimax move to be made
-
-        //swap player
-    }
-}while(isPlaying);
