@@ -316,6 +316,44 @@ function showEval(){
 
 }
 
+newGameButton = Document.getElementById("newGameButton");
+choiceDiv = Document.getElementById("colorChoiceDiv");
+
+newGameButton.addEventListener("clicked", () => {
+    choiceDiv.innerHTML = "<button id=\"whiteButton\">white</button><button id=\"blackButton\">black</button>"
+    whiteButton = Document.getElementById("whiteButton");
+    blackButton = Document.getElementById("blackButton");
+
+    whiteButton.addEventListener("clicked", () => {
+        isCheckmate = false;
+        let player = 'w';
+        let ai = 'b';
+
+        while(!isCheckmate){
+            //if player is 'player'
+                //wait for player to make legal move
+            //else (player is 'ai')
+                //wait for minimax move to be made
+
+            //swap player
+        }
+    });
+    blackButton.addEventListener("clicked", () => {
+        isCheckmate = false;
+        //let player choose which side to play on;
+        let player = 'b';
+        let ai = 'w';
+
+        while(!isCheckmate){
+            //if player is 'player'
+                //wait for player to make legal move
+            //else (player is 'ai')
+                //wait for minimax move to be made
+
+            //swap player
+        }
+    });
+});
 //make this into an event handler for a button on the page
 var isPlaying = true;
 do{
