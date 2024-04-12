@@ -208,19 +208,36 @@ bking.src = "images/bK.svg";
 // THIS IS A MESS
 // NEED TO FIGURE OUT PROCESS FLOW
 // ASYNCHRONOUS NATURE OF EVENT HANDLERS MAKES IT DIFFICULT
+// I don't think the semaphore method will work correctly since the code might be arbitrarily executed
 var currP;
 var tempCoord; // use to track square that clicked piece currently occupies
 var res;
 var req;
+var waiting = false;
 const ws = new WebSocket("ws://localhost:11111");
 ws.addEventListener("open", (event) => {
     console.log("Connection opened");
 });
 
+// set the position of the piece according to the result value in message
 ws.addEventListener("message", (event) => {
     console.log("message received:");
     console.log(event.data);
     res = JSON.parse(event.data);
+
+    if(res.result == true && currP !== '.'){
+        currP.isDragging = false;
+
+        currP.x = Math.floor((currP.x + (pW / 2)) / pW) * pW;
+        currP.y = Math.floor((currP.y + (pH / 2)) / pH) * pH;
+
+        pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = currP;
+    }
+    else{
+        pieces[tempCoord[0]][tempCoord[1]] == currP;
+    }
+
+    waiting = false;
 });
 
 board.addEventListener('mousedown', function(event){
@@ -243,21 +260,11 @@ board.addEventListener('mouseup', function(event){
     // check if move is legal
     ws.send();
 
-    if(currP !== '.' && res.result == true){
-        currP.isDragging = false;
-        //console.log(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].name + " unclicked");
-
-        currP.x = Math.floor((currP.x + (pW / 2)) / pW) * pW;
-        currP.y = Math.floor((currP.y + (pH / 2)) / pH) * pH;
-
-        //console.log("GridX: " + Math.floor(currP.x + (pW / 2) / pW) + " | GridY: " + Math.floor(currP.y / pH));
-        
-        pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = currP;
-        drawBoard(ctx,pieces);
+    while(waiting){
+        await sleep(10);
     }
-    else{
 
-    }
+    drawBoard(ctx,pieces);
 });
 
 document.addEventListener('mousemove', function(event){
@@ -276,12 +283,6 @@ document.addEventListener('mousemove', function(event){
     }
 });
 
-function isMovePossible(){
-    // check move for low level validity
-    // check move for being on same color piece
-    
-    // if move would capture own piece return false
-    // else 
-        // make call to server to check move for deeper validity
-        // return value of call
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
