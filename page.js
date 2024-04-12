@@ -325,11 +325,14 @@ newGameButton.addEventListener("click", () => {
     blackButton = document.getElementById("blackButton");
     console.log(choiceDiv.innerHTML)
     whiteButton.addEventListener("click", () => {
+        console.log("white button clicked");
         isCheckmate = false;
         let human = 'w';
         let ai = 'b';
 
-        choiceDiv.innerHTMl = "";
+        choiceDiv.innerHTML = "";
+        console.log(choiceDiv.innerHTML);
+        //this seems to work but right now it crashes the server, probably because the server is permanently waiting for a return response on the websocket
 
         let player = human;
         while(!isCheckmate){
@@ -351,11 +354,15 @@ newGameButton.addEventListener("click", () => {
         }
     });
     blackButton.addEventListener("click", () => {
+        console.log("black button clicked");
         isCheckmate = false;
         let human = 'b';
         let ai = 'w';
 
         choiceDiv.innerHTML = "";
+        console.log(choiceDiv.innerHTML);
+        //this seems to work but right now it crashes the server, probably because the server is permanently waiting for a return response on the websocket
+
 
         let player = ai;
         while(!isCheckmate){
