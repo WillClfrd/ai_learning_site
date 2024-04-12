@@ -205,16 +205,22 @@ bking.src = "images/bK.svg";
 
 //console.log(pieces);
 
+// THIS IS A MESS
+// NEED TO FIGURE OUT PROCESS FLOW
+// ASYNCHRONOUS NATURE OF EVENT HANDLERS MAKES IT DIFFICULT
 var currP;
 var tempCoord; // use to track square that clicked piece currently occupies
+var res;
+var req;
 const ws = new WebSocket("ws://localhost:11111");
 ws.addEventListener("open", (event) => {
     console.log("Connection opened");
 });
 
 ws.addEventListener("message", (event) => {
-    console.log("message received:")
-    console.log()
+    console.log("message received:");
+    console.log(event.data);
+    res = JSON.parse(event.data);
 });
 
 board.addEventListener('mousedown', function(event){
@@ -226,6 +232,7 @@ board.addEventListener('mousedown', function(event){
         currP = pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)];
         pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].isDragging = true;
         pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = '.';
+        tempCoord = (Math.floor(mouseY / pH),Math.floor(mouseX/ pW));
     }
 });
 
@@ -233,7 +240,10 @@ board.addEventListener('mouseup', function(event){
     var mouseX = event.clientX - board.getBoundingClientRect().left;
     var mouseY = event.clientY - board.getBoundingClientRect().top;
 
-    if(currP !== '.'){
+    // check if move is legal
+    ws.send();
+
+    if(currP !== '.' && res.result == true){
         currP.isDragging = false;
         //console.log(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].name + " unclicked");
 
@@ -244,6 +254,9 @@ board.addEventListener('mouseup', function(event){
         
         pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = currP;
         drawBoard(ctx,pieces);
+    }
+    else{
+
     }
 });
 
