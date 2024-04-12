@@ -2,14 +2,6 @@ var isMouseDown = false;
 var pW;
 var pH;
 
-function Piece(name, image, x, y){
-    this.name = name;
-    this.image = image;
-    this.x = x;
-    this.y = y;
-    this.isDragging = false;
-}
-
 function drawBoard(ctx, pieces){
     ctx.clearRect(0, 0, board.width, board.height);
 
@@ -219,12 +211,14 @@ var req;
 var waiting = false;
 var isCheckmate = false;
 var message;
+/*
 const ws = new WebSocket("ws://localhost:11111");
 ws.addEventListener("open", (event) => {
     console.log("Connection opened");
 });
-
+*/
 // set the position of the piece according to the result value in message
+/*
 ws.addEventListener("message", (event) => {
     console.log("message received:");
     console.log(event.data);
@@ -254,6 +248,7 @@ ws.addEventListener("message", (event) => {
         pieces[tempCoord[0]][tempCoord[1]] == currP;
     }
 });
+*/
 
 board.addEventListener('mousedown', function(event){
     var mouseX = event.clientX - board.getBoundingClientRect().left;
@@ -273,10 +268,10 @@ board.addEventListener('mouseup', function(event){
     var mouseY = event.clientY - board.getBoundingClientRect().top;
 
     // check if move is legal
-    ws.send();
+    //ws.send();
 
     while(waiting){
-        await sleep(10);
+        sleep(10);
     }
 
     drawBoard(ctx,pieces);
@@ -321,15 +316,15 @@ function showEval(){
 
 drawBoard(ctx,pieces);
 
-newGameButton = Document.getElementById("newGameButton");
-choiceDiv = Document.getElementById("colorChoiceDiv");
+newGameButton = document.getElementById("newGameButton");
+choiceDiv = document.getElementById("colorChoiceDiv");
 
-newGameButton.addEventListener("clicked", () => {
+newGameButton.addEventListener("click", () => {
     choiceDiv.innerHTML = "<button id=\"whiteButton\">white</button><button id=\"blackButton\">black</button>"
-    whiteButton = Document.getElementById("whiteButton");
-    blackButton = Document.getElementById("blackButton");
-
-    whiteButton.addEventListener("clicked", () => {
+    whiteButton = document.getElementById("whiteButton");
+    blackButton = document.getElementById("blackButton");
+    console.log(choiceDiv.innerHTML)
+    whiteButton.addEventListener("click", () => {
         isCheckmate = false;
         let human = 'w';
         let ai = 'b';
@@ -339,8 +334,8 @@ newGameButton.addEventListener("clicked", () => {
         let player = human;
         while(!isCheckmate){
             if(player == human){
+                //ws.send();
                 waiting = true;
-                //wait for player to make move
                 while(waiting){
                     sleep(10);
                 }
@@ -348,18 +343,15 @@ newGameButton.addEventListener("clicked", () => {
             }
             else{
                 waiting = true;
-                //wait for minimax move
                 while(waiting){
                     sleep(10);
                 }
                 player = human;
             }
-            //swap player
         }
     });
-    blackButton.addEventListener("clicked", () => {
+    blackButton.addEventListener("click", () => {
         isCheckmate = false;
-        //let player choose which side to play on;
         let human = 'b';
         let ai = 'w';
 
@@ -369,7 +361,7 @@ newGameButton.addEventListener("clicked", () => {
         while(!isCheckmate){
             if(player == human){
                 waiting = true;
-                //wait for player to make move
+                //ws.send();
                 while(waiting){
                     sleep(10);
                 }
