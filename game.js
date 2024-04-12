@@ -206,6 +206,7 @@ bking.src = "images/bK.svg";
 //console.log(pieces);
 
 // THIS IS A MESS
+    //This whole thing should be rebuilt later on to make it better to read
 // NEED TO FIGURE OUT PROCESS FLOW
 // ASYNCHRONOUS NATURE OF EVENT HANDLERS MAKES IT DIFFICULT
 // I don't think the semaphore method will work correctly since the code might be arbitrarily executed
@@ -214,6 +215,7 @@ var tempCoord; // use to track square that clicked piece currently occupies
 var res;
 var req;
 var waiting = false;
+var isCheckmate = false;
 const ws = new WebSocket("ws://localhost:11111");
 ws.addEventListener("open", (event) => {
     console.log("Connection opened");
@@ -224,6 +226,18 @@ ws.addEventListener("message", (event) => {
     console.log("message received:");
     console.log(event.data);
     res = JSON.parse(event.data);
+
+    switch(res.method){
+        case "ismovelegal":
+            legalityCheck(res);
+            break;
+        case "getminimaxmove":
+            minimaxMove(res);
+            break;
+        case "geteval":
+            showEval(res);
+            break;
+    }
 
     if(res.result == true && currP !== '.'){
         currP.isDragging = false;
@@ -236,8 +250,6 @@ ws.addEventListener("message", (event) => {
     else{
         pieces[tempCoord[0]][tempCoord[1]] == currP;
     }
-
-    waiting = false;
 });
 
 board.addEventListener('mousedown', function(event){
@@ -286,3 +298,38 @@ document.addEventListener('mousemove', function(event){
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+//check for checkmate in here
+function legalityCheck(data){
+    
+    if(res.isCheckmate == true){
+        isCheckmate = true;
+    }
+    waiting = false;
+}
+
+function minimaxMove(){
+
+}
+
+function showEval(){
+
+}
+
+//make this into an event handler for a button on the page
+var isPlaying = true;
+do{
+    isCheckmate = false;
+    //let player choose which side to play on;
+    let player = 'w';
+    let ai = 'b';
+
+    while(!isCheckmate){
+        //if player is 'player'
+            //wait for player to make legal move
+        //else (player is 'ai')
+            //wait for minimax move to be made
+
+        //swap player
+    }
+}while(isPlaying);
