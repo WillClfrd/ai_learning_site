@@ -1,0 +1,56 @@
+WEBSOCKET INTERFACE DOCUMENTATION
+------------------------------------------------------------------
+ismovelegal
+  Check move for legality
+  
+  Request Format:
+      {"method": "ismovelegal", 
+       "board": [['r','n','b','q','k','b','n','r'],
+                ['p','p','p','p','p','p','p','p'],
+                ['.','.','.','.','.','.','.','.'],
+                ['.','.','.','.','.','.','.','.'],
+                ['.','.','.','.','.','.','.','.'],
+                ['.','.','.','.','.','.','.','.'],
+                ['P','P','P','P','P','P','P','P'],
+                ['R','N','B','Q','K','B','N','R']],
+       "move": {"from": [row,col],
+               "to": [row,col]}}
+  Return Format (example):
+      {"result": true, 
+       "error": "none"}
+
+------------------------------------------------------------------
+getminimaxmove
+  get a move for a minimax ai
+  
+  Request Format (example):
+      {"method": "getminimaxmove",
+       "board": [['r','n','b','q','k','b','n','r'],
+                ['p','p','p','p','p','p','p','p'],
+                ['.','.','.','.','.','.','.','.'],
+                ['.','.','.','.','.','.','.','.'],
+                ['.','.','.','.','.','.','.','.'],
+                ['.','.','.','.','.','.','.','.'],
+                ['P','P','P','P','P','P','P','P'],
+                ['R','N','B','Q','K','B','N','R']],
+       "player": "b"}
+  Return Format:
+      {"move": {"from": [row,col],
+                "to": [row,col]},
+       "error": "none"}
+
+------------------------------------------------------------------
+geteval
+  return evaluation for non-engine player
+
+  Request Format (example):
+      {"method": "geteval",
+       "player": "w"}
+  Response Format:
+      {"eval": 0.0,
+       "error": "none"}
+
+------------------------------------------------------------------
+error
+Response Format:
+      {"error": "errorMessage"}
