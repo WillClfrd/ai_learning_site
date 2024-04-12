@@ -207,6 +207,15 @@ bking.src = "images/bK.svg";
 
 var currP;
 var tempCoord; // use to track square that clicked piece currently occupies
+const ws = new WebSocket("ws://localhost:11111");
+ws.addEventListener("open", (event) => {
+    console.log("Connection opened");
+});
+
+ws.addEventListener("message", (event) => {
+    console.log("message received:")
+    console.log()
+});
 
 board.addEventListener('mousedown', function(event){
     var mouseX = event.clientX - board.getBoundingClientRect().left;
