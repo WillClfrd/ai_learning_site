@@ -17,15 +17,10 @@ async def handle_req(websocket):
             me.board = req["board"]
             res["result"] = me.IsMoveLegal((req["move"]["from"][0],req["move"]["from"][1]), (req["move"]["to"][0],req["move"]["to"][1]))
         elif req["method"] == "getminimaxmove":
-            res = "getminmamove"
             me.board = req["board"]
-            # check exact return format for GetMinMaxMove
-            move = me.GetMinMaxMove(req["player"])
-            res["move"] = {}
-            res["move"]["from"] = move[0]
-            res["move"]["to"] = move[1]
+            res["move"] = me.GetMinMaxMove(req["player"])
         elif req["method"] == "geteval":
-            res = "geteval"
+            me.board = req["board"]
             res["eval"] = me.evl(req["player"])
         else:
             res["error"] = "invalid command"
