@@ -211,14 +211,13 @@ var req;
 var waiting = false;
 var isCheckmate = false;
 var message;
-/*
+
 const ws = new WebSocket("ws://localhost:11111");
 ws.addEventListener("open", (event) => {
     console.log("Connection opened");
 });
-*/
+
 // set the position of the piece according to the result value in message
-/*
 ws.addEventListener("message", (event) => {
     console.log("message received:");
     console.log(event.data);
@@ -248,7 +247,6 @@ ws.addEventListener("message", (event) => {
         pieces[tempCoord[0]][tempCoord[1]] == currP;
     }
 });
-*/
 
 board.addEventListener('mousedown', function(event){
     var mouseX = event.clientX - board.getBoundingClientRect().left;
@@ -362,7 +360,6 @@ newGameButton.addEventListener("click", () => {
         choiceDiv.innerHTML = "";
         console.log(choiceDiv.innerHTML);
         //this seems to work but right now it crashes the server, probably because the server is permanently waiting for a return response on the websocket
-
 
         let player = ai;
         while(!isCheckmate){

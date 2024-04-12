@@ -30,13 +30,15 @@ async def handle_req(websocket):
 
 # use to test if websocket is listening, obtaining messages, and responding correctly
 async def echo(websocket):
+    print("received message")
     async for message in websocket:
         await websocket.send(message)
 
 async def main():
     # sets hostname to listen on, function to handle requests, and port to listen on
-    async with serve(handle_req, "localhost", 11111):
+    async with serve(echo, "localhost", 11111):
         # awaits future requests (will run forever unless stopped manually or erroring out)
+        print("websocket running")
         await asyncio.Future()
 
 # starts the server listening on the websocket
