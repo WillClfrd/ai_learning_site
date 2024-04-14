@@ -15,7 +15,11 @@ async def handle_req(websocket):
         
         if req["method"] == "ismovelegal":
             me.board = req["board"]
-            res["result"] = me.IsMoveLegal((req["move"]["from"][0],req["move"]["from"][1]), (req["move"]["to"][0],req["move"]["to"][1])) and not me.IsInCheck(req["player"])
+            res["method"] = "ismovelegal"
+            moveCheck = me.IsMoveLegal((req["move"]["from"][0],req["move"]["from"][1]), (req["move"]["to"][0],req["move"]["to"][1]))
+            # make move to see if in check
+            check = me.IsInCheck(req["player"])
+            res["result"] = moveCheck and not check
             res["checkmate"] = me.IsCheckmate(req["opponent"])
             res["error"] = "none"
         elif req["method"] == "getminimaxmove":

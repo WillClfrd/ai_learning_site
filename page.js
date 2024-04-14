@@ -23,7 +23,7 @@ function drawBoard(ctx, pieces){
             else if(pieces[i][j].name == "R"){
                 ctx.drawImage(wrook, pieces[i][j].x, pieces[i][j].y, pW, pH);
             }
-            else if(pieces[i][j].name == "N"){
+            else if(pieces[i][j].name == "T"){
                 ctx.drawImage(wknight, pieces[i][j].x, pieces[i][j].y, pW, pH);
             }
             else if(pieces[i][j].name == "B"){
@@ -41,7 +41,7 @@ function drawBoard(ctx, pieces){
             else if(pieces[i][j].name == "r"){
                 ctx.drawImage(brook, pieces[i][j].x, pieces[i][j].y, pW, pH);
             }
-            else if(pieces[i][j].name == "n"){
+            else if(pieces[i][j].name == "t"){
                 ctx.drawImage(bknight, pieces[i][j].x, pieces[i][j].y, pW, pH);
             }
             else if(pieces[i][j].name == "b"){
@@ -115,9 +115,9 @@ wrook.src = "images/wR.svg";
 
 var wknight = new Image();
 wknight.onload = function() {
-    pieces[7][1] = new Piece('N',wknight, 1 * (board.width / 8), 7 * (board.height / 8));
+    pieces[7][1] = new Piece('T',wknight, 1 * (board.width / 8), 7 * (board.height / 8));
     ctx.drawImage(wknight,1 * (board.width / 8),7 * (board.height / 8),board.width / 8, board.height / 8);
-    pieces[7][6] = new Piece('N',wknight, 6 * (board.width / 8), 7 * (board.height / 8));
+    pieces[7][6] = new Piece('T',wknight, 6 * (board.width / 8), 7 * (board.height / 8));
     ctx.drawImage(wknight,6 * (board.width / 8),7 * (board.height / 8),board.width / 8, board.height / 8);
 };
 wknight.src = "images/wN.svg";
@@ -166,9 +166,9 @@ brook.src = "images/bR.svg";
 
 var bknight = new Image();
 bknight.onload = function() {
-    pieces[0][1] = new Piece('n',bknight,1 * (board.width / 8),0 * (board.height / 8));
+    pieces[0][1] = new Piece('t',bknight,1 * (board.width / 8),0 * (board.height / 8));
     ctx.drawImage(bknight,1 * (board.width / 8),0 * (board.height / 8),board.width / 8, board.height / 8);
-    pieces[0][6] = new Piece('n',bknight,6 * (board.width / 8),0 * (board.height / 8));
+    pieces[0][6] = new Piece('t',bknight,6 * (board.width / 8),0 * (board.height / 8));
     ctx.drawImage(bknight,6 * (board.width / 8),0 * (board.height / 8),board.width / 8, board.height / 8);
 };
 bknight.src = "images/bN.svg";
@@ -210,6 +210,9 @@ var req;
 var waiting = false;
 var isCheckmate = false;
 var message;
+var mouseX;
+var mouseY;
+var player = "w";
 
 const ws = new WebSocket("ws://localhost:11111");
 ws.addEventListener("open", (event) => {
@@ -224,12 +227,13 @@ ws.addEventListener("message", (event) => {
 
     switch(res.method){
         case "ismovelegal":
-            if(res.result == true && currP !== '.'){
+            console.log(res.result);
+            if(res.result && currP !== '.'){
                 currP.isDragging = false;
-        
+
                 currP.x = Math.floor((currP.x + (pW / 2)) / pW) * pW;
                 currP.y = Math.floor((currP.y + (pH / 2)) / pH) * pH;
-        
+
                 pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = currP;
                 
                 if(res.checkmate){
@@ -237,8 +241,17 @@ ws.addEventListener("message", (event) => {
                 }
             }
             else{
-                pieces[tempCoord[0]][tempCoord[1]] == currP;
+                currP.isDragging = false;
+                currP.x = tempCoord[1] * pW;
+                console.log("currP.x: " + currP.x + " | pW: " + pW);
+                currP.y = tempCoord[0] * pH;
+                console.log("currP.y: " + currP.y + " | pH: " + pH);
+                console.log("y: " + tempCoord[0] + " | x: " + tempCoord[1]);
+                pieces[tempCoord[0]][tempCoord[1]] = currP;
+                console.log(pieces);
             }
+
+            drawBoard(ctx,pieces);
             break;
         case "getminimaxmove":
             minimaxMove(res);
@@ -252,34 +265,52 @@ ws.addEventListener("message", (event) => {
 });
 
 board.addEventListener('mousedown', function(event){
-    var mouseX = event.clientX - board.getBoundingClientRect().left;
-    var mouseY = event.clientY - board.getBoundingClientRect().top;
+    mouseX = event.clientX - board.getBoundingClientRect().left;
+    mouseY = event.clientY - board.getBoundingClientRect().top;
 
     if(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] !== '.'){
         //console.log(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].name + " clicked");
         currP = pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)];
         pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].isDragging = true;
         pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = '.';
-        tempCoord = (Math.floor(mouseY / pH),Math.floor(mouseX/ pW));
+        tempCoord = [Math.floor(mouseY / pH),Math.floor(mouseX/ pW)];
+        // console.log("tempCoord: " + tempCoord);
     }
 });
 
 board.addEventListener('mouseup', function(event){
-    var mouseX = event.clientX - board.getBoundingClientRect().left;
-    var mouseY = event.clientY - board.getBoundingClientRect().top;
+    mouseX = event.clientX - board.getBoundingClientRect().left;
+    mouseY = event.clientY - board.getBoundingClientRect().top;
 
-    currP.isDragging = false;
+    let tempBoard = getBoard();
+    tempBoard[tempCoord[0]][tempCoord[1]] = currP.name;
+    /*
+    method
+    board
+    move {
+        from,
+        to
+    }
+    player
+    opponent
+    */
+    let req = {
+        method: "ismovelegal",
+        board: tempBoard,
+        move: {
+            from: [tempCoord[0], tempCoord[1]],
+            to: [Math.floor(mouseY / pH), Math.floor(mouseX / pW)]
+        },
+        player: player,
+        opponent: (player == "w")?"b":"w"
+    }
+    console.log(req);
+    
+    ws.send(JSON.stringify(req))
 
-    currP.x = Math.floor((currP.x + (pW / 2)) / pW) * pW;
-    currP.y = Math.floor((currP.y + (pH / 2)) / pH) * pH;
-
-    pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = currP;
-
-    console.log(getBoard(tempBoard));
-
-    // while(waiting){
-    //     sleep(10);
-    // }
+    while(waiting){
+        sleep(10);
+    }
 
     drawBoard(ctx,pieces);
 });
@@ -339,7 +370,7 @@ newGameButton.addEventListener("click", () => {
         console.log(choiceDiv.innerHTML);
         //this seems to work but right now it crashes the server, probably because the server is permanently waiting for a return response on the websocket
 
-        let player = human;
+        player = human;
         while(!isCheckmate){
             if(player == human){
                 //ws.send();
@@ -368,7 +399,7 @@ newGameButton.addEventListener("click", () => {
         console.log(choiceDiv.innerHTML);
         //this seems to work but right now it crashes the server, probably because the server is permanently waiting for a return response on the websocket
 
-        let player = ai;
+        player = ai;
         while(!isCheckmate){
             if(player == human){
                 waiting = true;
