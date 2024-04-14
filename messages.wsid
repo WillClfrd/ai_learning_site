@@ -4,8 +4,8 @@ ismovelegal
   Check move for legality
   
   Request Format:
-      {"method": "ismovelegal", 
-       "board": [["r","n","b","q","k","b","n","r"],
+       {"method": "ismovelegal", 
+        "board": [["r","n","b","q","k","b","n","r"],
                 ["p","p","p","p","p","p","p","p"],
                 [".",".",".",".",".",".",".","."],
                 [".",".",".",".",".",".",".","."],
@@ -13,10 +13,13 @@ ismovelegal
                 [".",".",".",".",".",".",".","."],
                 ["P","P","P","P","P","P","P","P"],
                 ["R","N","B","Q","K","B","N","R"]],
-       "move": {"from": [row,col],
-               "to": [row,col]}}
+        "move": {"from": [row,col],
+                "to": [row,col]}
+        "player": "w",
+        "opponent": "b"}
   Return Format (example):
-      {"result": true, 
+      {"result": true,
+      "checkmate": false, 
        "error": "none"}
 
 ------------------------------------------------------------------

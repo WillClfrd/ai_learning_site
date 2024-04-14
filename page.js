@@ -231,6 +231,10 @@ ws.addEventListener("message", (event) => {
                 currP.y = Math.floor((currP.y + (pH / 2)) / pH) * pH;
         
                 pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = currP;
+                
+                if(res.checkmate){
+                    isCheckmate == true;
+                }
             }
             else{
                 pieces[tempCoord[0]][tempCoord[1]] == currP;
@@ -243,6 +247,8 @@ ws.addEventListener("message", (event) => {
             showEval(res);
             break;
     }
+    
+    waiting = false;
 });
 
 board.addEventListener('mousedown', function(event){
