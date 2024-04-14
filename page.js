@@ -97,7 +97,7 @@ for(var i = 0; i < 8; i++){
 var wpawn = new Image();
 wpawn.onload = function () {
     for (var j = 0; j < 8; j++) {
-        pieces[6][j] = new Piece('P',wpawn,j * (board.width / 8),6 * (board.height / 8));
+        pieces[6][j] = new Piece('P',wpawn,j * (board.width / 8),6 * (board.height / 8),'w');
         ctx.drawImage(wpawn,j * (board.width / 8),6 * (board.height / 8),board.width / 8, board.height / 8);
     }
 };
@@ -105,42 +105,42 @@ wpawn.src = "images/wP.svg";
 
 var wrook = new Image();
 wrook.onload = function() {
-    pieces[7][0] = new Piece('R',wrook, 0 * (board.width / 8), 7 * (board.height / 8));
+    pieces[7][0] = new Piece('R',wrook, 0 * (board.width / 8), 7 * (board.height / 8),'w');
     //console.log(pieces[7][0].name);
     ctx.drawImage(wrook,0 * (board.width / 8),7 * (board.height / 8),board.width / 8, board.height / 8);
-    pieces[7][7] = new Piece('R',wrook, 7 * (board.width / 8),7 * (board.height / 8));
+    pieces[7][7] = new Piece('R',wrook, 7 * (board.width / 8),7 * (board.height / 8),'w');
     ctx.drawImage(wrook,7 * (board.width / 8),7 * (board.height / 8),board.width / 8, board.height / 8);
 };
 wrook.src = "images/wR.svg";
 
 var wknight = new Image();
 wknight.onload = function() {
-    pieces[7][1] = new Piece('T',wknight, 1 * (board.width / 8), 7 * (board.height / 8));
+    pieces[7][1] = new Piece('T',wknight, 1 * (board.width / 8), 7 * (board.height / 8),'w');
     ctx.drawImage(wknight,1 * (board.width / 8),7 * (board.height / 8),board.width / 8, board.height / 8);
-    pieces[7][6] = new Piece('T',wknight, 6 * (board.width / 8), 7 * (board.height / 8));
+    pieces[7][6] = new Piece('T',wknight, 6 * (board.width / 8), 7 * (board.height / 8),'w');
     ctx.drawImage(wknight,6 * (board.width / 8),7 * (board.height / 8),board.width / 8, board.height / 8);
 };
 wknight.src = "images/wN.svg";
 
 var wbish = new Image();
 wbish.onload = function() {
-    pieces[7][2] = new Piece('B',wbish,2 * (board.width / 8),7 * (board.height / 8));
+    pieces[7][2] = new Piece('B',wbish,2 * (board.width / 8),7 * (board.height / 8),'w');
     ctx.drawImage(wbish,2 * (board.width / 8),7 * (board.height / 8),board.width / 8, board.height / 8);
-    pieces[7][5] = new Piece('B',wbish,5 * (board.width / 8),7 * (board.height / 8));
+    pieces[7][5] = new Piece('B',wbish,5 * (board.width / 8),7 * (board.height / 8),'w');
     ctx.drawImage(wbish,5 * (board.width / 8),7 * (board.height / 8),board.width / 8, board.height / 8);
 };
 wbish.src = "images/wB.svg";
 
 var wqueen = new Image();
 wqueen.onload = function () {
-    pieces[7][3] = new Piece('Q',wqueen,3 * (board.width / 8),7 * (board.height / 8));
+    pieces[7][3] = new Piece('Q',wqueen,3 * (board.width / 8),7 * (board.height / 8),'w');
     ctx.drawImage(wqueen,3 * (board.width / 8),7 * (board.height / 8),board.width / 8, board.height / 8);
 }
 wqueen.src = "images/wQ.svg";
 
 var wking = new Image();
 wking.onload = function () {
-    pieces[7][4] = new Piece('K',wking,4 * (board.width / 8),7 * (board.height / 8));
+    pieces[7][4] = new Piece('K',wking,4 * (board.width / 8),7 * (board.height / 8),'w');
     ctx.drawImage(wking,4 * (board.width / 8),7 * (board.height / 8),board.width / 8, board.height / 8);
 }
 wking.src = "images/wK.svg";
@@ -149,7 +149,7 @@ wking.src = "images/wK.svg";
 var bpawn = new Image();
 bpawn.onload = function () {
     for (var j = 0; j < 8; j++) {
-        pieces[1][j] = new Piece('p',bpawn,j * (board.width / 8),1 * (board.height / 8));
+        pieces[1][j] = new Piece('p',bpawn,j * (board.width / 8),1 * (board.height / 8),'b');
         ctx.drawImage(bpawn,j * (board.width / 8),1 * (board.height / 8),board.width / 8, board.height / 8);
     }
 };
@@ -157,41 +157,41 @@ bpawn.src = "images/bP.svg";
 
 var brook = new Image();
 brook.onload = function() {
-    pieces[0][0] = new Piece('r',brook,0 * (board.width / 8),0 * (board.height / 8));
+    pieces[0][0] = new Piece('r',brook,0 * (board.width / 8),0 * (board.height / 8),'b');
     ctx.drawImage(brook,0 * (board.width / 8),0 * (board.height / 8),board.width / 8, board.height / 8);
-    pieces[0][7] = new Piece('r',brook,7 * (board.width / 8),0 * (board.height / 8));
+    pieces[0][7] = new Piece('r',brook,7 * (board.width / 8),0 * (board.height / 8),'b');
     ctx.drawImage(brook,7 * (board.width / 8),0 * (board.height / 8),board.width / 8, board.height / 8);
 };
 brook.src = "images/bR.svg";
 
 var bknight = new Image();
 bknight.onload = function() {
-    pieces[0][1] = new Piece('t',bknight,1 * (board.width / 8),0 * (board.height / 8));
+    pieces[0][1] = new Piece('t',bknight,1 * (board.width / 8),0 * (board.height / 8),'b');
     ctx.drawImage(bknight,1 * (board.width / 8),0 * (board.height / 8),board.width / 8, board.height / 8);
-    pieces[0][6] = new Piece('t',bknight,6 * (board.width / 8),0 * (board.height / 8));
+    pieces[0][6] = new Piece('t',bknight,6 * (board.width / 8),0 * (board.height / 8),'b');
     ctx.drawImage(bknight,6 * (board.width / 8),0 * (board.height / 8),board.width / 8, board.height / 8);
 };
 bknight.src = "images/bN.svg";
 
 var bbish = new Image();
 bbish.onload = function() {
-    pieces[0][2] = new Piece('b',bbish,2 * (board.width / 8),0 * (board.height / 8));
+    pieces[0][2] = new Piece('b',bbish,2 * (board.width / 8),0 * (board.height / 8),'b');
     ctx.drawImage(bbish,2 * (board.width / 8),0 * (board.height / 8),board.width / 8, board.height / 8);
-    pieces[0][5] = new Piece('b',bbish,5 * (board.width / 8),0 * (board.height / 8));
+    pieces[0][5] = new Piece('b',bbish,5 * (board.width / 8),0 * (board.height / 8),'b');
     ctx.drawImage(bbish,5 * (board.width / 8),0 * (board.height / 8),board.width / 8, board.height / 8);
 };
 bbish.src = "images/bB.svg";
 
 var bqueen = new Image();
 bqueen.onload = function () {
-    pieces[0][3] = new Piece('q',bqueen,3 * (board.width / 8),0 * (board.height / 8));
+    pieces[0][3] = new Piece('q',bqueen,3 * (board.width / 8),0 * (board.height / 8),'b');
     ctx.drawImage(bqueen,3 * (board.width / 8),0 * (board.height / 8),board.width / 8, board.height / 8);
 }
 bqueen.src = "images/bQ.svg";
 
 var bking = new Image();
 bking.onload = function () {
-    pieces[0][4] = new Piece('k',bking,4 * (board.width / 8),0 * (board.height / 8));
+    pieces[0][4] = new Piece('k',bking,4 * (board.width / 8),0 * (board.height / 8),'b');
     ctx.drawImage(bking,4 * (board.width / 8),0 * (board.height / 8),board.width / 8, board.height / 8);
 }
 bking.src = "images/bK.svg";
@@ -245,12 +245,12 @@ ws.addEventListener("message", (event) => {
             else{
                 currP.isDragging = false;
                 currP.x = tempCoord[1] * pW;
-                console.log("currP.x: " + currP.x + " | pW: " + pW);
+                //console.log("currP.x: " + currP.x + " | pW: " + pW);
                 currP.y = tempCoord[0] * pH;
-                console.log("currP.y: " + currP.y + " | pH: " + pH);
-                console.log("y: " + tempCoord[0] + " | x: " + tempCoord[1]);
+                //console.log("currP.y: " + currP.y + " | pH: " + pH);
+                //console.log("y: " + tempCoord[0] + " | x: " + tempCoord[1]);
                 pieces[tempCoord[0]][tempCoord[1]] = currP;
-                console.log(pieces);
+                //console.log(pieces);
             }
 
             drawBoard(ctx,pieces);
@@ -270,7 +270,7 @@ board.addEventListener('mousedown', function(event){
     mouseX = event.clientX - board.getBoundingClientRect().left;
     mouseY = event.clientY - board.getBoundingClientRect().top;
 
-    if(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] !== '.'){
+    if(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] !== '.' && pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].color == player){
         //console.log(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].name + " clicked");
         currP = pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)];
         pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].isDragging = true;
@@ -284,37 +284,30 @@ board.addEventListener('mouseup', function(event){
     mouseX = event.clientX - board.getBoundingClientRect().left;
     mouseY = event.clientY - board.getBoundingClientRect().top;
 
-    let tempBoard = getBoard();
-    tempBoard[tempCoord[0]][tempCoord[1]] = currP.name;
-    /*
-    method
-    board
-    move {
-        from,
-        to
-    }
-    player
-    opponent
-    */
-    let req = {
-        method: "ismovelegal",
-        board: tempBoard,
-        move: {
-            from: [tempCoord[0], tempCoord[1]],
-            to: [Math.floor(mouseY / pH), Math.floor(mouseX / pW)]
-        },
-        player: player,
-        opponent: (player == "w")?"b":"w"
-    }
-    console.log(req);
-    
-    ws.send(JSON.stringify(req))
+    if(currP != null && currP.isDragging){
+        let tempBoard = getBoard();
+        tempBoard[tempCoord[0]][tempCoord[1]] = currP.name;
+        
+        let req = {
+            method: "ismovelegal",
+            board: tempBoard,
+            move: {
+                from: [tempCoord[0], tempCoord[1]],
+                to: [Math.floor(mouseY / pH), Math.floor(mouseX / pW)]
+            },
+            player: player,
+            opponent: (player == "w")?"b":"w"
+        }
+        console.log(req);
+        
+        ws.send(JSON.stringify(req))
 
-    while(waiting){
-        sleep(10);
-    }
+        while(waiting){
+            sleep(10);
+        }
 
-    drawBoard(ctx,pieces);
+        drawBoard(ctx,pieces);
+    }
 });
 
 document.addEventListener('mousemove', function(event){

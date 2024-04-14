@@ -7,11 +7,12 @@ class game{
 }
 
 class Piece{
-        constructor(name, image, x, y){
+        constructor(name, image, x, y, color){
                 this.name = name;
                 this.image = image;
                 this.x = x;
                 this.y = y;
                 this.isDragging = false;
+                this.color = color;
         }
 }
