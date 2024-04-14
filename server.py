@@ -17,8 +17,14 @@ async def handle_req(websocket):
             me.board = req["board"]
             res["method"] = "ismovelegal"
             moveCheck = me.IsMoveLegal((req["move"]["from"][0],req["move"]["from"][1]), (req["move"]["to"][0],req["move"]["to"][1]))
+            # print(f"moveCheck: {moveCheck}")
             # make move to see if in check
+            # print(req["board"])
+            me.board[req["move"]["to"][0]][req["move"]["to"][1]] = req["board"][req["move"]["from"][0]][req["move"]["from"][1]]
+            me.board[req["move"]["from"][0]][req["move"]["from"][1]] = '.'
             check = me.IsInCheck(req["player"])
+            # print(f"inCheck: {check}")
+            # print(me.board)
             res["result"] = moveCheck and not check
             res["checkmate"] = me.IsCheckmate(req["opponent"])
             res["error"] = "none"

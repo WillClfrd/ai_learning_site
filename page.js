@@ -239,6 +239,8 @@ ws.addEventListener("message", (event) => {
                 if(res.checkmate){
                     isCheckmate == true;
                 }
+
+                player = (player == "w")?"b":"w";
             }
             else{
                 currP.isDragging = false;
