@@ -27,4 +27,14 @@
     </body>
     <script src="model.js"></script>
     <script src="page.js"></script>
+
+    <script>
+        // set query parameters in the header to determine which color is the player
+        // unsure how exactly I'm going to handle this in page.js
+        // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        // WHY IS JS SO ANNOYING
+        var url = 'index.html' + '?playerColor=' + encodeURIComponent("");
+
+        window.location.href = url;
+    </script>
 </html>
