@@ -12,7 +12,7 @@ async def handle_req(websocket):
         # returns every input received from websocket
         req = json.loads(message)
         # check exact format for parsing json into function parameters and for assigning function return values
-        
+        print(req)
         if req["method"] == "ismovelegal":
             me.board = req["board"]
             res["method"] = "ismovelegal"

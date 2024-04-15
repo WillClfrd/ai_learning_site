@@ -256,7 +256,16 @@ ws.addEventListener("message", (event) => {
             drawBoard(ctx,pieces);
             break;
         case "getminimaxmove":
-            minimaxMove(res);
+            /*
+            {"move": {"from": [row,col],
+                "to": [row,col]},
+                "error": "none"}
+            */
+
+            pieces[res.move.to[0]][res.move.to[1]] = pieces[res.move.from[0]][res.move.from[1]]
+            pieces[res.move.from[0]][res.move.from[1]] = '.'
+
+            drawBoard(ctx,pieces);
             break;
         case "geteval":
             showEval(res);
@@ -267,6 +276,7 @@ ws.addEventListener("message", (event) => {
 });
 
 board.addEventListener('mousedown', function(event){
+    console.log("mouse clicked");
     mouseX = event.clientX - board.getBoundingClientRect().left;
     mouseY = event.clientY - board.getBoundingClientRect().top;
 
@@ -277,6 +287,9 @@ board.addEventListener('mousedown', function(event){
         pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = '.';
         tempCoord = [Math.floor(mouseY / pH),Math.floor(mouseX/ pW)];
         // console.log("tempCoord: " + tempCoord);
+    }
+    else{
+        console.log("failed to set currP");
     }
 });
 
@@ -302,9 +315,7 @@ board.addEventListener('mouseup', function(event){
         
         ws.send(JSON.stringify(req))
 
-        while(waiting){
-            sleep(10);
-        }
+        while(waiting){}
 
         drawBoard(ctx,pieces);
     }
@@ -326,10 +337,6 @@ document.addEventListener('mousemove', function(event){
     }
 });
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 function getBoard(){
     let pieceArray = [[],[],[],[],[],[],[],[]];
     for(let i = 0; i < 8; ++i){
@@ -349,72 +356,107 @@ drawBoard(ctx,pieces);
 
 newGameButton = document.getElementById("newGameButton");
 choiceDiv = document.getElementById("colorChoiceDiv");
+const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 
 newGameButton.addEventListener("click", () => {
     choiceDiv.innerHTML = "<button id=\"whiteButton\">white</button><button id=\"blackButton\">black</button>"
     whiteButton = document.getElementById("whiteButton");
     blackButton = document.getElementById("blackButton");
     //console.log(choiceDiv.innerHTML)
-    whiteButton.addEventListener("click", () => {
+    whiteButton.addEventListener("click", async () => {
         console.log("white button clicked");
         isCheckmate = false;
         let human = 'w';
         let ai = 'b';
 
         choiceDiv.innerHTML = "";
-        console.log(choiceDiv.innerHTML);
+        //console.log(choiceDiv.innerHTML);
         //this seems to work but right now it crashes the server, probably because the server is permanently waiting for a return response on the websocket
 
         player = human;
         while(!isCheckmate){
             if(player == human){
-                //ws.send();
+                console.log("" + player + " turn");
                 waiting = true;
+                console.log("waiting " + player + ": " + waiting);
                 while(waiting){
-                    sleep(10);
+                    console.log("waiting for player move");
+                    await sleep(100);
                 }
-                player = ai;
+                //player = ai;
             }
             else{
+                console.log("" + (player == "w")?"b":"w" + " turn");
                 waiting = true;
-                while(waiting){
-                    sleep(10);
+
+                let tempBoard = getBoard();
+                tempBoard[tempCoord[0]][tempCoord[1]] = currP.name;
+                
+                let req = {
+                    method: "getminimaxmove",
+                    board: tempBoard,
+                    player: player
                 }
-                player = human;
+                console.log(req);
+                
+                console.log("sending data for minimax move");
+                ws.send(JSON.stringify(req))
+
+                while(waiting){
+                    await sleep(100);
+                }
+                //player = human;
             }
         }
+
+        console.log("Game over: " + (player == "w")?"b":"w" + " wins");
     });
-    blackButton.addEventListener("click", () => {
+    blackButton.addEventListener("click", async () => {
         console.log("black button clicked");
         isCheckmate = false;
         let human = 'b';
         let ai = 'w';
 
         choiceDiv.innerHTML = "";
-        console.log(choiceDiv.innerHTML);
+        //console.log(choiceDiv.innerHTML);
         //this seems to work but right now it crashes the server, probably because the server is permanently waiting for a return response on the websocket
 
         player = ai;
         while(!isCheckmate){
             if(player == human){
+                console.log("" + player + " turn");
                 waiting = true;
-                //ws.send();
+                console.log("waiting " + player + ": " + waiting);
                 while(waiting){
-                    sleep(10);
+                    console.log("waiting for response");
+                    await sleep(100);
                 }
-                player = ai;
             }
             else{
+                console.log("" + (player == "w")?"b":"w" + " turn");
                 waiting = true;
-                //send minimax move
-                ws.send(); //add format here
-                //wait for minimax move
-                while(waiting){
-                    sleep(10);
+
+                let tempBoard = getBoard();
+                tempBoard[tempCoord[0]][tempCoord[1]] = currP.name;
+                
+                let req = {
+                    method: "getminimaxmove",
+                    board: tempBoard,
+                    player: player
                 }
-                player = human;
+                console.log(req);
+                
+                ws.send(JSON.stringify(req))
+
+                while(waiting){
+                    await sleep(100);
+                }
             }
         }
+
+        console.log("Game over: " + (player == "w")?"b":"w" + " wins");
+
+        console.log("Game over: " + (player == "w")?"b":"w" + " wins");
     });
 });
 //make this into an event handler for a button on the page
