@@ -14,7 +14,7 @@
                 </td>
                 <td class="mid-col">
                     <div class="board-top"><h2>Board top</h2></div>
-                    <canvas class="board" width="1344" id="board"></div>
+                    <canvas class="board" width="700" id="board"></div>
                     <div class="board-bottom"></div>
                 </td>
                 <td class="right-col" id="black">
@@ -27,14 +27,4 @@
     </body>
     <script src="model.js"></script>
     <script src="page.js"></script>
-
-    <script>
-        // set query parameters in the header to determine which color is the player
-        // unsure how exactly I'm going to handle this in page.js
-        // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        // WHY IS JS SO ANNOYING
-        var url = 'index.html' + '?playerColor=' + encodeURIComponent("");
-
-        window.location.href = url;
-    </script>
 </html>

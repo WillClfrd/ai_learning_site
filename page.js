@@ -224,7 +224,6 @@ ws.addEventListener("message", (event) => {
     console.log("message received:");
     console.log(event.data);
     res = JSON.parse(event.data);
-
     switch(res.method){
         case "ismovelegal":
             console.log(res.result);
@@ -241,6 +240,7 @@ ws.addEventListener("message", (event) => {
                 }
 
                 player = (player == "w")?"b":"w";
+                waiting = false;
             }
             else{
                 currP.isDragging = false;
@@ -256,23 +256,33 @@ ws.addEventListener("message", (event) => {
             drawBoard(ctx,pieces);
             break;
         case "getminimaxmove":
-            /*
-            {"move": {"from": [row,col],
-                "to": [row,col]},
-                "error": "none"}
-            */
-
-            pieces[res.move.to[0]][res.move.to[1]] = pieces[res.move.from[0]][res.move.from[1]]
-            pieces[res.move.from[0]][res.move.from[1]] = '.'
+            console.log("res: " + res);
+            console.log("res[move]: " + res.move);
+            console.log("res[move][0][0]: " + res.move[0][0]);
+            //console.log("Target row: " + res.move[0][0] + " | Target column: " + res.move.to[1]);
+            //console.log("Source row: " + res.move.from[0] + " | Source column: " + res.move.from[1]);
+            pieces[res.move[1][0]][res.move[1][1]] = pieces[res.move[0][0]][res.move[0][1]];
+            pieces[res.move[1][0]][res.move[1][1]].y = res.move[1][0] * pH;
+            pieces[res.move[1][0]][res.move[1][1]].x = res.move[1][1] * pW;
+            //console.log("assigned pieces[" + res.move[1][0] + "][" + res.move[1][1] + "] with pieces[" + res.move[0][0] + "][" + res.move[0][1] + "]");
+            pieces[res.move[0][0]][res.move[0][1]] = '.';
+            //console.log(getBoard());
+            //console.log(pieces);
+            
+            // for(let i = 0; i < 8; ++i){
+            //     for(let j = 0; j < 8; ++j){
+            //         console.log("pieces[" + i + "][" + j + "].y: " + pieces[i][j].y + " | pieces[" + i + "][" + j + "].x: " + pieces[i][j].x);
+            //     }
+            // }
 
             drawBoard(ctx,pieces);
+            waiting = false;
             break;
         case "geteval":
             showEval(res);
             break;
     }
-    
-    waiting = false;
+    console.log("waiting: " + waiting);
 });
 
 board.addEventListener('mousedown', function(event){
@@ -293,7 +303,7 @@ board.addEventListener('mousedown', function(event){
     }
 });
 
-board.addEventListener('mouseup', function(event){
+board.addEventListener('mouseup', async function(event){
     mouseX = event.clientX - board.getBoundingClientRect().left;
     mouseY = event.clientY - board.getBoundingClientRect().top;
 
@@ -315,7 +325,10 @@ board.addEventListener('mouseup', function(event){
         
         ws.send(JSON.stringify(req))
 
-        while(waiting){}
+        while(waiting){
+            //console.log("in loop after send");
+            await sleep(100);
+        }
 
         drawBoard(ctx,pieces);
     }
@@ -364,99 +377,74 @@ newGameButton.addEventListener("click", () => {
     blackButton = document.getElementById("blackButton");
     //console.log(choiceDiv.innerHTML)
     whiteButton.addEventListener("click", async () => {
-        console.log("white button clicked");
-        isCheckmate = false;
-        let human = 'w';
-        let ai = 'b';
-
-        choiceDiv.innerHTML = "";
-        //console.log(choiceDiv.innerHTML);
-        //this seems to work but right now it crashes the server, probably because the server is permanently waiting for a return response on the websocket
-
-        player = human;
-        while(!isCheckmate){
-            if(player == human){
-                console.log("" + player + " turn");
-                waiting = true;
-                console.log("waiting " + player + ": " + waiting);
-                while(waiting){
-                    console.log("waiting for player move");
-                    await sleep(100);
-                }
-                //player = ai;
-            }
-            else{
-                console.log("" + (player == "w")?"b":"w" + " turn");
-                waiting = true;
-
-                let tempBoard = getBoard();
-                tempBoard[tempCoord[0]][tempCoord[1]] = currP.name;
-                
-                let req = {
-                    method: "getminimaxmove",
-                    board: tempBoard,
-                    player: player
-                }
-                console.log(req);
-                
-                console.log("sending data for minimax move");
-                ws.send(JSON.stringify(req))
-
-                while(waiting){
-                    await sleep(100);
-                }
-                //player = human;
-            }
-        }
-
-        console.log("Game over: " + (player == "w")?"b":"w" + " wins");
+        var url = 'index.html' + '?playerColor=' + encodeURIComponent("w");
+        window.location.href = url;
     });
     blackButton.addEventListener("click", async () => {
-        console.log("black button clicked");
-        isCheckmate = false;
-        let human = 'b';
-        let ai = 'w';
-
-        choiceDiv.innerHTML = "";
-        //console.log(choiceDiv.innerHTML);
-        //this seems to work but right now it crashes the server, probably because the server is permanently waiting for a return response on the websocket
-
-        player = ai;
-        while(!isCheckmate){
-            if(player == human){
-                console.log("" + player + " turn");
-                waiting = true;
-                console.log("waiting " + player + ": " + waiting);
-                while(waiting){
-                    console.log("waiting for response");
-                    await sleep(100);
-                }
-            }
-            else{
-                console.log("" + (player == "w")?"b":"w" + " turn");
-                waiting = true;
-
-                let tempBoard = getBoard();
-                tempBoard[tempCoord[0]][tempCoord[1]] = currP.name;
-                
-                let req = {
-                    method: "getminimaxmove",
-                    board: tempBoard,
-                    player: player
-                }
-                console.log(req);
-                
-                ws.send(JSON.stringify(req))
-
-                while(waiting){
-                    await sleep(100);
-                }
-            }
-        }
-
-        console.log("Game over: " + (player == "w")?"b":"w" + " wins");
-
-        console.log("Game over: " + (player == "w")?"b":"w" + " wins");
+        var url = 'index.html' + '?playerColor=' + encodeURIComponent("b");
+        window.location.href = url;
     });
 });
-//make this into an event handler for a button on the page
+
+url = new URL(window.location.href);
+
+if (url.searchParams.has('playerColor') && url.searchParams.get('playerColor') == "w") {
+    playGame("w");
+}
+else if(url.searchParams.has('playerColor') && url.searchParams.get('playerColor') == "b"){
+    playGame("b");
+}
+else if(url.searchParams.has('playerColor')){
+    console.log('found playerColor but not w or b');
+}
+else{
+    console.log('all url checks failed');
+}
+
+
+async function playGame(color){
+    isCheckmate = false;
+    let human = color;
+    let ai = (color == "w")?"b":"w";
+
+    choiceDiv.innerHTML = "";
+    console.log("Player color: " + human + " | AI color: " + ai);
+    player = human;
+    while(!isCheckmate){
+        if(player == human){
+            console.log("" + player + " turn");
+            waiting = true;
+            console.log("waiting on player: " + waiting);
+            while(waiting){
+                //console.log("waiting for player move");
+                await sleep(100);
+            }
+            console.log("player move received");
+            player = ai;
+        }
+        else{
+            console.log("minimax turn");
+            waiting = true;
+
+            let tempBoard = getBoard();
+            //tempBoard[tempCoord[0]][tempCoord[1]] = currP.name;
+            
+            let req = {
+                method: "getminimaxmove",
+                board: tempBoard,
+                player: player
+            }
+            console.log(req);
+            
+            console.log("sending data for minimax move");
+            ws.send(JSON.stringify(req))
+
+            while(waiting){
+                await sleep(100);
+            }
+            player = human;
+        }
+    }
+
+    console.log("Game over: " + (player == "w")?"b":"w" + " wins");
+}

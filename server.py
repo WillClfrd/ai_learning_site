@@ -29,6 +29,7 @@ async def handle_req(websocket):
             res["checkmate"] = me.IsCheckmate(req["opponent"])
             res["error"] = "none"
         elif req["method"] == "getminimaxmove":
+            res["method"] = "getminimaxmove"
             me.board = req["board"]
             res["move"] = me.GetMinMaxMove(req["player"])
         elif req["method"] == "geteval":
@@ -36,8 +37,9 @@ async def handle_req(websocket):
             res["eval"] = me.evl(req["player"])
         else:
             res["error"] = "invalid command"
-
+        #print(f"Sending: {res}")
         await websocket.send(json.dumps(res))
+        #print("res sent")
 
 # use to test if websocket is listening, obtaining messages, and responding correctly
 async def echo(websocket):
