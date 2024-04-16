@@ -32,6 +32,14 @@ class minimax_engine:
         if src == dest:
             return False
 
+        # need to define checks for en-passant and promotion
+            # for promotion I may not need to consider whether the move is legal since the only issue with legality of promoting is the initial check for whether it places the player in check
+            # for en-passant
+                # unsure how to do this
+                # en-passant is triggered when the opponent pawn jumps 2 squares
+                    # may be easiest to track whether en-passant is possible on the board on the client side
+                    # set a flag for en-passant available
+                # en-passant may be easiest to verify entirely on the client side, but I will need to make sure that successful en-passant correctly updates the current player
         # White pawn check
         if srcP == 'P':
             if destP == empty:
@@ -195,6 +203,9 @@ class minimax_engine:
             if not(destP in minimax_engine.blackSet):
                 return True
 
+        # add castling validity check here
+            # initial validity that checks whether king and rook have been moved will take place on the front end
+            # only checks here should be for castling through/out of check 
         # white king check
         if srcP == 'K':
             if abs(src[0] - dest[0]) == 1 and abs(src[1] - dest[1]) == 0 and not(destP in minimax_engine.whiteSet):
