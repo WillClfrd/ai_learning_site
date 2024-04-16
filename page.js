@@ -403,13 +403,19 @@ else{
 
 
 async function playGame(color){
+    await sleep(500);
     isCheckmate = false;
     let human = color;
     let ai = (color == "w")?"b":"w";
 
     choiceDiv.innerHTML = "";
     console.log("Player color: " + human + " | AI color: " + ai);
-    player = human;
+    if(color == "w"){
+        player = human;
+    }
+    else{
+        player = ai;
+    }
     while(!isCheckmate){
         if(player == human){
             console.log("" + player + " turn");
