@@ -1,4 +1,4 @@
-from engine import minimax_engine as me
+from python.engine import minimax_engine as me
 import asyncio
 from websockets.server import serve
 import json

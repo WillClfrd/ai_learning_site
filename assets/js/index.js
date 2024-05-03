@@ -1,6 +1,5 @@
 function set_page_content(content){
     pageContent = document.getElementById("page_content");
-    console.log(pageContent)
     pageContent.innerHTML=content;
 }
 
@@ -20,8 +19,6 @@ if(!page){
     page = "home";
 }
 
-console.log(page);
-
 const ws = new WebSocket("ws://localhost:11111");
 ws.addEventListener("open", (event) => {
     let req = {
@@ -33,6 +30,5 @@ ws.addEventListener("open", (event) => {
 
 ws.addEventListener("message", (event) => {
     data = JSON.parse(event.data);
-    console.log(data)
     set_page_content(data.content);
 })

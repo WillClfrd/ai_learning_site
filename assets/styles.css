@@ -67,6 +67,7 @@ body {
 
 .sidebar {
     float:left;
+    width:14%;
     height:100%;
     border-right:solid;
     border-color:white;
@@ -80,9 +81,9 @@ body {
 .content-panel {
     float:right;
     height:100%;
-    width:86%;
+    width:100%;
     background-color:black;
     color:white;
     padding-top:2%;
-    padding-left:2%;
+    padding-left:16%;
 }
