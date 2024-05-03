@@ -67,3 +67,13 @@ Response Format:
       {"error": "errorMessage"}
 
 ------------------------------------------------------------------
+getpage
+    Return html page content for current page
+
+    Request Format:
+        {"method": "getpage",
+         "page": "page_name"}
+
+    Response Format:
+        {"content": "page_content"
+         "error": "none"}

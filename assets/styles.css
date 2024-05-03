@@ -5,7 +5,7 @@ html, body {
 }
 
 body {
-    background-color:black;
+    background-color: #00284d;
 }
 
 .game-container {
@@ -56,4 +56,30 @@ body {
     padding:0;
     margin:0;
     width:700px;
+}
+
+.header {
+    background-color:darkblue;
+    color:white;
+    border:solid;
+    display:block;
+}
+
+.sidebar {
+    float:left;
+    height:100%;
+    border-right:solid;
+    border-color:white;
+    position:fixed;
+}
+
+.navbar-h2 {
+    text-align: center;
+}
+
+.content-panel {
+    float:right;
+    height:100%;
+    width:86%;
+    background-color:black;
 }

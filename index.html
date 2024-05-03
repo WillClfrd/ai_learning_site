@@ -3,28 +3,54 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Minimax Chess</title>
-        <link rel="stylesheet" href="styles.css">
+        <title>AI Algorithms</title>
+        <link rel="stylesheet" href="assets/styles.css">
+        <link rel="stylesheet" href="assets/css/bootstrap.css">
     </head>
-    <body>
-        <table class="game-container">
-            <tr>
-                <td class="left-col" id="white">
-                    <h2>Left column</h2>
-                </td>
-                <td class="mid-col">
-                    <div class="board-top"><h2>Board top</h2></div>
-                    <canvas class="board" width="700" id="board"></div>
-                    <div class="board-bottom"></div>
-                </td>
-                <td class="right-col" id="black">
-                    <h2>Game Options</h2>
-                    <button id="newGameButton" type="button">New Game</button>
-                    <div id="colorChoiceDiv"></div>
-                </td>
-            </tr>
-        </table>
+    <body style="background-color: darkgrey;">
+        <div class="sidebar">
+            <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height:100%">
+                <a href="/index.html?page=home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none" id="home">
+                <span class="fs-4">Algorithms</span>
+                </a>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="index.html?page=uni_cost_search" class="nav-link text-white" id="uni_cost_search">
+                    Uniform Cost Search
+                    </a>
+                </li>
+                <li>
+                    <a href="index.html?page=a_star_search" class="nav-link text-white" id="a_star_search">
+                    A* Search
+                    </a>
+                </li>
+                <li>
+                    <a href="index.html?page=minmax_adv_search" class="nav-link text-white" id="minmax_adv_search">
+                    Minimax Adversarial Search
+                    </a>
+                </li>
+                <li>
+                    <a href="index.html?page=stoch_grad_desc" class="nav-link text-white" id="stoch_grad_desc">
+                    Stochastic Gradient Descent
+                    </a>
+                </li>
+                <li>
+                    <a href="index.html?page=id3_dec_tree" class="nav-link text-white" id="id3_dec_tree">
+                    ID3 Decision Tree
+                    </a>
+                </li>
+                <li>
+                    <a href="index.html?page=gen_algo" class="nav-link text-white" id="gen_algo">
+                    Genetic Algorithm
+                    </a>
+                </li>
+                </ul>
+            </div>
+        </div>
+        <div class="content-panel" id="page_content">
+
+        </div>
     </body>
-    <script src="model.js"></script>
-    <script src="page.js"></script>
 </html>
+<script src="index.js"></script>
