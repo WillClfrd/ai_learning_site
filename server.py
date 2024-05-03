@@ -3,6 +3,8 @@ import asyncio
 from websockets.server import serve
 import json
 
+pages = ["a_star_search.html","id3_dec_tree.html","minmax_adv_search.html","gen_algo.html","stoch_grad_desc.html","uni_cost_search.html","home.html"]
+
 # define websocket here to make calls to minimax_engine methods and return call results
 async def handle_req(websocket):
     print("connection established")
@@ -35,6 +37,16 @@ async def handle_req(websocket):
         elif req["method"] == "geteval":
             me.board = req["board"]
             res["eval"] = me.evl(req["player"])
+        elif req["method"] == "getpage":
+            print(req["page"])
+            if req["page"] in pages:
+                with open("html/" + req["page"], "r") as file:
+                    res["content"] = file.read()
+                    res["error"] = "none"
+            else:
+                with open("html/error.html","r") as file:
+                    res["content"] = file.read()
+                    res["error"] = "invalid_page"
         else:
             res["error"] = "invalid command"
         #print(f"Sending: {res}")
