@@ -38,7 +38,7 @@ async def handle_req(websocket):
             me.board = req["board"]
             res["eval"] = me.evl(req["player"])
         elif req["method"] == "getpage":
-            print(req["page"])
+            # print(req["page"])
             if req["page"] in pages:
                 with open("html/" + req["page"], "r") as file:
                     res["content"] = file.read()
