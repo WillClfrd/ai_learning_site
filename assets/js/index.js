@@ -12,6 +12,14 @@ function set_active_link(page){
     }
 }
 
+function get_active_js(page){
+    if(pages.includes(page)){
+        scripts = document.getElementById("page_script");
+        scripts.type = "text/javascript";
+        scripts.src = "assets/js/" + page + ".js";
+    }
+}
+
 const ws = new WebSocket("ws://localhost:11111");
 ws.addEventListener("open", (event) => {
     let req = {
@@ -28,6 +36,7 @@ ws.addEventListener("message", (event) => {
 
 var params = new URLSearchParams(window.location.search);
 set_active_link(params.get("page"));
+get_active_js(params.get("page"));
 
 var page = params.get("page");
 if(!page){

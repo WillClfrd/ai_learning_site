@@ -70,7 +70,7 @@ body {
     width:14%;
     height:100%;
     border-right:solid;
-    border-color:white;
+    border-color:#0d6efd;
     position:fixed;
 }
 
@@ -86,4 +86,90 @@ body {
     color:white;
     padding-top:2%;
     padding-left:16%;
+}
+
+.ucs_page_content {
+    height:100%;
+    width:100%;
+    padding:0;
+    margin:0;
+}
+
+.ucs_graph_div {
+    background-color: #212529;
+    height:70%;
+    width:70%;
+    border-radius: 10px;
+    padding: 5px;
+    float:left;
+}
+
+.ucs_graph {
+    background-color:whitesmoke;
+    border-radius: 5px;
+    height:100%;
+    width:100%;
+}
+
+.ucs_controls_div {
+    background-color: #212529;
+    height:25%;
+    width:70%;
+    float:left;
+    margin-top:1%;
+    border-radius:10px;
+    padding: 5px;
+}
+
+.ucs_controls {
+    background-color:#2f3439;
+    border-radius: 5px;
+    height:100%;
+    width:100%;
+}
+
+.ucs_details_div {
+    background-color: #212529;
+    height:96.7%;
+    width:20%;
+    float:right;
+    margin-right:9%;
+    border-radius:10px;
+    padding: 5px;
+}
+
+.ucs_details {
+    background-color:#2f3439;
+    border-radius: 5px;
+    height:100%;
+    width:100%;
+}
+
+.ucs_table {
+    height:100%;
+    width:55%;
+}
+
+.ucs_table_row {
+    height:50%;
+    width:100%;
+}
+
+.ucs_table_data {
+    height:40%;
+    width:10%;
+    padding-left:20px;
+}
+
+.ucs_btn {
+    background-color:#0d6efd;
+    border: none;
+    color: white;
+    padding:0;
+    text-align: center;
+    font-size: 16px;
+    margin:0;
+    border-radius: 10px;
+    width:70%;
+    height:50%;
 }
