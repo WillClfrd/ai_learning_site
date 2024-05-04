@@ -74,8 +74,10 @@ function drawBoard(ctx, pieces){
     //console.log(pieces);
 }
 
+var boardParent = document.getElementById("chessboardParent");
 var board = document.getElementById("board");
-board.height = board.width;
+board.height = boardParent.clientWidth;
+board.width = boardParent.clientWidth;
 var boardColors = ["#bd8f6a","#613511"]
 var ctx = board.getContext("2d");
 
@@ -207,6 +209,25 @@ bking.onload = function () {
 }
 bking.src = "images/bK.svg";
 
+window.addEventListener('resize', function(event){
+    console.log("resizing");
+    board.width = boardParent.clientWidth;
+    board.height = boardParent.clientWidth;
+    pW = board.width / 8;
+    pH = board.height / 8;
+
+    for(i = 0; i < 8; ++i){
+        for(j = 0; j < 8; ++j){
+            if(pieces[i][j] != "."){
+                pieces[i][j].x = j * pW;
+                pieces[i][j].y = i * pH;
+            }
+        }
+    }
+
+    drawBoard(ctx,pieces);
+});
+
 //console.log(pieces);
 
 // THIS IS A MESS
@@ -311,6 +332,8 @@ board.addEventListener('mousedown', function(event){
     }
     else{
         console.log("failed to set currP");
+        console.log("mouse x: " + mouseX + " | mouse y: " + mouseY);
+        console.log("Board Height: " + board.height + " | Board Width: " + board.width);
     }
 });
 
@@ -383,7 +406,7 @@ choiceDiv = document.getElementById("colorChoiceDiv");
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 
 newGameButton.addEventListener("click", () => {
-    choiceDiv.innerHTML = "<button id=\"whiteButton\">white</button><button id=\"blackButton\">black</button>"
+    choiceDiv.innerHTML = "<button id=\"whiteButton\" class=\"chess_white_btn\">white</button><br/><button id=\"blackButton\" class=\"chess_black_btn\">black</button>"
     whiteButton = document.getElementById("whiteButton");
     blackButton = document.getElementById("blackButton");
     //console.log(choiceDiv.innerHTML)

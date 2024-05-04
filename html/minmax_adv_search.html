@@ -1,30 +1,14 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Minimax Chess</title>
-        <link rel="stylesheet" href="assets/css/styles.css">
-    </head>
-    <body>
-        <table class="game-container">
-            <tr>
-                <td class="left-col" id="white">
-                    <h2>Left column</h2>
-                </td>
-                <td class="mid-col">
-                    <div class="board-top"><h2>Board top</h2></div>
-                    <canvas class="board" width="700" id="board"></div>
-                    <div class="board-bottom"></div>
-                </td>
-                <td class="right-col" id="black">
-                    <h2>Game Options</h2>
-                    <button id="newGameButton" type="button">New Game</button>
-                    <div id="colorChoiceDiv"></div>
-                </td>
-            </tr>
-        </table>
-    </body>
-    <script src="assets/js/model.js"></script>
-    <script src="assets/js/page.js"></script>
-</html>
+<div class="ucs_page_content">
+    <div class="chessboard_div" id="chessboardParent">
+        <canvas class="board" id="board"></canvas>
+    </div>
+    <div class="chessboard_details_div" id="chess_details_div">
+        <div class="chessboard_details"></div>
+    </div>
+    <div class="chessboard_controls_div">
+        <div class="chessboard_controls">
+            <button id="newGameButton" type="button" class="chessboard_btn">New Game</button>
+            <div id="colorChoiceDiv"></div>
+        </div>
+    </div>
+</div>

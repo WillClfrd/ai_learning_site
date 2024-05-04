@@ -55,7 +55,8 @@ body {
 .board {
     padding:0;
     margin:0;
-    width:700px;
+    width:100%;
+    border-radius:5px;
 }
 
 .header {
@@ -172,4 +173,86 @@ body {
     border-radius: 10px;
     width:70%;
     height:50%;
+}
+
+.chessboard_div {
+    background-color: #212529;
+    height:fit-content;
+    width:50%;
+    border-radius: 10px;
+    padding: 5px;
+    float:left;
+}
+
+.chessboard_controls_div {
+    height:fit-content;
+    width:20%;
+    float:left;
+    margin-top:1%;
+    border-radius:10px;
+    padding: 5px;
+}
+
+.chessboard_controls {
+    border-radius: 5px;
+    height:100%;
+    width:100%;
+}
+
+.chessboard_btn {
+    background-color:#0d6efd;
+    border: none;
+    color: white;
+    padding:0;
+    text-align: center;
+    font-size: 16px;
+    margin:1%;
+    border-radius: 10px;
+    width:50%;
+    height:50px;
+}
+
+.chess_white_btn {
+    background-color:white;
+    border: solid;
+    color: black;
+    border-color:black;
+    padding:0;
+    text-align: center;
+    font-size: 16px;
+    margin:1%;
+    border-radius: 10px;
+    width:50%;
+    height:50px;
+}
+
+.chess_black_btn {
+    background-color:#212529;
+    border: solid;
+    color: white;
+    border-color:black;
+    padding:0;
+    text-align: center;
+    font-size: 16px;
+    margin:1%;
+    border-radius: 10px;
+    width:50%;
+    height:50px;
+}
+
+.chessboard_details_div {
+    background-color: #212529;
+    height: 75.7%;
+    width:30%;
+    float:left;
+    margin-left:1%;
+    border-radius:10px;
+    padding: 5px;
+}
+
+.chessboard_details {
+    background-color:#2f3439;
+    border-radius: 5px;
+    height:100%;
+    width:100%;
 }
