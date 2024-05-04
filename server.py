@@ -3,7 +3,7 @@ import asyncio
 from websockets.server import serve
 import json
 
-pages = ["a_star_search.html","id3_dec_tree.html","minmax_adv_search.html","gen_algo.html","stoch_grad_desc.html","uni_cost_search.html","home.html"]
+pages = ["a_star_search","id3_dec_tree","minmax_adv_search","gen_algo","stoch_grad_desc","uni_cost_search","home"]
 
 # define websocket here to make calls to minimax_engine methods and return call results
 async def handle_req(websocket):
@@ -40,12 +40,14 @@ async def handle_req(websocket):
         elif req["method"] == "getpage":
             # print(req["page"])
             if req["page"] in pages:
-                with open("html/" + req["page"], "r") as file:
+                with open("html/" + req["page"] + ".html", "r") as file:
                     res["content"] = file.read()
                     res["error"] = "none"
+                    res["script"] = "assets/js/" + req["page"] + ".js"
             else:
                 with open("html/error.html","r") as file:
                     res["content"] = file.read()
+                    res["script"] = "assets/js/error.js"
                     res["error"] = "invalid_page"
         else:
             res["error"] = "invalid command"

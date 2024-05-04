@@ -1,9 +1,13 @@
-const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+// const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 
-while(document.getElementById("reset_btn")==null){
-    sleep(100);
-    console.log("sleeping");
-}
+// async function wait(time){
+//     await sleep(time);
+// }
+
+// while(document.getElementById("reset_btn")==null){
+//     wait(100);
+// }
+console.log("ucs script")
 
 add_node_btn = document.getElementById("add_node_btn");
 add_edge_btn = document.getElementById("add_edge_btn");

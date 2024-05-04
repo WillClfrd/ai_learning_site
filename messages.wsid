@@ -75,5 +75,6 @@ getpage
          "page": "page_name"}
 
     Response Format:
-        {"content": "page_content"
+        {"content": "page_content",
+         "script": "example.js",
          "error": "none"}
