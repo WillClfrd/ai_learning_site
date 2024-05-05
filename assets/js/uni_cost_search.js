@@ -1,10 +1,11 @@
 class Circle{
-    constructor(x,y,radius){
+    constructor(x,y,radius,id){
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.startAng = 0;
         this.endAng = 2 * Math.PI;
+        this.id = id;
     }
 }
 
@@ -17,11 +18,14 @@ class Line{
         this.connStart = false;
         this.connEnd = false;
         this.movePoint = "none";
+        this.parStart = null;
+        this.parEnd = null;
     }
 }
 
 var nodes = [];
 var lines = [];
+var id = 0;
 var panel = document.getElementById("drawing_panel");
 var ctx = panel.getContext("2d");
 var currNode = null;
@@ -31,17 +35,8 @@ console.log(panel.clientHeight);
 
 function drawShapes(ctx){
     ctx.clearRect(0, 0, panel.width, panel.height);
-    
-    for(i = 0; i < nodes.length; ++i){
-        ctx.beginPath();
-        ctx.arc(nodes[i].x,nodes[i].y,nodes[i].radius,nodes[i].startAng,nodes[i].endAng);
-        ctx.fillStyle = "red";
-        ctx.fill();
-        // ctx.stroke();
-    }
 
     for(i = 0; i < lines.length; ++i){
-        //console.log(lines[i].startX)
         ctx.moveTo(lines[i].startX, lines[i].startY);
         ctx.lineTo(lines[i].endX, lines[i].endY);
         ctx.stroke();
@@ -58,11 +53,14 @@ function drawShapes(ctx){
             ctx.fillStyle = "blue";
             ctx.fill();
         }
-
-        // ctx.moveTo((100 * i), i * 100);
-        // ctx.lineTo(200 + (100 * i), i * 100);
     }
-    // ctx.fill();
+
+    for(i = 0; i < nodes.length; ++i){
+        ctx.beginPath();
+        ctx.arc(nodes[i].x,nodes[i].y,nodes[i].radius,nodes[i].startAng,nodes[i].endAng);
+        ctx.fillStyle = "red";
+        ctx.fill();
+    }
 }
 
 add_node_btn = document.getElementById("add_node_btn");
@@ -117,6 +115,17 @@ panel.addEventListener("mousemove",(event)=>{
         currNode.x = mouseX;
         currNode.y = mouseY;
 
+        for(i = 0; i < lines.length; ++i){
+            if(lines[i].parStart != null){
+                lines[i].startX = lines[i].parStart.x;
+                lines[i].startY = lines[i].parStart.y;
+            }
+            if(lines[i].parEnd != null){
+                lines[i].endX = lines[i].parEnd.x;
+                lines[i].endY = lines[i].parEnd.y;
+            }
+        }
+
         drawShapes(ctx);
         ctx.beginPath();
         ctx.arc(currNode.x,currNode.y,currNode.radius,currNode.startAng,currNode.endAng);
@@ -164,6 +173,24 @@ panel.addEventListener("mouseup",(event)=>{
         drawShapes(ctx);
     }
     else if(currLine != null){
+        mouseX = event.clientX - panel.getBoundingClientRect().left;
+        mouseY = event.clientY - panel.getBoundingClientRect().top;
+
+        for(i = 0; i < nodes.length; ++i){
+            if((mouseX >= (nodes[i].x - nodes[i].radius) && mouseX <= (nodes[i].x + nodes[i].radius)) && (mouseY >= (nodes[i].y - nodes[i].radius) && mouseY <= (nodes[i].y + nodes[i].radius))){
+                if(currLine.movePoint == "start"){
+                    currLine.parStart = nodes[i];
+                    currLine.startX = nodes[i].x;
+                    currLine.startY = nodes[i].y;
+                }
+                else{
+                    currLine.parEnd = nodes[i];
+                    currLine.endX = nodes[i].x;
+                    currLine.endY = nodes[i].y;
+                }
+            }
+        }
+
         lines.push(currLine);
         currLine = null;
         drawShapes(ctx);
@@ -171,7 +198,7 @@ panel.addEventListener("mouseup",(event)=>{
 });
 
 add_node_btn.addEventListener("click",(event)=>{
-    nodes.push(new Circle(panel.clientWidth / 2, panel.clientHeight / 2, 30));
+    nodes.push(new Circle(panel.clientWidth / 2, panel.clientHeight / 2, 30, id++));
     drawShapes(ctx);
     console.log(nodes);
 });
