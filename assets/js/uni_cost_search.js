@@ -24,27 +24,8 @@ class Line{
 }
 
 window.addEventListener("resize",(event)=>{
-    let prevWidth = panel.width;
-    let prevHeight = panel.height;
-    
-    panel.width = panelParent.clientWidth;
-    panel.height = panelParent.clientHeight;
-
-    let widthRatio = prevWidth / panel.width;
-    let heightRatio = prevHeight / panel.height;
-
-    for(i = 0; i < nodes.length; ++i){
-        nodes[i].x = nodes[i].x * widthRatio;
-        nodes[i].y = nodes[i].y * heightRatio;
-    }
-
-    for(i = 0; i < lines.length; ++i){
-        lines[i].startX = lines[i].startX * widthRatio;
-        lines[i].startY = lines[i].startY * heightRatio;
-
-        lines[i].endX = lines[i].endX * widthRatio;
-        lines[i].endY = lines[i].endY * heightRatio;
-    }
+    panel.width = panelParent.clientWidth - (parentPadding * 2);
+    panel.height = panelParent.clientHeight - (parentPadding * 2);
 
     drawShapes(ctx);
 });
@@ -54,8 +35,9 @@ var lines = [];
 var id = 0;
 var panel = document.getElementById("drawing_panel");
 var panelParent = document.getElementById("drawing_panel_parent")
-panel.width = panelParent.clientWidth;
-panel.height = panelParent.clientHeight;
+let parentPadding = 5;
+panel.width = panelParent.clientWidth - (parentPadding * 2);
+panel.height = panelParent.clientHeight - (parentPadding * 2);
 
 console.log("parent width: " + panelParent.clientWidth);
 console.log("parent height " + panelParent.clientHeight);
@@ -263,10 +245,10 @@ panel.addEventListener("click",(event)=>{
         for(i = 0; i < nodes.length; ++i){
             if((mouseX >= (nodes[i].x - nodes[i].radius) && mouseX <= (nodes[i].x + nodes[i].radius)) && (mouseY >= (nodes[i].y - nodes[i].radius) && mouseY <= (nodes[i].y + nodes[i].radius))){
                 for(j = 0; j < lines.length; ++j){
-                    if(lines[j].parStart.id == nodes[i].id){
+                    if(lines[j].parStart != null && lines[j].parStart.id == nodes[i].id){
                         lines[j].parStart = null;
                     }
-                    if(lines[j].parEnd.id == nodes[i].id){
+                    if(lines[j].parEnd != null && lines[j].parEnd.id == nodes[i].id){
                         lines[j].parEnd = null;
                     }
                 }
