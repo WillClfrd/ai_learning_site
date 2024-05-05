@@ -23,16 +23,49 @@ class Line{
     }
 }
 
+window.addEventListener("resize",(event)=>{
+    let prevWidth = panel.width;
+    let prevHeight = panel.height;
+    
+    panel.width = panelParent.clientWidth;
+    panel.height = panelParent.clientHeight;
+
+    let widthRatio = prevWidth / panel.width;
+    let heightRatio = prevHeight / panel.height;
+
+    for(i = 0; i < nodes.length; ++i){
+        nodes[i].x = nodes[i].x * widthRatio;
+        nodes[i].y = nodes[i].y * heightRatio;
+    }
+
+    for(i = 0; i < lines.length; ++i){
+        lines[i].startX = lines[i].startX * widthRatio;
+        lines[i].startY = lines[i].startY * heightRatio;
+
+        lines[i].endX = lines[i].endX * widthRatio;
+        lines[i].endY = lines[i].endY * heightRatio;
+    }
+
+    drawShapes(ctx);
+});
+
 var nodes = [];
 var lines = [];
 var id = 0;
 var panel = document.getElementById("drawing_panel");
+var panelParent = document.getElementById("drawing_panel_parent")
+panel.width = panelParent.clientWidth;
+panel.height = panelParent.clientHeight;
+
+console.log("parent width: " + panelParent.clientWidth);
+console.log("parent height " + panelParent.clientHeight);
+
 var ctx = panel.getContext("2d");
 var currNode = null;
 var currLine = null;
 var delMode = false;
-console.log(panel.clientWidth);
-console.log(panel.clientHeight);
+console.log("panel width: " + panel.width);
+console.log("panel height: " + panel.height);
 
 function drawShapes(ctx){
     ctx.clearRect(0, 0, panel.width, panel.height);
@@ -224,6 +257,8 @@ panel.addEventListener("click",(event)=>{
     mouseX = event.clientX - panel.getBoundingClientRect().left;
     mouseY = event.clientY - panel.getBoundingClientRect().top;
 
+    console.log("x: " + mouseX + " | y: " + mouseY);
+
     if(delMode){
         for(i = 0; i < nodes.length; ++i){
             if((mouseX >= (nodes[i].x - nodes[i].radius) && mouseX <= (nodes[i].x + nodes[i].radius)) && (mouseY >= (nodes[i].y - nodes[i].radius) && mouseY <= (nodes[i].y + nodes[i].radius))){
@@ -252,13 +287,13 @@ panel.addEventListener("click",(event)=>{
 });
 
 add_node_btn.addEventListener("click",(event)=>{
-    nodes.push(new Circle(panel.clientWidth / 2, panel.clientHeight / 2, 30, id++));
+    nodes.push(new Circle(panel.width / 2, panel.height / 2, 30, id++));
     drawShapes(ctx);
     console.log(nodes);
 });
 
 add_edge_btn.addEventListener("click",(event)=>{
-    lines.push(new Line((panel.clientWidth / 2) - 100,panel.clientHeight / 2,(panel.clientWidth / 2) + 100,panel.clientHeight / 2));
+    lines.push(new Line((panel.width / 2) - 100,panel.height / 2,(panel.width / 2) + 100,panel.height / 2));
     drawShapes(ctx);
     console.log(lines);
 });
