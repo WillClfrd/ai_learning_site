@@ -1,4 +1,4 @@
-from python.engine import minimax_engine as me
+from site_python_files.engine import minimax_engine as me
 import asyncio
 from websockets.server import serve
 import json
@@ -14,7 +14,7 @@ async def handle_req(websocket):
         # returns every input received from websocket
         req = json.loads(message)
         # check exact format for parsing json into function parameters and for assigning function return values
-        print(req)
+        # print(req)
         if req["method"] == "ismovelegal":
             me.board = req["board"]
             res["method"] = "ismovelegal"
