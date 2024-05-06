@@ -45,13 +45,6 @@ var startNode = null;
 var endNode = null;
 var selStart = false;
 var selEnd = false;
-var occSpace = new Array(panel.height);
-    
-for(i = 0; i < occSpace.length; ++i){
-    occSpace[i] = new Array(panel.width);
-}
-
-clearOccSpace();
 
 function drawShapes(ctx){
     ctx.clearRect(0, 0, panel.width, panel.height);
@@ -113,26 +106,14 @@ function genGraph(){
     for(i = 0; i < nodesNum; ++i){
         randX = Math.floor(genInt(panel.width - 60)) + 30;
         randY = Math.floor(genInt(panel.height - 60)) + 30;
-        while(occSpace[randY][randX] == 1){
+        
+        while(checkBoundary(randX,randY)){
             randX = Math.floor(genInt(panel.width - 60)) + 30;
             randY = Math.floor(genInt(panel.height - 60)) + 30;
         }
 
-        let lowerX = Math.max(0,randY - 50);
-        let upperX = Math.min(occSpace[0].length,randY + 50);
-        let lowerY = Math.max(0,randX - 50);
-        let upperY = Math.min(occSpace.length,randX + 50);
-
-        for(j = lowerX; j < upperX; ++j){
-            for(z = lowerY; z < upperY; ++z){
-                occSpace[j][z] = 1;
-            }
-        }
-
         nodes.push(new Circle(randX,randY,30,id++));
     }
-
-    console.log(occSpace);
 
     for(i = 0; i < nodes.length; ++i){
         let numEdges = genInt(3) + 1;
@@ -152,22 +133,15 @@ function genGraph(){
 
     console.log(nodes);
     drawShapes(ctx);
-    for(i = 0; i < occSpace.length; ++i){
-        for(j = 0; j < occSpace[i].length; ++j){
-            if(occSpace[i][j] == 1){
-                
-            }
-        }
-    }
 }
 
-function clearOccSpace(){
-    for(i = 0; i < occSpace.length; ++i){
-        for(j = 0; j < occSpace[i].length; ++j){
-            occSpace[i][j] = 0;
+function checkBoundary(x,y){
+    for(i = 0; i < nodes.length; ++i){
+        if(((x >= (nodes[i].x - 60)) && (x <= (nodes[i].x + 60))) && ((y >= (nodes[i].y - 60)) && (y <= (nodes[i].y + 60)))){
+            return true;
         }
     }
-    console.log("Cleared occSpace");
+    return false;
 }
 
 add_node_btn = document.getElementById("add_node_btn");
@@ -483,7 +457,6 @@ reset_btn.addEventListener("click",(event)=>{
     lines = [];
     id = 0;
     lineID = 0;
-    clearOccSpace();
     drawShapes(ctx);
     console.log("resetting");
 });
