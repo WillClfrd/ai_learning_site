@@ -12,7 +12,8 @@ class Circle{
 }
 
 class Line{
-    constructor(startX,startY,endX,endY){
+    constructor(id,startX,startY,endX,endY){
+        this.id = id;
         this.startX = startX;
         this.startY = startY;
         this.endX = endX;
@@ -27,13 +28,6 @@ class Line{
     }
 }
 
-window.addEventListener("resize",(event)=>{
-    panel.width = panelParent.clientWidth - (parentPadding * 2);
-    panel.height = panelParent.clientHeight - (parentPadding * 2);
-
-    drawShapes(ctx);
-});
-
 var nodes = [];
 var lines = [];
 var id = 0;
@@ -43,10 +37,6 @@ var panelParent = document.getElementById("drawing_panel_parent")
 let parentPadding = 5;
 panel.width = panelParent.clientWidth - (parentPadding * 2);
 panel.height = panelParent.clientHeight - (parentPadding * 2);
-
-//console.log("parent width: " + panelParent.clientWidth);
-//console.log("parent height " + panelParent.clientHeight);
-
 var ctx = panel.getContext("2d");
 var currNode = null;
 var currLine = null;
@@ -55,8 +45,6 @@ var startNode = null;
 var endNode = null;
 var selStart = false;
 var selEnd = false;
-//console.log("panel width: " + panel.width);
-//console.log("panel height: " + panel.height);
 
 function drawShapes(ctx){
     ctx.clearRect(0, 0, panel.width, panel.height);
@@ -106,14 +94,56 @@ function drawShapes(ctx){
     }
 }
 
+function genInt(upper){
+    return Math.floor(Math.random() * upper);
+}
+
+function genGraph(){
+    let nodesNum = Math.floor(Math.random(20)) + 11;
+    
+    console.log(panel.width);
+    console.log(panel.height);
+    for(i = 0; i < nodesNum; ++i){
+        nodes.push(new Circle(Math.floor(genInt(panel.width - 60)) + 30,Math.floor(genInt(panel.height - 60)) + 30,30,id++));
+    }
+
+    for(i = 0; i < nodes.length; ++i){
+        let numEdges = genInt(3) + 1;
+        
+        for(j = 0; j < numEdges; ++j){
+            let randNode = nodes[genInt(nodes.length)];
+            while(randNode == nodes[i]){
+                randNode = nodes[genInt(nodes.length)];
+            }
+            let tempLine = new Line(lineID++, nodes[i].x, nodes[i].y, randNode.x, randNode.y);
+            tempLine.parStart = nodes[i];
+            tempLine.parEnd = randNode;
+            lines.push(tempLine);
+            tempLine = null;
+        }
+    }
+
+    console.log(nodes);
+    drawShapes(ctx);
+}
+
 add_node_btn = document.getElementById("add_node_btn");
 add_edge_btn = document.getElementById("add_edge_btn");
 del_mode_btn = document.getElementById("del_mode_btn");
 sel_start_btn = document.getElementById("sel_start_btn");
 sel_end_btn = document.getElementById("sel_end_btn");
+gen_graph_btn = document.getElementById("gen_graph_btn");
 prev_step_btn = document.getElementById("prev_step_btn");
 next_step_btn = document.getElementById("next_step_btn");
 reset_btn = document.getElementById("reset_btn");
+
+
+window.addEventListener("resize",(event)=>{
+    panel.width = panelParent.clientWidth - (parentPadding * 2);
+    panel.height = panelParent.clientHeight - (parentPadding * 2);
+
+    drawShapes(ctx);
+});
 
 panel.addEventListener("mousedown",(event)=>{
     mouseX = event.clientX - panel.getBoundingClientRect().left;
@@ -344,8 +374,7 @@ add_node_btn.addEventListener("click",(event)=>{
 });
 
 add_edge_btn.addEventListener("click",(event)=>{
-    lines.push(new Line(((lineID * 100) % (panel.width - (panel.width % 100))) + 5,(Math.floor((lineID * 100) / (panel.width - (panel.width % 100))) * 100) + 5,((lineID * 100) % (panel.width - (panel.width % 100))) + 95,(Math.floor((lineID * 100) / (panel.width - (panel.width % 100))) * 100) + 95));
-    ++lineID;
+    lines.push(new Line(lineID++,((lineID * 100) % (panel.width - (panel.width % 100))) + 5,(Math.floor((lineID * 100) / (panel.width - (panel.width % 100))) * 100) + 5,((lineID * 100) % (panel.width - (panel.width % 100))) + 95,(Math.floor((lineID * 100) / (panel.width - (panel.width % 100))) * 100) + 95));
     drawShapes(ctx);
     console.log(lines);
 });
@@ -393,6 +422,10 @@ sel_end_btn.addEventListener("click",(event)=>{
         drawShapes(ctx);
         console.log("Exiting Select End Mode");
     }
+});
+
+gen_graph_btn.addEventListener("click",(event)=>{
+    genGraph();
 });
 
 prev_step_btn.addEventListener("click",(event)=>{
