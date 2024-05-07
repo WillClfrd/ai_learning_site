@@ -1,4 +1,6 @@
 from site_python_files.engine import minimax_engine as me
+from site_python_files.uniform_cost import UCS
+from site_python_files.a_star import AStar
 import asyncio
 from websockets.server import serve
 import json
@@ -49,6 +51,10 @@ async def handle_req(websocket):
                     res["content"] = file.read()
                     res["script"] = "assets/js/error.js"
                     res["error"] = "invalid_page"
+        elif req["method"] == "uniform_cost_search":
+            print("uniform cost search")
+        elif req["method"] == "a_star_search":
+            print("a star search")
         else:
             res["error"] = "invalid command"
         #print(f"Sending: {res}")
