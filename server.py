@@ -59,7 +59,7 @@ async def handle_req(websocket):
                         with open("html/error.html","r") as file:
                             res["content"] = file.read()
                             res["scripts"] = ["assets/js/error.js"]
-                            res["error"] = "invalid_page"
+                            res["error"] = "invalid_script"
             else:
                 with open("html/error.html","r") as file:
                     res["content"] = file.read()
