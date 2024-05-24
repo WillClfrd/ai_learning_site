@@ -1,12 +1,15 @@
 var pages = ["uni_cost_search","a_star_search","minmax_adv_search","stoch_grad_desc","id3_dec_tree","gen_algo"];
+var pageScripts = {"uni_cost_search":["uni_cost_search"], "a_star_search":["a_star_search"], "minmax_adv_search":["minmax_adv_search"], "stoch_grad_desc":["stoch_grad_desc"], "id3_dec_tree":["id3_dec_tree"], "gen_algo":["gen_algo"]}
 
 function set_page_content(content,pageScript){
     // console.log(content);
     pageContent = document.getElementById("page_content");
     pageContent.innerHTML=content;
-    const script = document.createElement('script');
-    script.src = pageScript;
-    document.body.appendChild(script);
+    for(num in pageScript){
+        const script = document.createElement('script');
+        script.src = pageScript[num];
+        document.body.appendChild(script);
+    }
 }
 
 function set_active_link(page){
@@ -28,7 +31,8 @@ const ws = new WebSocket("ws://localhost:11111");
 ws.addEventListener("open", (event) => {
     let req = {
         method: "getpage",
-        page: page
+        page: page,
+        scripts: pageScripts[page]
     }
     ws.send(JSON.stringify(req));
 });
@@ -37,7 +41,7 @@ ws.addEventListener("message", (event) => {
     data = JSON.parse(event.data);
     // scripts = document.getElementById("page_script");
     // scripts.src="";
-    set_page_content(data.content,data.script);
+    set_page_content(data.content,data.scripts);
 })
 
 var params = new URLSearchParams(window.location.search);

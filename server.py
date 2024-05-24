@@ -6,6 +6,7 @@ from websockets.server import serve
 import json
 
 pages = ["a_star_search","id3_dec_tree","minmax_adv_search","gen_algo","stoch_grad_desc","uni_cost_search","home"]
+js_scripts = ["a_star_search", "gen_algo", "home.js", "id3_dec_tree", "index.js", "minmax_adv_search", "model", "stoch_grad_desc", "uni_cost_search"]
 
 # define websocket here to make calls to minimax_engine methods and return call results
 async def handle_req(websocket):
@@ -45,11 +46,24 @@ async def handle_req(websocket):
                 with open("html/" + req["page"] + ".html", "r") as file:
                     res["content"] = file.read()
                     res["error"] = "none"
-                    res["script"] = "assets/js/" + req["page"] + ".js"
+                    
+                    scripts = []
+
+                    if req["scripts"]:
+                        for script in req["scripts"]:
+                            if script in js_scripts:
+                                scripts.append("assets/js/" + str(script) + ".js")
+                        
+                        res["scripts"] = scripts
+                    else:
+                        with open("html/error.html","r") as file:
+                            res["content"] = file.read()
+                            res["scripts"] = ["assets/js/error.js"]
+                            res["error"] = "invalid_page"
             else:
                 with open("html/error.html","r") as file:
                     res["content"] = file.read()
-                    res["script"] = "assets/js/error.js"
+                    res["scripts"] = ["assets/js/error.js"]
                     res["error"] = "invalid_page"
         elif req["method"] == "uniform_cost_search":
             print("uniform cost search")
