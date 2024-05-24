@@ -72,11 +72,12 @@ getpage
 
     Request Format:
         {"method": "getpage",
-         "page": "page_name"}
+         "page": "page_name",
+         "scripts": ["script_name",...,"script_name"]}
 
     Response Format:
         {"content": "page_content",
-         "script": "example.js",
+         "scripts": ["script.js",...,"script.js"],
          "error": "none"}
 
 ------------------------------------------------------------------
