@@ -1,6 +1,6 @@
 from site_python_files.engine import minimax_engine as me
-from site_python_files.uniform_cost import UCS
-from site_python_files.a_star import AStar
+import site_python_files.uniform_cost as UCS
+import site_python_files.a_star as AS
 import asyncio
 from websockets.server import serve
 import json
