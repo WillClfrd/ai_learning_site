@@ -62,7 +62,7 @@ function drawShapes(ctx){
             ctx.arc(lines[i].startX,lines[i].startY,5,0,2 * Math.PI);
             ctx.fillStyle = "blue";
             ctx.fill();
-        }
+        }       
         if(lines[i].connEnd == false){
             ctx.beginPath();
             ctx.arc(lines[i].endX,lines[i].endY,5,0,2 * Math.PI);
@@ -115,24 +115,55 @@ function genGraph(){
         nodes.push(new Circle(randX,randY,30,id++));
     }
 
+    console.log(nodes);
+    console.log(lines);
+
     for(i = 0; i < nodes.length; ++i){
         let numEdges = genInt(3) + 1;
         
+        console.log(i + "nymLine "+ numEdges);
         for(j = 0; j < numEdges; ++j){
+            console.log("i: "+ i);
+            console.log(j);
             let randNode = nodes[genInt(nodes.length)];
-            while(randNode == nodes[i]){
+            
+            if (checkEdgeseachCir(nodes[i].x, nodes[i].y) >= 4){
+                break;
+            }
+
+            while(randNode == nodes[i] || checkEdgeseachCir(randNode.x, randNode.y) >= 4 ){
                 randNode = nodes[genInt(nodes.length)];
             }
+            console.log("*"+panel.width+"  "+panel.height);
+            
+            console.log(nodes);
+            console.log("i after:" + i);
+            console.log(nodes[i]);
+            //console.log( randNode.x + " " + randNode.y);
+
             let tempLine = new Line(lineID++, nodes[i].x, nodes[i].y, randNode.x, randNode.y);
             tempLine.parStart = nodes[i];
             tempLine.parEnd = randNode;
             lines.push(tempLine);
             tempLine = null;
+            console.log("________");
         }
     }
 
     console.log(nodes);
+    console.log(lines);
+
     drawShapes(ctx);
+}
+
+function checkEdgeseachCir (x,y){
+    let count = 0;
+    for (z = 0; z < lines.length; ++z){
+        if ((x == lines[z].startX && y == lines[z].startY) || (x == lines[z].endX && y == lines[z].endY))
+            ++count;
+    }
+    console.log("numEdge="+count);
+    return count;
 }
 
 function checkBoundary(x,y){
@@ -442,6 +473,7 @@ sel_end_btn.addEventListener("click",(event)=>{
 
 gen_graph_btn.addEventListener("click",(event)=>{
     genGraph();
+    console.log("success");
 });
 
 prev_step_btn.addEventListener("click",(event)=>{
