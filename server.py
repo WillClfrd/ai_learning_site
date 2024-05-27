@@ -19,6 +19,17 @@ async def handle_req(websocket):
 
         if req["method"] == "ismovelegal":
             me.board = req["board"]
+
+            me.white_king = req["flags"][0]
+            me.white_krook = req["flags"][1]
+            me.white_qrook = req["flags"][2]
+            me.black_king = req["flags"][3]
+            me.black_krook = req["flags"][4]
+            me.black_qrook = req["flags"][5]
+            me.en_passant = req["flags"][6]
+            me.ep_targets = req["en_passant_targets"]
+            me.is_ep = False
+
             res["method"] = "ismovelegal"
             moveCheck = me.IsMoveLegal((req["move"]["from"][0],req["move"]["from"][1]), (req["move"]["to"][0],req["move"]["to"][1]))
 
@@ -28,6 +39,7 @@ async def handle_req(websocket):
 
             res["result"] = moveCheck and not check
             res["checkmate"] = me.IsCheckmate(req["opponent"])
+            res["ep_picked"] = me.is_ep
             res["error"] = "none"
         elif req["method"] == "getminimaxmove":
             res["method"] = "getminimaxmove"
