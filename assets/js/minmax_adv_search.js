@@ -78,7 +78,7 @@ var boardParent = document.getElementById("chessboardParent");
 var board = document.getElementById("board");
 board.height = boardParent.clientWidth;
 board.width = boardParent.clientWidth;
-var boardColors = ["#bd8f6a","#613511"]
+var boardColors = ["#bd8f6a","#613511"];
 var ctx = board.getContext("2d");
 
 console.log("Board Height: " + board.height + " | Board Width: " + board.width);
@@ -245,6 +245,13 @@ var message;
 var mouseX;
 var mouseY;
 var player = "w";
+var white_king = true;
+var white_krook = true;
+var white_qrook = true;
+var black_king = true;
+var black_krook =  true;
+var black_qrook = true;
+var en_passant = false;
 
 const chessSocket = new WebSocket("ws://localhost:11111");
 chessSocket.addEventListener("open", (event) => {
@@ -262,13 +269,39 @@ chessSocket.addEventListener("message", (event) => {
             if(res.result && currP !== '.'){
                 currP.isDragging = false;
 
+                // en passant
+                if(currP.name == 'P' && res.ep_picked){
+                    pieces[Math.floor(mouseY / pH) + 1][Math.floor(mouseX/ pW)] = '.';
+                }
+                else if(currP.name == 'p' && res.ep_picked){
+                    pieces[Math.floor(mouseY / pH) - 1][Math.floor(mouseX/ pW)] = '.';
+                }
+                else if(currP.name == 'K'){
+                    white_king = false;
+                }
+                else if(currP.name == 'k'){
+                    black_king = false;
+                }
+                
                 currP.x = Math.floor((currP.x + (pW / 2)) / pW) * pW;
                 currP.y = Math.floor((currP.y + (pH / 2)) / pH) * pH;
 
                 pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = currP;
-                
+
                 if(res.checkmate){
                     isCheckmate == true;
+                }
+                if(black_qrook && board[0][0] == '.'){
+                    black_qrook = false;
+                }
+                if(black_krook && board[0][7] == '.'){
+                    black_krook = false;
+                }
+                if(white_qrook && board[7][0] == '.'){
+                    white_qrook = false;
+                }
+                if(white_krook && board[7][7] == '.'){
+                    white_krook = false;
                 }
 
                 player = (player == "w")?"b":"w";
@@ -352,8 +385,13 @@ board.addEventListener('mouseup', async function(event){
                 from: [tempCoord[0], tempCoord[1]],
                 to: [Math.floor(mouseY / pH), Math.floor(mouseX / pW)]
             },
+            flags: [white_king, white_krook, white_qrook, black_king, black_krook, black_qrook, en_passant],
+            en_passant_targets: [],
             player: player,
             opponent: (player == "w")?"b":"w"
+        }
+        if(en_passant && currP.name == 'P'){
+            req.en_passant_targets = [[currP],[]];
         }
         console.log(req);
         

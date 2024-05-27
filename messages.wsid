@@ -14,7 +14,9 @@ ismovelegal
                 ["P","P","P","P","P","P","P","P"],
                 ["R","N","B","Q","K","B","N","R"]],
         "move": {"from": [row,col],
-                "to": [row,col]}
+                "to": [row,col]},
+        "flags": [white_king, white_krook, white_qrook, black_king, black_krook, black_qrook, en_passant],
+        "en_passant_targets": [[row_1,col_1],[row_2,col_2]],
         "player": "w",
         "opponent": "b"}
   Return Format (example):

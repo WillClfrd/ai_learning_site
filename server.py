@@ -7,6 +7,7 @@ import json
 
 pages = ["a_star_search","id3_dec_tree","minmax_adv_search","gen_algo","stoch_grad_desc","uni_cost_search","home"]
 js_scripts = ["a_star_search", "gen_algo", "home.js", "id3_dec_tree", "index.js", "minmax_adv_search", "model", "stoch_grad_desc", "uni_cost_search"]
+conn = 0
 
 # define websocket here to make calls to minimax_engine methods and return call results
 async def handle_req(websocket):
