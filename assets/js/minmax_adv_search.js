@@ -263,7 +263,7 @@ chessSocket.addEventListener("message", (event) => {
                 currP.isDragging = false;
 
                 // en passant is on board
-                if((currP.name == 'P' || currP.name == 'p') && Math.abs(tempCoord[0] - Math.floor(mouseY / pH)) == 2 && ((Math.floor(mouseX / pW) < 7 && (pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW) + 1].name == 'P' || pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW) + 1].name == 'p')) || (Math.floor(mouseX / pW) > 0 && (pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW) - 1].name == 'P' || pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW) - 1].name == 'p')))){
+                if(Math.abs(tempCoord[0] - Math.floor(mouseY / pH)) == 2 && ((Math.floor(mouseX / pW) < 7 && ((pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW) + 1].name == 'P' && currP.name == 'p') || (pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW) + 1].name == 'p' && currP.name == 'P'))) || (Math.floor(mouseX / pW) > 0 && ((pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW) - 1].name == 'P' && currP.name == 'p') || (pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW) - 1].name == 'p' && currP.name == 'P'))))){
                     en_passant = true;
                 }
                 else{
