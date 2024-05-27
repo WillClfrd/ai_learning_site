@@ -228,15 +228,8 @@ window.addEventListener('resize', function(event){
     drawBoard(ctx,pieces);
 });
 
-//console.log(pieces);
-
-// THIS IS A MESS
-    //This whole thing should be rebuilt later on to make it better to read
-// NEED TO FIGURE OUT PROCESS FLOW
-// ASYNCHRONOUS NATURE OF EVENT HANDLERS MAKES IT DIFFICULT
-// I don't think the semaphore method will work correctly since the code might be arbitrarily executed
 var currP;
-var tempCoord; // use to track square that clicked piece currently occupies
+var tempCoord;
 var res;
 var req;
 var waiting = false;
@@ -269,12 +262,40 @@ chessSocket.addEventListener("message", (event) => {
             if(res.result && currP !== '.'){
                 currP.isDragging = false;
 
-                // en passant
+                // en passant is on board
+                if((currP.name == 'P' || currP.name == 'p') && Math.abs(tempCoord[0] - Math.floor(mouseY / pH)) == 2 && ((Math.floor(mouseX / pW) < 7 && (pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW) + 1].name == 'P' || pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW) + 1].name == 'p')) || (Math.floor(mouseX / pW) > 0 && (pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW) - 1].name == 'P' || pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW) - 1].name == 'p')))){
+                    en_passant = true;
+                }
+                else{
+                    en_passant = false;
+                }
+
+                // castling move made
+                if((currP.name == 'K' && white_king) || (currP.name == 'k' && black_king)){
+                    if(tempCoord[1] - Math.floor(mouseX / pW) == -2){
+                        console.log("Moving king side rook");
+                        pieces[tempCoord[0]][tempCoord[1] + 1] = pieces[tempCoord[0]][7];
+                        pieces[tempCoord[0]][7] = '.';
+
+                        pieces[tempCoord[0]][tempCoord[1] + 1].x = (tempCoord[1] + 1) * pW;
+                        pieces[tempCoord[0]][tempCoord[1] + 1].y = tempCoord[0] * pH;
+                    }
+                    else if(tempCoord[1] - Math.floor(mouseX / pW) == 2){
+                        console.log("Moving queen side rook");
+                        pieces[tempCoord[0]][tempCoord[1] - 1] = pieces[tempCoord[0]][0];
+                        pieces[tempCoord[0]][0] = '.';
+
+                        pieces[tempCoord[0]][tempCoord[1] - 1].x = (tempCoord[1] - 1) * pW;
+                        pieces[tempCoord[0]][tempCoord[1] - 1].y = tempCoord[0] * pH;
+                    }
+                }
+
+                // en passant and castling
                 if(currP.name == 'P' && res.ep_picked){
-                    pieces[Math.floor(mouseY / pH) + 1][Math.floor(mouseX/ pW)] = '.';
+                    pieces[Math.floor(mouseY / pH) + 1][Math.floor(mouseX / pW)] = '.';
                 }
                 else if(currP.name == 'p' && res.ep_picked){
-                    pieces[Math.floor(mouseY / pH) - 1][Math.floor(mouseX/ pW)] = '.';
+                    pieces[Math.floor(mouseY / pH) - 1][Math.floor(mouseX / pW)] = '.';
                 }
                 else if(currP.name == 'K'){
                     white_king = false;
@@ -286,21 +307,21 @@ chessSocket.addEventListener("message", (event) => {
                 currP.x = Math.floor((currP.x + (pW / 2)) / pW) * pW;
                 currP.y = Math.floor((currP.y + (pH / 2)) / pH) * pH;
 
-                pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = currP;
+                pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW)] = currP;
 
                 if(res.checkmate){
                     isCheckmate == true;
                 }
-                if(black_qrook && board[0][0] == '.'){
+                if(black_qrook && pieces[0][0] == '.'){
                     black_qrook = false;
                 }
-                if(black_krook && board[0][7] == '.'){
+                if(black_krook && pieces[0][7] == '.'){
                     black_krook = false;
                 }
-                if(white_qrook && board[7][0] == '.'){
+                if(white_qrook && pieces[7][0] == '.'){
                     white_qrook = false;
                 }
-                if(white_krook && board[7][7] == '.'){
+                if(white_krook && pieces[7][7] == '.'){
                     white_krook = false;
                 }
 
@@ -310,12 +331,8 @@ chessSocket.addEventListener("message", (event) => {
             else{
                 currP.isDragging = false;
                 currP.x = tempCoord[1] * pW;
-                //console.log("currP.x: " + currP.x + " | pW: " + pW);
                 currP.y = tempCoord[0] * pH;
-                //console.log("currP.y: " + currP.y + " | pH: " + pH);
-                //console.log("y: " + tempCoord[0] + " | x: " + tempCoord[1]);
                 pieces[tempCoord[0]][tempCoord[1]] = currP;
-                //console.log(pieces);
             }
 
             drawBoard(ctx,pieces);
@@ -324,21 +341,11 @@ chessSocket.addEventListener("message", (event) => {
             console.log("res: " + res);
             console.log("res[move]: " + res.move);
             console.log("res[move][0][0]: " + res.move[0][0]);
-            //console.log("Target row: " + res.move[0][0] + " | Target column: " + res.move.to[1]);
-            //console.log("Source row: " + res.move.from[0] + " | Source column: " + res.move.from[1]);
+
             pieces[res.move[1][0]][res.move[1][1]] = pieces[res.move[0][0]][res.move[0][1]];
             pieces[res.move[1][0]][res.move[1][1]].y = res.move[1][0] * pH;
             pieces[res.move[1][0]][res.move[1][1]].x = res.move[1][1] * pW;
-            //console.log("assigned pieces[" + res.move[1][0] + "][" + res.move[1][1] + "] with pieces[" + res.move[0][0] + "][" + res.move[0][1] + "]");
             pieces[res.move[0][0]][res.move[0][1]] = '.';
-            //console.log(getBoard());
-            //console.log(pieces);
-            
-            // for(let i = 0; i < 8; ++i){
-            //     for(let j = 0; j < 8; ++j){
-            //         console.log("pieces[" + i + "][" + j + "].y: " + pieces[i][j].y + " | pieces[" + i + "][" + j + "].x: " + pieces[i][j].x);
-            //     }
-            // }
 
             drawBoard(ctx,pieces);
             waiting = false;
@@ -356,12 +363,10 @@ board.addEventListener('mousedown', function(event){
     mouseY = event.clientY - board.getBoundingClientRect().top;
 
     if(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] !== '.' && pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].color == player){
-        //console.log(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].name + " clicked");
         currP = pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)];
         pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].isDragging = true;
         pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = '.';
         tempCoord = [Math.floor(mouseY / pH),Math.floor(mouseX/ pW)];
-        // console.log("tempCoord: " + tempCoord);
     }
     else{
         console.log("failed to set currP");
@@ -390,9 +395,10 @@ board.addEventListener('mouseup', async function(event){
             player: player,
             opponent: (player == "w")?"b":"w"
         }
-        if(en_passant && currP.name == 'P'){
-            req.en_passant_targets = [[currP],[]];
+        if(en_passant && (currP.name == 'P' || currP.name == 'p')){
+            req.en_passant_targets = [[tempCoord[0],tempCoord[1] - 1],[tempCoord[0],tempCoord[1] + 1]];
         }
+
         console.log(req);
         
         chessSocket.send(JSON.stringify(req))
