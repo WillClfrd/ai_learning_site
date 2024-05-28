@@ -12,6 +12,43 @@ class Piece{
 var isMouseDown = false;
 var pW;
 var pH;
+var promBuffer = 10;
+
+function drawPromotionOpts(ctx, color){
+    ctx.fillStyle = "#363636";
+    ctx.strokeStyle = "#000000";
+    ctx.beginPath();
+    ctx.roundRect((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2, (board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2, (board.width / 2) + (promBuffer * 5), (board.height / 8) + (promBuffer * 2), 10);
+    ctx.fill();
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.fillStyle = "grey";
+    ctx.strokeStyle = "#000000";
+    for(i = 0; i < 4; ++i){
+        ctx.beginPath();
+        ctx.roundRect(promGrid[i][0], promGrid[i][1], pW, pH, 5);
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+    }
+
+    ctx.stroke();
+
+    if(prom_color == 'w'){
+        // console.log("pawn-x: " + promGrid[0][0] + " | pawn-y: " + promGrid[0][1]);
+        ctx.drawImage(wknight, promGrid[0][0], promGrid[0][1], pW, pH);
+        ctx.drawImage(wbish, promGrid[1][0], promGrid[1][1], pW, pH);
+        ctx.drawImage(wrook, promGrid[2][0], promGrid[2][1], pW, pH);
+        ctx.drawImage(wqueen, promGrid[3][0], promGrid[3][1], pW, pH);
+    }
+    else{
+        ctx.drawImage(bknight, promGrid[0][0], promGrid[0][1], pW, pH);
+        ctx.drawImage(bbish, promGrid[1][0], promGrid[1][1], pW, pH);
+        ctx.drawImage(brook, promGrid[2][0], promGrid[2][1], pW, pH);
+        ctx.drawImage(bqueen, promGrid[3][0], promGrid[3][1], pW, pH);
+    }
+}
 
 function drawBoard(ctx, pieces){
     ctx.clearRect(0, 0, board.width, board.height);
@@ -71,6 +108,10 @@ function drawBoard(ctx, pieces){
         }
         // ctx.drawImage(pieces[i].image, pieces[i].x, pieces[i].y, pW, pH);
     }
+
+    if(promoting){
+        drawPromotionOpts(ctx);
+    }
     //console.log(pieces);
 }
 
@@ -80,11 +121,12 @@ board.height = boardParent.clientWidth;
 board.width = boardParent.clientWidth;
 var boardColors = ["#bd8f6a","#613511"];
 var ctx = board.getContext("2d");
-
-console.log("Board Height: " + board.height + " | Board Width: " + board.width);
-
 pW = board.width / 8;
 pH = board.height / 8;
+var promGrid = [[((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2) + promBuffer, ((board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2) + promBuffer],[((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2) + (promBuffer * 2) + pW, ((board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2) + promBuffer],[((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2) + (promBuffer * 3) + (2 * pW), ((board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2) + promBuffer],[((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2) + (promBuffer * 4) + (3 * pW), ((board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2) + promBuffer]];
+console.log(promGrid);
+
+console.log("Board Height: " + board.height + " | Board Width: " + board.width);
 
 ctx.fillStyle = "#363636";
 ctx.fillRect(0,0,board.width,board.height);
@@ -225,6 +267,8 @@ window.addEventListener('resize', function(event){
         }
     }
 
+    promGrid = [[((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2) + promBuffer, ((board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2) + promBuffer],[((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2) + (promBuffer * 2) + pW, ((board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2) + promBuffer],[((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2) + (promBuffer * 3) + (2 * pW), ((board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2) + promBuffer],[((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2) + (promBuffer * 4) + (3 * pW), ((board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2) + promBuffer]];
+
     drawBoard(ctx,pieces);
 });
 
@@ -245,6 +289,9 @@ var black_king = true;
 var black_krook =  true;
 var black_qrook = true;
 var en_passant = false;
+var promoting = false;
+var prom_color = 'w';
+var promCoord;
 
 const chessSocket = new WebSocket("ws://localhost:11111");
 chessSocket.addEventListener("open", (event) => {
@@ -302,6 +349,17 @@ chessSocket.addEventListener("message", (event) => {
                 }
                 else if(currP.name == 'k'){
                     black_king = false;
+                }
+
+                if(currP.name == 'P' && Math.floor(mouseY / pH) == 0){
+                    promCoord = [Math.floor(mouseY / pH),Math.floor(mouseX / pW)];
+                    prom_color = 'w';
+                    promoting = true;
+                }
+                else if(currP.name == 'p' && Math.floor(mouseY / pH) == 7){
+                    promCoord = [Math.floor(mouseY / pH),Math.floor(mouseX / pW)];
+                    prom_color = 'b';
+                    promoting = true;
                 }
                 
                 currP.x = Math.floor((currP.x + (pW / 2)) / pW) * pW;
@@ -409,6 +467,38 @@ board.addEventListener('mouseup', async function(event){
         }
 
         drawBoard(ctx,pieces);
+    }
+});
+
+board.addEventListener("click", (event) => {
+    mouseX = event.clientX - board.getBoundingClientRect().left;
+    mouseY = event.clientY - board.getBoundingClientRect().top;
+
+    let promPiece;
+    let promName;
+
+    if(promoting){
+        if((mouseX >= promGrid[0][0] && mouseX <= (promGrid[0][0] + pW)) && (mouseY >= promGrid[0][1] && mouseY <= (promGrid[0][1] + pH))){
+            promPiece = (prom_color == 'w')?wknight:bknight;
+            promName = (prom_color == 'w')?'T':'t';
+        }
+        else if((mouseX >= promGrid[1][0] && mouseX <= (promGrid[1][0] + pW)) && (mouseY >= promGrid[1][1] && mouseY <= (promGrid[1][1] + pH))){
+            promPiece = (prom_color == 'w')?wbish:bbish;
+            promName = (prom_color == 'w')?'B':'b';
+        }
+        else if((mouseX >= promGrid[2][0] && mouseX <= (promGrid[2][0] + pW)) && (mouseY >= promGrid[2][1] && mouseY <= (promGrid[2][1] + pH))){
+            promPiece = (prom_color == 'w')?wrook:brook;
+            promName = (prom_color == 'w')?'R':'r';
+        }
+        else if((mouseX >= promGrid[3][0] && mouseX <= (promGrid[3][0] + pW)) && (mouseY >= promGrid[3][1] && mouseY <= (promGrid[3][1] + pH))){
+            promPiece = (prom_color == 'w')?wqueen:bqueen;
+            promName = (prom_color == 'w')?'Q':'q';
+        }
+
+        pieces[promCoord[0]][promCoord[1]].image = promPiece;
+        pieces[promCoord[0]][promCoord[1]].name = promName;
+        promoting = false;
+        drawBoard(ctx, pieces);
     }
 });
 
