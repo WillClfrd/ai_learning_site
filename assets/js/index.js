@@ -1,5 +1,5 @@
-var pages = ["uni_cost_search","a_star_search","minmax_adv_search","stoch_grad_desc","id3_dec_tree","gen_algo"];
-var pageScripts = {"uni_cost_search":["uni_cost_search"], "a_star_search":["a_star_search"], "minmax_adv_search":["minmax_adv_search"], "stoch_grad_desc":["stoch_grad_desc"], "id3_dec_tree":["id3_dec_tree"], "gen_algo":["gen_algo"]}
+var pages = ["uni_cost_search","a_star_search","minmax_adv_search","stoch_grad_desc","id3_dec_tree","gen_algo","wsid"];
+var pageScripts = {"uni_cost_search":["uni_cost_search"], "a_star_search":["a_star_search"], "minmax_adv_search":["minmax_adv_search"], "stoch_grad_desc":["stoch_grad_desc"], "id3_dec_tree":["id3_dec_tree"], "gen_algo":["gen_algo"], "wsid":["wsid"]}
 
 function set_page_content(content,pageScript){
     // console.log(content);

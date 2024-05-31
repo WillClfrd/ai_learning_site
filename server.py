@@ -5,7 +5,7 @@ import asyncio
 from websockets.server import serve
 import json
 
-pages = ["a_star_search","id3_dec_tree","minmax_adv_search","gen_algo","stoch_grad_desc","uni_cost_search","home"]
+pages = ["a_star_search","id3_dec_tree","minmax_adv_search","gen_algo","stoch_grad_desc","uni_cost_search","home","wsid"]
 js_scripts = ["a_star_search", "gen_algo", "home.js", "id3_dec_tree", "index.js", "minmax_adv_search", "model", "stoch_grad_desc", "uni_cost_search"]
 conn = 0
 
@@ -76,20 +76,24 @@ async def handle_req(websocket):
             print("uniform cost search")
             
             # parse nodes, edges, start, and goal from req and use to create ucs object and call ucs functions
-            nodes = []
-            edges = []
-            start = 0
-            goal = 0
+            try: 
+                nodes = req["nodes"]
+                edges = req["edges"]
+                start = req["start"]
+                goal = req["end"]
 
-            if goal != -1:
-                ucs = UCS.UCS(start=start, goal=goal, nodes=nodes, edges=edges)
-            else:
-                ucs = UCS.UCS(start=start, nodes=nodes, edges=edges)
+                if goal != -1:
+                    ucs = UCS.UCS(start=start, goal=goal, nodes=nodes, edges=edges)
+                else:
+                    ucs = UCS.UCS(start=start, nodes=nodes, edges=edges)
 
-            result_path = ucs.graph_search()
+                steps = ucs.graph_search()
 
-            # package result_path appropriately
-            res["result"] = result_path
+                res["steps"] = steps
+                res["error"] = 0
+            except:
+                res["steps"] = []
+                res["error"] = -1
         elif req["method"] == "a_star":
             print("a star search")
 

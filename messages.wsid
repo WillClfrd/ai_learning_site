@@ -83,3 +83,24 @@ getpage
          "error": "none"}
 
 ------------------------------------------------------------------
+ucs
+    Runs the uniform cost search algorithm on the given graph
+
+    Request Format:
+        {
+            "method": "ucs",
+            "nodes": {"nodeID_1": {"x": xVal, "y": yVal},..., "nodeID_N": {"x": xVal, "y": yVal}},
+            "edges": {"edgeID_1": {"weight": edgeWeight, "par1": "parentNodeID_1",..., "edgeID_N": {"weight": edgeWeight, "par1": "parentNodeID_1", "par2": "parentNodeID_2"}}},
+            "start": nodeID,
+            "end": nodeID,
+        }
+
+    Response Format:
+        {
+            "steps":[
+                        {"frontier": [{"nodes":[nodeID,...,nodeID], "cost": val},...,{"nodes":[nodeID,...,nodeID], "cost": val}]:, "path": {"nodes":[nodeID,...,nodeID], "cost": val}},
+                        ...,
+                        {"frontier": [{"nodes":[nodeID,...,nodeID], "cost": val},...,{"nodes":[nodeID,...,nodeID], "cost": val}]:, "path": {"nodes":[nodeID,...,nodeID], "cost": val}}
+                    ],
+            "error": 0
+        }
