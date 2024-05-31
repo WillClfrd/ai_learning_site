@@ -12,6 +12,43 @@ class Piece{
 var isMouseDown = false;
 var pW;
 var pH;
+var promBuffer = 10;
+
+function drawPromotionOpts(ctx, color){
+    ctx.fillStyle = "#363636";
+    ctx.strokeStyle = "#000000";
+    ctx.beginPath();
+    ctx.roundRect((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2, (board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2, (board.width / 2) + (promBuffer * 5), (board.height / 8) + (promBuffer * 2), 10);
+    ctx.fill();
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.fillStyle = "grey";
+    ctx.strokeStyle = "#000000";
+    for(i = 0; i < 4; ++i){
+        ctx.beginPath();
+        ctx.roundRect(promGrid[i][0], promGrid[i][1], pW, pH, 5);
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+    }
+
+    ctx.stroke();
+
+    if(prom_color == 'w'){
+        // console.log("pawn-x: " + promGrid[0][0] + " | pawn-y: " + promGrid[0][1]);
+        ctx.drawImage(wknight, promGrid[0][0], promGrid[0][1], pW, pH);
+        ctx.drawImage(wbish, promGrid[1][0], promGrid[1][1], pW, pH);
+        ctx.drawImage(wrook, promGrid[2][0], promGrid[2][1], pW, pH);
+        ctx.drawImage(wqueen, promGrid[3][0], promGrid[3][1], pW, pH);
+    }
+    else{
+        ctx.drawImage(bknight, promGrid[0][0], promGrid[0][1], pW, pH);
+        ctx.drawImage(bbish, promGrid[1][0], promGrid[1][1], pW, pH);
+        ctx.drawImage(brook, promGrid[2][0], promGrid[2][1], pW, pH);
+        ctx.drawImage(bqueen, promGrid[3][0], promGrid[3][1], pW, pH);
+    }
+}
 
 function drawBoard(ctx, pieces){
     ctx.clearRect(0, 0, board.width, board.height);
@@ -71,6 +108,10 @@ function drawBoard(ctx, pieces){
         }
         // ctx.drawImage(pieces[i].image, pieces[i].x, pieces[i].y, pW, pH);
     }
+
+    if(promoting){
+        drawPromotionOpts(ctx);
+    }
     //console.log(pieces);
 }
 
@@ -78,13 +119,14 @@ var boardParent = document.getElementById("chessboardParent");
 var board = document.getElementById("board");
 board.height = boardParent.clientWidth;
 board.width = boardParent.clientWidth;
-var boardColors = ["#bd8f6a","#613511"]
+var boardColors = ["#bd8f6a","#613511"];
 var ctx = board.getContext("2d");
-
-console.log("Board Height: " + board.height + " | Board Width: " + board.width);
-
 pW = board.width / 8;
 pH = board.height / 8;
+var promGrid = [[((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2) + promBuffer, ((board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2) + promBuffer],[((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2) + (promBuffer * 2) + pW, ((board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2) + promBuffer],[((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2) + (promBuffer * 3) + (2 * pW), ((board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2) + promBuffer],[((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2) + (promBuffer * 4) + (3 * pW), ((board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2) + promBuffer]];
+console.log(promGrid);
+
+console.log("Board Height: " + board.height + " | Board Width: " + board.width);
 
 ctx.fillStyle = "#363636";
 ctx.fillRect(0,0,board.width,board.height);
@@ -225,18 +267,13 @@ window.addEventListener('resize', function(event){
         }
     }
 
+    promGrid = [[((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2) + promBuffer, ((board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2) + promBuffer],[((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2) + (promBuffer * 2) + pW, ((board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2) + promBuffer],[((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2) + (promBuffer * 3) + (2 * pW), ((board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2) + promBuffer],[((board.width / 2) - ((board.width / 2) + (promBuffer * 5)) / 2) + (promBuffer * 4) + (3 * pW), ((board.height / 2) - ((board.height / 8) + (promBuffer * 2)) / 2) + promBuffer]];
+
     drawBoard(ctx,pieces);
 });
 
-//console.log(pieces);
-
-// THIS IS A MESS
-    //This whole thing should be rebuilt later on to make it better to read
-// NEED TO FIGURE OUT PROCESS FLOW
-// ASYNCHRONOUS NATURE OF EVENT HANDLERS MAKES IT DIFFICULT
-// I don't think the semaphore method will work correctly since the code might be arbitrarily executed
 var currP;
-var tempCoord; // use to track square that clicked piece currently occupies
+var tempCoord;
 var res;
 var req;
 var waiting = false;
@@ -245,6 +282,16 @@ var message;
 var mouseX;
 var mouseY;
 var player = "w";
+var white_king = true;
+var white_krook = true;
+var white_qrook = true;
+var black_king = true;
+var black_krook =  true;
+var black_qrook = true;
+var en_passant = false;
+var promoting = false;
+var prom_color = 'w';
+var promCoord;
 
 const chessSocket = new WebSocket("ws://localhost:11111");
 chessSocket.addEventListener("open", (event) => {
@@ -262,27 +309,93 @@ chessSocket.addEventListener("message", (event) => {
             if(res.result && currP !== '.'){
                 currP.isDragging = false;
 
+                // en passant is on board
+                if(Math.abs(tempCoord[0] - Math.floor(mouseY / pH)) == 2 && ((Math.floor(mouseX / pW) < 7 && ((pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW) + 1].name == 'P' && currP.name == 'p') || (pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW) + 1].name == 'p' && currP.name == 'P'))) || (Math.floor(mouseX / pW) > 0 && ((pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW) - 1].name == 'P' && currP.name == 'p') || (pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW) - 1].name == 'p' && currP.name == 'P'))))){
+                    en_passant = true;
+                }
+                else{
+                    en_passant = false;
+                }
+
+                // castling move made
+                if((currP.name == 'K' && white_king) || (currP.name == 'k' && black_king)){
+                    if(tempCoord[1] - Math.floor(mouseX / pW) == -2){
+                        console.log("Moving king side rook");
+                        pieces[tempCoord[0]][tempCoord[1] + 1] = pieces[tempCoord[0]][7];
+                        pieces[tempCoord[0]][7] = '.';
+
+                        pieces[tempCoord[0]][tempCoord[1] + 1].x = (tempCoord[1] + 1) * pW;
+                        pieces[tempCoord[0]][tempCoord[1] + 1].y = tempCoord[0] * pH;
+                    }
+                    else if(tempCoord[1] - Math.floor(mouseX / pW) == 2){
+                        console.log("Moving queen side rook");
+                        pieces[tempCoord[0]][tempCoord[1] - 1] = pieces[tempCoord[0]][0];
+                        pieces[tempCoord[0]][0] = '.';
+
+                        pieces[tempCoord[0]][tempCoord[1] - 1].x = (tempCoord[1] - 1) * pW;
+                        pieces[tempCoord[0]][tempCoord[1] - 1].y = tempCoord[0] * pH;
+                    }
+                }
+
+                // en passant and castling
+                if(currP.name == 'P' && res.ep_picked){
+                    pieces[Math.floor(mouseY / pH) + 1][Math.floor(mouseX / pW)] = '.';
+                }
+                else if(currP.name == 'p' && res.ep_picked){
+                    pieces[Math.floor(mouseY / pH) - 1][Math.floor(mouseX / pW)] = '.';
+                }
+                else if(currP.name == 'K'){
+                    white_king = false;
+                }
+                else if(currP.name == 'k'){
+                    black_king = false;
+                }
+
+                if(currP.name == 'P' && Math.floor(mouseY / pH) == 0){
+                    promCoord = [Math.floor(mouseY / pH),Math.floor(mouseX / pW)];
+                    prom_color = 'w';
+                    promoting = true;
+                }
+                else if(currP.name == 'p' && Math.floor(mouseY / pH) == 7){
+                    promCoord = [Math.floor(mouseY / pH),Math.floor(mouseX / pW)];
+                    prom_color = 'b';
+                    promoting = true;
+                }
+                
                 currP.x = Math.floor((currP.x + (pW / 2)) / pW) * pW;
                 currP.y = Math.floor((currP.y + (pH / 2)) / pH) * pH;
 
-                pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = currP;
-                
+                pieces[Math.floor(mouseY / pH)][Math.floor(mouseX / pW)] = currP;
+
                 if(res.checkmate){
                     isCheckmate == true;
                 }
+                if(black_qrook && pieces[0][0] == '.'){
+                    black_qrook = false;
+                }
+                if(black_krook && pieces[0][7] == '.'){
+                    black_krook = false;
+                }
+                if(white_qrook && pieces[7][0] == '.'){
+                    white_qrook = false;
+                }
+                if(white_krook && pieces[7][7] == '.'){
+                    white_krook = false;
+                }
 
                 player = (player == "w")?"b":"w";
-                waiting = false;
+                if(promoting){
+                    waiting = true;
+                }
+                else{
+                    waiting = false;
+                }
             }
             else{
                 currP.isDragging = false;
                 currP.x = tempCoord[1] * pW;
-                //console.log("currP.x: " + currP.x + " | pW: " + pW);
                 currP.y = tempCoord[0] * pH;
-                //console.log("currP.y: " + currP.y + " | pH: " + pH);
-                //console.log("y: " + tempCoord[0] + " | x: " + tempCoord[1]);
                 pieces[tempCoord[0]][tempCoord[1]] = currP;
-                //console.log(pieces);
             }
 
             drawBoard(ctx,pieces);
@@ -291,21 +404,11 @@ chessSocket.addEventListener("message", (event) => {
             console.log("res: " + res);
             console.log("res[move]: " + res.move);
             console.log("res[move][0][0]: " + res.move[0][0]);
-            //console.log("Target row: " + res.move[0][0] + " | Target column: " + res.move.to[1]);
-            //console.log("Source row: " + res.move.from[0] + " | Source column: " + res.move.from[1]);
+
             pieces[res.move[1][0]][res.move[1][1]] = pieces[res.move[0][0]][res.move[0][1]];
             pieces[res.move[1][0]][res.move[1][1]].y = res.move[1][0] * pH;
             pieces[res.move[1][0]][res.move[1][1]].x = res.move[1][1] * pW;
-            //console.log("assigned pieces[" + res.move[1][0] + "][" + res.move[1][1] + "] with pieces[" + res.move[0][0] + "][" + res.move[0][1] + "]");
             pieces[res.move[0][0]][res.move[0][1]] = '.';
-            //console.log(getBoard());
-            //console.log(pieces);
-            
-            // for(let i = 0; i < 8; ++i){
-            //     for(let j = 0; j < 8; ++j){
-            //         console.log("pieces[" + i + "][" + j + "].y: " + pieces[i][j].y + " | pieces[" + i + "][" + j + "].x: " + pieces[i][j].x);
-            //     }
-            // }
 
             drawBoard(ctx,pieces);
             waiting = false;
@@ -323,12 +426,10 @@ board.addEventListener('mousedown', function(event){
     mouseY = event.clientY - board.getBoundingClientRect().top;
 
     if(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] !== '.' && pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].color == player){
-        //console.log(pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].name + " clicked");
         currP = pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)];
         pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)].isDragging = true;
         pieces[Math.floor(mouseY / pH)][Math.floor(mouseX/ pW)] = '.';
         tempCoord = [Math.floor(mouseY / pH),Math.floor(mouseX/ pW)];
-        // console.log("tempCoord: " + tempCoord);
     }
     else{
         console.log("failed to set currP");
@@ -352,9 +453,15 @@ board.addEventListener('mouseup', async function(event){
                 from: [tempCoord[0], tempCoord[1]],
                 to: [Math.floor(mouseY / pH), Math.floor(mouseX / pW)]
             },
+            flags: [white_king, white_krook, white_qrook, black_king, black_krook, black_qrook, en_passant],
+            en_passant_targets: [],
             player: player,
             opponent: (player == "w")?"b":"w"
         }
+        if(en_passant && (currP.name == 'P' || currP.name == 'p')){
+            req.en_passant_targets = [[tempCoord[0],tempCoord[1] - 1],[tempCoord[0],tempCoord[1] + 1]];
+        }
+
         console.log(req);
         
         chessSocket.send(JSON.stringify(req))
@@ -365,6 +472,39 @@ board.addEventListener('mouseup', async function(event){
         }
 
         drawBoard(ctx,pieces);
+    }
+});
+
+board.addEventListener("click", (event) => {
+    mouseX = event.clientX - board.getBoundingClientRect().left;
+    mouseY = event.clientY - board.getBoundingClientRect().top;
+
+    let promPiece;
+    let promName;
+
+    if(promoting){
+        if((mouseX >= promGrid[0][0] && mouseX <= (promGrid[0][0] + pW)) && (mouseY >= promGrid[0][1] && mouseY <= (promGrid[0][1] + pH))){
+            promPiece = (prom_color == 'w')?wknight:bknight;
+            promName = (prom_color == 'w')?'T':'t';
+        }
+        else if((mouseX >= promGrid[1][0] && mouseX <= (promGrid[1][0] + pW)) && (mouseY >= promGrid[1][1] && mouseY <= (promGrid[1][1] + pH))){
+            promPiece = (prom_color == 'w')?wbish:bbish;
+            promName = (prom_color == 'w')?'B':'b';
+        }
+        else if((mouseX >= promGrid[2][0] && mouseX <= (promGrid[2][0] + pW)) && (mouseY >= promGrid[2][1] && mouseY <= (promGrid[2][1] + pH))){
+            promPiece = (prom_color == 'w')?wrook:brook;
+            promName = (prom_color == 'w')?'R':'r';
+        }
+        else if((mouseX >= promGrid[3][0] && mouseX <= (promGrid[3][0] + pW)) && (mouseY >= promGrid[3][1] && mouseY <= (promGrid[3][1] + pH))){
+            promPiece = (prom_color == 'w')?wqueen:bqueen;
+            promName = (prom_color == 'w')?'Q':'q';
+        }
+
+        pieces[promCoord[0]][promCoord[1]].image = promPiece;
+        pieces[promCoord[0]][promCoord[1]].name = promName;
+        promoting = false;
+        drawBoard(ctx, pieces);
+        waiting = false;
     }
 });
 
