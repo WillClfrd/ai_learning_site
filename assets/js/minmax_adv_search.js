@@ -384,7 +384,12 @@ chessSocket.addEventListener("message", (event) => {
                 }
 
                 player = (player == "w")?"b":"w";
-                waiting = false;
+                if(promoting){
+                    waiting = true;
+                }
+                else{
+                    waiting = false;
+                }
             }
             else{
                 currP.isDragging = false;
@@ -499,6 +504,7 @@ board.addEventListener("click", (event) => {
         pieces[promCoord[0]][promCoord[1]].name = promName;
         promoting = false;
         drawBoard(ctx, pieces);
+        waiting = false;
     }
 });
 
