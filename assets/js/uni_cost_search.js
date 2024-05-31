@@ -46,6 +46,23 @@ var endNode = null;
 var selStart = false;
 var selEnd = false;
 
+function reverseColor(ctx){
+    for(i = 0; i < nodes.length; ++i){
+        ctx.beginPath();
+        ctx.arc(nodes[i].x,nodes[i].y,nodes[i].radius,nodes[i].startAng,nodes[i].endAng);       
+        if (nodes[i] == startNode){
+            ctx.fillStyle = "green";
+        }
+        else if (nodes[i] == endNode){
+            ctx.fillStyle = "red";
+        }
+        else{
+            ctx.fillStyle = "blue";
+        }
+        ctx.fill();
+    }
+}
+
 function drawShapes(ctx){
     ctx.clearRect(0, 0, panel.width, panel.height);
 
@@ -62,7 +79,7 @@ function drawShapes(ctx){
             ctx.arc(lines[i].startX,lines[i].startY,5,0,2 * Math.PI);
             ctx.fillStyle = "blue";
             ctx.fill();
-        }       
+        }
         if(lines[i].connEnd == false){
             ctx.beginPath();
             ctx.arc(lines[i].endX,lines[i].endY,5,0,2 * Math.PI);
@@ -81,14 +98,26 @@ function drawShapes(ctx){
         if(delMode){
             ctx.fillStyle = "black";
         } //update startNode and endNode to be null on
-        else if(nodes[i].start){
+        else if (nodes[i].start == true || nodes[i].end == true){
+            ctx.fillStyle = "blue";
+        }
+        else if(selStart){
             ctx.fillStyle = "green";
         }
-        else if(nodes[i].end){
+        else if(selEnd){
             ctx.fillStyle = "red";
         }
         else{
             ctx.fillStyle = "blue";
+        }
+
+        if (selStart == false){
+            if (nodes[i].start == true)
+                ctx.fillStyle = "green";
+        }
+        if (selEnd == false){
+            if(nodes[i].end == true)
+                ctx.fillStyle = "red";
         }
         ctx.fill();
     }
@@ -121,10 +150,8 @@ function genGraph(){
     for(i = 0; i < nodes.length; ++i){
         let numEdges = genInt(3) + 1;
         
-        console.log(i + "nymLine "+ numEdges);
+        //console.log(i + " numLine "+ numEdges);
         for(j = 0; j < numEdges; ++j){
-            console.log("i: "+ i);
-            console.log(j);
             let randNode = nodes[genInt(nodes.length)];
             
             if (checkEdgeseachCir(nodes[i].x, nodes[i].y) >= 4){
@@ -134,19 +161,11 @@ function genGraph(){
             while(randNode == nodes[i] || checkEdgeseachCir(randNode.x, randNode.y) >= 4 ){
                 randNode = nodes[genInt(nodes.length)];
             }
-            console.log("*"+panel.width+"  "+panel.height);
-            
-            console.log(nodes);
-            console.log("i after:" + i);
-            console.log(nodes[i]);
-            //console.log( randNode.x + " " + randNode.y);
-
             let tempLine = new Line(lineID++, nodes[i].x, nodes[i].y, randNode.x, randNode.y);
             tempLine.parStart = nodes[i];
             tempLine.parEnd = randNode;
             lines.push(tempLine);
             tempLine = null;
-            console.log("________");
         }
     }
 
@@ -162,7 +181,6 @@ function checkEdgeseachCir (x,y){
         if ((x == lines[z].startX && y == lines[z].startY) || (x == lines[z].endX && y == lines[z].endY))
             ++count;
     }
-    console.log("numEdge="+count);
     return count;
 }
 
@@ -258,10 +276,16 @@ panel.addEventListener("mousemove",(event)=>{
             ctx.fillStyle = "black";
         }
         else if(currNode.start){
-            ctx.fillStyle = "green";
+            if (selStart)
+                ctx.fillStyle = "blue";
+            else
+                ctx.fillStyle = "green";
         }
         else if(currNode.end){
-            ctx.fillStyle = "red";
+            if (selEnd)
+                ctx.fillStyle = "blue";
+            else
+                ctx.fillStyle = "red";
         }
         else{
             ctx.fillStyle = "blue";
@@ -396,6 +420,7 @@ panel.addEventListener("click",(event)=>{
                 }
                 startNode = nodes[i];
                 nodes[i].start = true;
+                console.log("start node is " + nodes[i]);
                 drawShapes(ctx);
             }
         }
@@ -408,6 +433,7 @@ panel.addEventListener("click",(event)=>{
                 }
                 endNode = nodes[i];
                 nodes[i].end = true;
+                console.log("end node is " + nodes[i]);
                 drawShapes(ctx);
             }
         }
@@ -451,7 +477,7 @@ sel_start_btn.addEventListener("click",(event)=>{
     }
     else{
         selStart = false;
-        drawShapes(ctx);
+        reverseColor(ctx);
         console.log("Exiting Select Start Mode");
     }
 });
@@ -466,7 +492,7 @@ sel_end_btn.addEventListener("click",(event)=>{
     }
     else{
         selEnd = false;
-        drawShapes(ctx);
+        reverseColor(ctx);
         console.log("Exiting Select End Mode");
     }
 });
