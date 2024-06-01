@@ -45,6 +45,9 @@ async def handle_req(websocket):
             res["method"] = "getminimaxmove"
             me.board = req["board"]
             res["move"] = me.GetMinMaxMove(req["player"])
+            me.movePiece(res["move"][0],res["move"][1],me.board)
+            #res["board"] = me.board
+            res["checkmate"] = me.IsCheckmate(req["opponent"])
         elif req["method"] == "geteval":
             me.board = req["board"]
             res["eval"] = me.evl(req["player"])

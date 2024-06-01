@@ -50,6 +50,27 @@ function drawPromotionOpts(ctx, color){
     }
 }
 
+function drawCheckmate(ctx){
+    let buffer = 10;
+    let radius = 10;
+
+    ctx.fillStyle = "#363636";
+    ctx.strokeStyle = "#000000";
+    ctx.beginPath();
+    ctx.roundRect((board.width / 2) - (((board.width / 2) + (buffer * 2)) / 2), (board.height / 2) - (((board.height / 4) + (buffer * 2)) / 2),(board.width / 2) + (buffer * 2),(board.height / 4) + (buffer * 2),radius);
+    ctx.fill();
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.fillStyle = "grey";
+    ctx.strokeStyle = "#000000";
+    ctx.beginPath();
+    ctx.roundRect(((board.width / 2) - (board.width / 4)), ((board.height / 2) - (board.height / 4)),(board.width / 2),(board.height / 2),radius);
+    ctx.fill();
+    ctx.stroke();
+    ctx.closePath();
+}
+
 function drawBoard(ctx, pieces){
     ctx.clearRect(0, 0, board.width, board.height);
 
@@ -111,6 +132,10 @@ function drawBoard(ctx, pieces){
 
     if(promoting){
         drawPromotionOpts(ctx);
+    }
+
+    if(isCheckmate){
+        drawCheckmate(ctx);
     }
     //console.log(pieces);
 }
@@ -399,6 +424,11 @@ chessSocket.addEventListener("message", (event) => {
             }
 
             drawBoard(ctx,pieces);
+
+            if(res.checkmate){
+                isCheckmate = true;
+            }
+
             break;
         case "getminimaxmove":
             console.log("res: " + res);
@@ -410,8 +440,13 @@ chessSocket.addEventListener("message", (event) => {
             pieces[res.move[1][0]][res.move[1][1]].x = res.move[1][1] * pW;
             pieces[res.move[0][0]][res.move[0][1]] = '.';
 
+            if(res.checkmate){
+                isCheckmate = true;
+            }
+
             drawBoard(ctx,pieces);
             waiting = false;
+
             break;
         case "geteval":
             showEval(res);
@@ -612,7 +647,8 @@ async function playGame(color){
             let req = {
                 method: "getminimaxmove",
                 board: tempBoard,
-                player: player
+                player: player,
+                opponent: (player == "w")?"b":"w"
             }
             console.log(req);
             
@@ -626,5 +662,6 @@ async function playGame(color){
         }
     }
 
-    console.log("Game over: " + (player == "w")?"b":"w" + " wins");
+    let winner = (player == "w")?"b":"w"
+    console.log("Game over: " + winner + " wins");
 }
