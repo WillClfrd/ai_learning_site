@@ -53,6 +53,12 @@ function drawPromotionOpts(ctx, color){
 function drawCheckmate(ctx){
     let buffer = 10;
     let radius = 10;
+    let headerScaleFactor = 0.0553410553;
+    let subtextScaleFactor = 0.0296010296;
+    let textMinSize = 1;
+
+    let headerSize = Math.floor((board.width * headerScaleFactor) + textMinSize);
+    let subtextSize = Math.floor((board.width * subtextScaleFactor) + textMinSize);
 
     ctx.fillStyle = "#363636";
     ctx.strokeStyle = "#000000";
@@ -62,13 +68,27 @@ function drawCheckmate(ctx){
     ctx.stroke();
     ctx.closePath();
 
-    ctx.fillStyle = "grey";
+    ctx.fillStyle = "lightgrey";
     ctx.strokeStyle = "#000000";
     ctx.beginPath();
-    ctx.roundRect(((board.width / 2) - (board.width / 4)), ((board.height / 2) - (board.height / 4)),(board.width / 2),(board.height / 2),radius);
+    ctx.roundRect(((board.width / 2) - (board.width / 4)), ((board.height / 2) - (board.height / 8)),(board.width / 2),(board.height / 4),radius);
     ctx.fill();
     ctx.stroke();
     ctx.closePath();
+
+    ctx.fillStyle = "black";
+    ctx.strokeStyle = "black";
+    ctx.font = "" + headerSize + "pt serif";
+    ctx.textAlign = "center";
+    ctx.fillText("Checkmate", board.width / 2, (board.height / 2) - (board.height / 64));
+    ctx.strokeText("Checkmate", board.width / 2, (board.height / 2) - (board.height / 64));
+
+    let winText = (winner=='w')?"White":'Black'
+
+    ctx.font = "" + subtextSize + "pt serif";
+    ctx.textAlign = "center";
+    ctx.fillText("" + winText + " wins", board.width / 2, (board.height / 2) + (board.height / 16));
+    ctx.strokeText("" + winText + " wins", board.width / 2, (board.height / 2) + (board.height / 16));
 }
 
 function drawBoard(ctx, pieces){
@@ -317,6 +337,7 @@ var en_passant = false;
 var promoting = false;
 var prom_color = 'w';
 var promCoord;
+var winner;
 
 const chessSocket = new WebSocket("ws://localhost:11111");
 chessSocket.addEventListener("open", (event) => {
@@ -662,6 +683,6 @@ async function playGame(color){
         }
     }
 
-    let winner = (player == "w")?"b":"w"
+    winner = (player == "w")?"b":"w"
     console.log("Game over: " + winner + " wins");
 }
