@@ -73,40 +73,22 @@ async def handle_req(websocket):
                     res["scripts"] = ["assets/js/error.js"]
                     res["error"] = "invalid_page"
         elif req["method"] == "ucs":
-            print("uniform cost search")
-            
-            # parse nodes, edges, start, and goal from req and use to create ucs object and call ucs functions
             try: 
                 nodes = req["nodes"]
-                print(f"nodes: {nodes}")
                 edges = req["edges"]
-                print(f"edges: {edges}")
                 start = req["start"]
-                print(f"start: {start}")
 
                 try:
                     goal = req["end"]
                 except:
                     goal = -1
 
-                print(f"goal: {goal}")
-
                 if goal != -1:
-                    print("setting up graph for UCS")
                     ucs = UCS.UCS(start=start, goal=goal, nodes=nodes, edges=edges)
                 else:
-                    print("setting up graph for Dijkstra's")
                     ucs = UCS.UCS(start=start, nodes=nodes, edges=edges)
 
-                print("running graph search")
                 steps = ucs.graph_search()
-                for i in range(0,len(steps)):
-                    print(f"Step {i}:")
-                    print(f"\tFrontier:")
-                    for path in steps[i]["frontier"]:
-                        print(f"\t\tCost: {path.cost} | Nodes: {path.nodes}")
-                    print(f"\tSelected Path:\n\t\tCost: {steps[i]["path"].cost} | Nodes: {steps[i]["path"].nodes}")
-                print()
 
                 result = []
                 for i in range(0,len(steps)):
@@ -127,7 +109,6 @@ async def handle_req(websocket):
                         result[i]["total_path"] = result[i]["path"]
 
                 res["steps"] = result
-                #print(res["steps"])
                 res["error"] = 0
             except:
                 res["steps"] = []
