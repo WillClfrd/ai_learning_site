@@ -4,9 +4,11 @@ import site_python_files.a_star as AS
 import asyncio
 from websockets.server import serve
 import json
+from bs4 import BeautifulSoup as bs
+import re
 
 pages = ["a_star_search","id3_dec_tree","minmax_adv_search","gen_algo","stoch_grad_desc","uni_cost_search","home","wsid"]
-js_scripts = ["a_star_search", "gen_algo", "home.js", "id3_dec_tree", "index.js", "minmax_adv_search", "model", "stoch_grad_desc", "uni_cost_search"]
+js_scripts = ["a_star_search", "gen_algo", "home.js", "id3_dec_tree", "index.js", "minmax_adv_search", "model", "stoch_grad_desc", "uni_cost_search", "wsid"]
 conn = 0
 
 # define websocket here to make calls to minimax_engine methods and return call results
@@ -136,6 +138,47 @@ async def handle_req(websocket):
             print("stochastic gradient descent")
         elif req["method"] == "id3":
             print("id3 decision tree")
+        elif req["method"] == "add_doc_module":
+            print(req)
+            try:
+                with open("html/wsid.html","r+") as base:
+                    print("1")
+                    page = base.read()
+                    print("2")
+                    content = open("html/doc_module.html","r").read().split("$")
+                    print("3")
+                    for i in range(0,len(content)):
+                        if content[i] == "module_name":
+                            content[i] = req["module_name"]
+                    print("4")
+                    new_content = ""
+                    print("5")
+                    for tok in content:
+                        new_content += tok
+                    print("6")
+                    soup = bs(page,"html")
+                    print("7")
+                    new_div = soup.new_tag('div')
+                    new_div.string = new_content
+                    new_div["class"] = "doc_module_div"
+                    new_div["id"] = req["module_name"].lower() + "_module_div"
+                    print("8")
+                    module_div = soup.find('div', id='modules_div')
+                    module_div.append(new_div)
+                    print("9")
+
+                    lt_pattern = re.compile(r'(&lt;)')
+                    gt_pattern = re.compile(r'(&gt;)')
+                    out_text = soup.prettify()
+                    out_text = re.sub(lt_pattern,'<',out_text)
+                    out_text = re.sub(gt_pattern,'>',out_text)
+
+                    with open("html/wsid.html","w") as outFile:
+                        outFile.write(out_text)
+                    print("10")
+                    res["error"] = 0
+            except:
+                res["error"] = -1
         else:
             res["error"] = "invalid command"
         await websocket.send(json.dumps(res))

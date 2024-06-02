@@ -87,6 +87,7 @@ body {
     color:white;
     padding-top:2%;
     padding-left:16%;
+    overflow:auto;
 }
 
 .ucs_page_content {
@@ -254,5 +255,82 @@ body {
     background-color:#2f3439;
     border-radius: 5px;
     height:100%;
+    width:100%;
+}
+
+.doc_content_div {
+    margin-left:3%;
+    margin-right:5%;
+    margin-top:2%;
+    margin-bottom:7%;
+}
+
+.doc_header_div {
+    margin:0%;
+    margin-bottom:0%;
+}
+
+.doc_module_div {
+    margin:0%;
+    margin-bottom:2%;
+    padding:2%;
+    width:100%;
+    height:fit-content;
+    border:solid;
+    background-color:rgba(255, 255, 255, 0.1);
+    border-color:#303030;
+    border-width:0.15em;
+    border-radius:7px;
+}
+
+.add_module_div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: fit-content;
+    width: 100%;
+    margin-bottom: 2%;
+}
+
+.add_module_component_div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: fit-content;
+    width: 100%;
+    margin-bottom: 2%;
+}
+
+.add_subcomponent_entry_div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: fit-content;
+    width: 100%;
+    margin-bottom: 2%;
+}
+
+.module_subcomponent_div {
+    padding: 2%;
+    padding-top:0%;
+    padding-bottom:0%;
+}
+
+.parameters-list {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding-top:10px;
+    padding-right:30px;
+    padding-bottom:13px;
+    list-style-type: none;
+    border-radius:5px;
+    width:fit-content;
+}
+
+.add-form {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding:2%;
+    list-style-type: none;
+    border-radius:5px;
+    height:fit-content;
     width:100%;
 }
