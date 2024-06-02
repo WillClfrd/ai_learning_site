@@ -5,3 +5,4 @@ site_python_files
 to-do.txt
 notes.txt
 UCS_message_template.txt
+__pycache__
