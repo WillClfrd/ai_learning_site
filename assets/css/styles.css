@@ -288,8 +288,20 @@ body {
     align-items: center;
     justify-content: space-between;
     height: fit-content;
-    width: 100%;
     margin-bottom: 2%;
+}
+
+.add_module_btn_div {
+    display: flex;
+    align-items: center;
+    height:fit-content;
+    width:fit-content;
+    justify-content: space-between;
+}
+
+.add_module_btn {
+    margin-left:5px;
+    margin-right:5px;
 }
 
 .add_module_component_div {
@@ -333,4 +345,8 @@ body {
     border-radius:5px;
     height:fit-content;
     width:100%;
+}
+
+.active {
+    background-color:red;
 }

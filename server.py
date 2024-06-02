@@ -142,30 +142,28 @@ async def handle_req(websocket):
             print(req)
             try:
                 with open("html/wsid.html","r+") as base:
-                    print("1")
                     page = base.read()
-                    print("2")
                     content = open("html/doc_module.html","r").read().split("$")
-                    print("3")
+
                     for i in range(0,len(content)):
                         if content[i] == "module_name":
+                            content[i] = req["module_name"].lower()
+                        elif content[i] == "module_title":
                             content[i] = req["module_name"]
-                    print("4")
+
                     new_content = ""
-                    print("5")
                     for tok in content:
                         new_content += tok
-                    print("6")
+
                     soup = bs(page,"html")
-                    print("7")
+
                     new_div = soup.new_tag('div')
                     new_div.string = new_content
                     new_div["class"] = "doc_module_div"
                     new_div["id"] = req["module_name"].lower() + "_module_div"
-                    print("8")
+
                     module_div = soup.find('div', id='modules_div')
                     module_div.append(new_div)
-                    print("9")
 
                     lt_pattern = re.compile(r'(&lt;)')
                     gt_pattern = re.compile(r'(&gt;)')
@@ -175,8 +173,29 @@ async def handle_req(websocket):
 
                     with open("html/wsid.html","w") as outFile:
                         outFile.write(out_text)
-                    print("10")
                     res["error"] = 0
+            except:
+                res["error"] = -1
+        elif req["method"] == "remove_doc_div":
+            try:
+                page = open("html/wsid.html","r").read()
+                soup = bs(page,"html.parser")
+
+                target = soup.find('div',id=req["id"])
+                if target:
+                    target.decompose()
+
+                lt_pattern = re.compile(r'(&lt;)')
+                gt_pattern = re.compile(r'(&gt;)')
+                out_text = soup.prettify()
+                out_text = re.sub(lt_pattern,'<',out_text)
+                out_text = re.sub(gt_pattern,'>',out_text)
+
+                outFile = open("html/wsid.html", "w")
+                outFile.write(out_text)
+
+                res["error"] = 0
+                pass
             except:
                 res["error"] = -1
         else:

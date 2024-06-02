@@ -1,180 +1,179 @@
 <div class="doc_content_div" id="doc_div">
- <div id="modules_div">
-  <div class="add_module_div">
-   <h1>
-    Modules
-   </h1>
-   <button class="btn btn-primary" id="add_module_btn">
-    +
-   </button>
-  </div>
-  <div id="module_form">
-  </div>
-  <hr/>
-  <div class="doc_module_div" id="ucs_module_div">
-   <div class="add_module_component_div">
-    <h3>
-     Uniform Cost Search
-    </h3>
-    <button class="btn btn-primary" id="add_module_component_btn">
-     +
-    </button>
-   </div>
-   <hr/>
-   <div class="module_subcomponent_div" id="ucs_purpose">
-    <div class="add_subcomponent_entry_div">
-     <h4>
-      Purpose
-     </h4>
-     <button class="btn btn-primary" id="add_purpose_subcomponent_entry_btn">
-      +
-     </button>
-    </div>
-    <hr/>
-    <div class="module_subcomponent_div" id="ucs_purpose_subcomponent_entry">
-     <p>
-      This module is meant to be used to create graphs and perform a graph search on the created graphs using the uniform cost search algorithm.
-     </p>
-    </div>
-   </div>
-   <br/>
-   <div class="module_subcomponent_div" id="ucs_methods">
-    <div class="add_subcomponent_entry_div">
-     <h4>
-      Methods
-     </h4>
-     <button class="btn btn-primary" id="add_methods_subcomponent_entry_btn">
-      +
-     </button>
-    </div>
-    <hr/>
-    <div class="module_subcomponent_div" id="ucs_methods_subcomponent_entry">
-     <h5>
-      ucs
-     </h5>
-     <div class="module_subcomponent_div">
-      <p>
-       Function:
-      </p>
-      <ul class="parameters-list">
-       <li>
-        Contructs a graph using the given information and performs a graph search on the constructed graph.
-       </li>
-      </ul>
-      <p>
-       Returns:
-      </p>
-      <ul class="parameters-list">
-       <li>
-        Either the path from the start node to the end node or the paths in a minimum spanning tree with the given start node as its root if no end node is passed in the method call.
-       </li>
-      </ul>
-      <p>
-       Request Format:
-      </p>
-      <ul class="parameters-list">
-       <li>
-        {"method": "ucs", "nodes":
-        <i>
-         Nodes
-        </i>
-        , "edges":
-        <i>
-         Edges
-        </i>
-        , "start":
-        <i>
-         nodeID
-        </i>
-        , "end":
-        <i>
-         nodeID
-        </i>
-        }
-       </li>
-      </ul>
-      <p>
-       Request Parameters:
-      </p>
-      <ul class="parameters-list">
-       <li>
-        <b>
-         method
-        </b>
-        : "ucs"
-       </li>
-       <li>
-        <b>
-         nodes
-        </b>
-        : structure containing node information following format
-       </li>
-       <li>
-        <b>
-         edges
-        </b>
-        : structure containing edge information following format
-       </li>
-       <li>
-        <b>
-         start
-        </b>
-        : string id for graph search starting node
-       </li>
-       <li>
-        <b>
-         end
-        </b>
-        (
-        <i>
-         optional
-        </i>
-        ): string id for graph search end node
-       </li>
-      </ul>
-      <p>
-       Response Format:
-      </p>
-      <ul class="parameters-list">
-       <li>
-        {"steps":
-        <i>
-         StepsArray
-        </i>
-        , "error":
-        <i>
-         ErrorFlag
-        </i>
-        }
-       </li>
-      </ul>
-      <p>
-       Response Parameters:
-      </p>
-      <ul class="parameters-list">
-       <li>
-        <b>
-         steps
-        </b>
-        : list of dictionaries containing information for the frontier and selected path at each step of the algorithm in format [{"frontier": [,...,], "path": },...,{"frontier": [,...,], "path": }]
-       </li>
-       <li>
-        <b>
-         error
-        </b>
-        : int value indicating error status for method call (0 for success, any other number for error)
-       </li>
-      </ul>
+    <div id="modules_div">
+     <div class="add_module_div">
+      <h1>
+       Modules
+      </h1>
+      <div class="add_module_btn_div">
+       <button class="btn btn-primary add_module_btn" id="add_module_btn">
+        +
+       </button>
+       <button class="btn btn-primary add_module_btn" id="del_module_btn">
+        Delete
+       </button>
+      </div>
+     </div>
+     <div id="module_form">
+     </div>
+     <hr/>
+     <div class="doc_module_div" id="ucs_module_div">
+      <div class="add_module_component_div">
+       <h3 id="ucs_module_title">
+        Uniform Cost Search
+       </h3>
+       <button class="btn btn-primary" id="add_module_component_btn">
+        +
+       </button>
+      </div>
+      <hr/>
+      <div class="module_subcomponent_div" id="ucs_purpose">
+       <div class="add_subcomponent_entry_div">
+        <h4>
+         Purpose
+        </h4>
+        <button class="btn btn-primary" id="add_purpose_subcomponent_entry_btn">
+         +
+        </button>
+       </div>
+       <hr/>
+       <div class="module_subcomponent_div" id="ucs_purpose_subcomponent_entry">
+        <p>
+         This module is meant to be used to create graphs and perform a graph search on the created graphs using the uniform cost search algorithm.
+        </p>
+       </div>
+      </div>
+      <br/>
+      <div class="module_subcomponent_div" id="ucs_methods">
+       <div class="add_subcomponent_entry_div">
+        <h4>
+         Methods
+        </h4>
+        <button class="btn btn-primary" id="add_methods_subcomponent_entry_btn">
+         +
+        </button>
+       </div>
+       <hr/>
+       <div class="module_subcomponent_div" id="ucs_methods_subcomponent_entry">
+        <h5>
+         ucs
+        </h5>
+        <div class="module_subcomponent_div">
+         <p>
+          Function:
+         </p>
+         <ul class="parameters-list">
+          <li>
+           Contructs a graph using the given information and performs a graph search on the constructed graph.
+          </li>
+         </ul>
+         <p>
+          Returns:
+         </p>
+         <ul class="parameters-list">
+          <li>
+           Either the path from the start node to the end node or the paths in a minimum spanning tree with the given start node as its root if no end node is passed in the method call.
+          </li>
+         </ul>
+         <p>
+          Request Format:
+         </p>
+         <ul class="parameters-list">
+          <li>
+           {"method": "ucs", "nodes":
+           <i>
+            Nodes
+           </i>
+           , "edges":
+           <i>
+            Edges
+           </i>
+           , "start":
+           <i>
+            nodeID
+           </i>
+           , "end":
+           <i>
+            nodeID
+           </i>
+           }
+          </li>
+         </ul>
+         <p>
+          Request Parameters:
+         </p>
+         <ul class="parameters-list">
+          <li>
+           <b>
+            method
+           </b>
+           : "ucs"
+          </li>
+          <li>
+           <b>
+            nodes
+           </b>
+           : structure containing node information following format
+          </li>
+          <li>
+           <b>
+            edges
+           </b>
+           : structure containing edge information following format
+          </li>
+          <li>
+           <b>
+            start
+           </b>
+           : string id for graph search starting node
+          </li>
+          <li>
+           <b>
+            end
+           </b>
+           (
+           <i>
+            optional
+           </i>
+           ): string id for graph search end node
+          </li>
+         </ul>
+         <p>
+          Response Format:
+         </p>
+         <ul class="parameters-list">
+          <li>
+           {"steps":
+           <i>
+            StepsArray
+           </i>
+           , "error":
+           <i>
+            ErrorFlag
+           </i>
+           }
+          </li>
+         </ul>
+         <p>
+          Response Parameters:
+         </p>
+         <ul class="parameters-list">
+          <li>
+           <b>
+            steps
+           </b>
+           : list of dictionaries containing information for the frontier and selected path at each step of the algorithm in format [{"frontier": [,...,], "path": },...,{"frontier": [,...,], "path": }]
+          </li>
+          <li>
+           <b>
+            error
+           </b>
+           : int value indicating error status for method call (0 for success, any other number for error)
+          </li>
+         </ul>
+        </div>
+       </div>
+      </div>
      </div>
     </div>
    </div>
-  </div>
-  <div class="doc_module_div" id="test_module_div">
-   <div class="add_module_component_div">
-    <h3>Test</h3>
-    <button class="btn btn-primary" id="Testadd_module_component_btn">+</button>
-</div>
-<hr/>
-  </div>
- </div>
-</div>
+   

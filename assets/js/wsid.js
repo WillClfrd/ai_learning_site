@@ -1,4 +1,16 @@
-console.log("wsid")
+var modules = [];
+console.log("wsid");
+
+let allElements = document.querySelectorAll('*');
+allElements.forEach(element => {
+    if(element.id){
+        if(element.id.includes("_module_div")){
+            modules.push(element.id.slice(0,element.id.indexOf('_')));
+        }
+    }
+});
+
+console.log(modules);
 
 const docSocket = new WebSocket("ws://localhost:11111");
 docSocket.addEventListener("open", (event) => {
@@ -12,6 +24,33 @@ docSocket.addEventListener("message", (event) => {
 
 module_div = document.getElementById("")
 add_module_btn = document.getElementById("add_module_btn");
+del_module_btn = document.getElementById("del_module_btn");
+var moduleEls = [];
+var moduleTitles = [];
+
+for(let i = 0; i < modules.length; ++i){
+    moduleEls[i] = document.getElementById("" + modules[i] + "_module_div");
+    moduleTitles[i] = document.getElementById("" + modules[i] + "_module_title");
+    console.log(moduleTitles)
+    console.log(modules[i]);
+    console.log(moduleTitles[i].innerHTML);
+    moduleTitles[i].addEventListener("click", (event)=>{
+        if(moduleTitles[i].style.color == "orange"){
+            let req = {
+                method: "remove_doc_div",
+                id: moduleEls[i].id
+            }
+
+            removed = modules.splice(i,1);
+            moduleEls.splice(i,1);
+            moduleTitles.splice(i,1);
+
+            docSocket.send(JSON.stringify(req));
+
+            location.reload();
+        }
+    });
+}
 
 add_module_btn.addEventListener("click", (event)=>{
     add_module_form = document.getElementById("module_form");
@@ -61,4 +100,35 @@ add_module_btn.addEventListener("click", (event)=>{
 
     add_module_form.appendChild(form);
     add_module_form.classList.add("add-form");
+});
+
+del_module_btn.addEventListener("click", (event)=>{
+    let active_flag = false;
+    
+    for(let i = 0; i < del_module_btn.classList.length; ++i){
+        if(del_module_btn.classList[i] == "btn-danger"){
+            active_flag = true;
+        }
+    }
+
+
+    if(active_flag){
+        console.log("exiting delete mode");
+        del_module_btn.classList.remove("btn-danger");
+        del_module_btn.classList.add("btn-primary");
+
+        for(let i = 0; i < moduleEls.length; ++i){
+            moduleTitles[i].style.color = "white";
+        }
+    }
+    else{
+        console.log("entering delete mode");
+        del_module_btn.classList.remove("btn-primary");
+        del_module_btn.classList.add("btn-danger");
+
+        for(let i = 0; i < moduleEls.length; ++i){
+            moduleTitles[i].style.color = "orange";
+            moduleTitles[i].style.cursor = "pointer";
+        }
+    }
 });
