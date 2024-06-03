@@ -198,6 +198,73 @@ async def handle_req(websocket):
                 pass
             except:
                 res["error"] = -1
+        elif req["method"] == "edit_doc_text":
+            try:
+                page = open("html/wsid.html","r").read()
+                soup = bs(page, "html.parser")
+                
+                element = soup.find(id=req["el_id"])
+                print(f"previous string: {element.string}")
+                element.string = req["new_text"]
+                print(f"string after assignment: {element.string}")
+
+                # lt_pattern = re.compile(r'(&lt;)')
+                # gt_pattern = re.compile(r'(&gt;)')
+                # out_text = soup.prettify()
+                # out_text = re.sub(lt_pattern,'<',out_text)
+                # out_text = re.sub(gt_pattern,'>',out_text)
+
+                with open("html/wsid.html","w") as outFile:
+                    outFile.write(str(soup))
+                res["error"] = 0
+            except:
+                res["error"] = -1
+        elif req["method"] == "add_module_method":
+            print(req)
+            try:
+                page = open("html/wsid.html","r+").read()
+                content = open("html/methods_component.html","r").read().split("$")
+
+                for i in range(0,len(content)):
+                    if content[i] == "module_name":
+                        content[i] = req["module_name"].lower()
+                    elif content[i] == "method_name":
+                        content[i] = req["method_name"]
+                    elif content[i] == "function":
+                        content[i] = req["func"]
+                    elif content[i] == "returns":
+                        content[i] = req["returns"]
+                    elif content[i] == "request_format":
+                        content[i] = req["req_format"]
+                    elif content[i] == "response_format":
+                        content[i] = req["res_format"]
+
+                new_content = '\n'
+                for tok in content:
+                    new_content += tok
+                new_content += '\n'
+
+                soup = bs(page,"html")
+
+                new_div = soup.new_tag('div')
+                new_div.string = new_content
+                new_div["class"] = "module_subcomponent_div"
+                new_div["id"] = req["module_name"].lower() + "_methods_subcomponent_div"
+
+                methods_div = soup.find('div', id='' + req["module_name"] + '_methods_subcomponents')
+                methods_div.append(new_div)
+
+                lt_pattern = re.compile(r'(&lt;)')
+                gt_pattern = re.compile(r'(&gt;)')
+                out_text = str(soup)
+                out_text = re.sub(lt_pattern,'<',out_text)
+                out_text = re.sub(gt_pattern,'>',out_text)
+
+                with open("html/wsid.html","w") as outFile:
+                    outFile.write(out_text)
+                res["error"] = 0
+            except:
+                res["error"] = -1
         else:
             res["error"] = "invalid command"
         await websocket.send(json.dumps(res))

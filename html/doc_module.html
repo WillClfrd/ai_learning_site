@@ -1,8 +1,34 @@
 <div class="add_module_component_div">
     <h3 id="$module_name$_module_title">$module_title$</h3>
     <div class="add_module_btn_div">
-        <button class="btn btn-primary add_module_btn" id="$module_name$_add_component_btn">+</button>
-        <button class="btn btn-primary add_module_btn" id="$module_name$_del_component_btn">Delete</button>
+        <button class="btn btn-primary add_module_btn" id="$module_name$_del_btn">Delete</button>
     </div>
 </div>
 <hr/>
+<div class="module_subcomponent_div" id="$module_name$_purpose">
+    <div class="add_subcomponent_entry_div">
+        <h4>Purpose</h4>
+        <div class="add_module_btn_div">
+            <button class="btn btn-primary add_module_btn" id="$module_name$_purpose_edit_btn">Edit</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="module_subcomponent_div" id="$module_name$_purpose_description">
+        <ul class="parameters-list">
+            <li id="$module_name$_purpose_description_text">Description</li>
+        </ul>
+    </div>
+    <div id="$module_name$_purpose_edit_form" class="module_subcomponent_div"></div>
+</div>
+<br/>
+<div class="module_subcomponent_div" id="$module_name$_methods">
+    <div class="add_subcomponent_entry_div">
+        <h4>Methods</h4>
+        <div class="add_module_btn_div">
+            <button class="btn btn-primary add_module_btn" id="$module_name$_methods_add_btn">+</button>
+        </div>
+    </div>
+    <hr/>
+    <div id="$module_name$_methods_add_form" class="module_subcomponent_div"></div>
+    <div class="module_subcomponent_div" id="$module_name$_methods_subcomponents"></div>
+</div>

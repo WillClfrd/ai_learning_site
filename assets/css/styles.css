@@ -328,6 +328,15 @@ body {
     padding-bottom:0%;
 }
 
+.method-div {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: solid;
+    border-color: #00284d;
+    border-radius:5px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
 .parameters-list {
     background-color: rgba(255, 255, 255, 0.05);
     padding-top:10px;
@@ -349,4 +358,9 @@ body {
 
 .active {
     background-color:red;
+}
+
+h5 {
+    color:yellow;
+    text-decoration:underline;
 }

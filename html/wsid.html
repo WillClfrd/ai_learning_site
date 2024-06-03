@@ -1,186 +1,126 @@
 <div class="doc_content_div" id="doc_div">
- <div id="modules_div">
-  <div class="add_module_div">
-   <h1>
+<div id="modules_div">
+<div class="add_module_div">
+<h1>
     Modules
    </h1>
-   <div class="add_module_btn_div">
-    <button class="btn btn-primary add_module_btn" id="add_module_btn">
+<div class="add_module_btn_div">
+<button class="btn btn-primary add_module_btn" id="add_module_btn">
      +
     </button>
-   </div>
-  </div>
-  <div id="module_form">
-  </div>
-  <hr/>
-  <div class="doc_module_div" id="ucs_module_div">
-   <div class="add_module_component_div">
-    <h3 id="ucs_module_title">
-     Uniform Cost Search
-    </h3>
-    <div class="add_module_btn_div">
-        <button class="btn btn-primary add_module_btn" id="ucs_add_component_btn">+</button>
-        <button class="btn btn-primary add_module_btn" id="ucs_del_component_btn">Delete</button>
-    </div>
-   </div>
-   <hr/>
-   <div class="module_subcomponent_div" id="ucs_purpose">
-    <div class="add_subcomponent_entry_div">
-     <h4>
-      Purpose
-     </h4>
-     <button class="btn btn-primary" id="add_purpose_subcomponent_entry_btn">
-      +
-     </button>
-    </div>
-    <hr/>
-    <div class="module_subcomponent_div" id="ucs_purpose_subcomponent_entry">
-     <p>
-      This module is meant to be used to create graphs and perform a graph search on the created graphs using the uniform cost search algorithm.
-     </p>
-    </div>
-   </div>
-   <br/>
-   <div class="module_subcomponent_div" id="ucs_methods">
-    <div class="add_subcomponent_entry_div">
-     <h4>
-      Methods
-     </h4>
-     <button class="btn btn-primary" id="add_methods_subcomponent_entry_btn">
-      +
-     </button>
-    </div>
-    <hr/>
-    <div class="module_subcomponent_div" id="ucs_methods_subcomponent_entry">
-     <h5>
-      ucs
-     </h5>
-     <div class="module_subcomponent_div">
-      <p>
-       Function:
-      </p>
-      <ul class="parameters-list">
-       <li>
-        Contructs a graph using the given information and performs a graph search on the constructed graph.
-       </li>
-      </ul>
-      <p>
-       Returns:
-      </p>
-      <ul class="parameters-list">
-       <li>
-        Either the path from the start node to the end node or the paths in a minimum spanning tree with the given start node as its root if no end node is passed in the method call.
-       </li>
-      </ul>
-      <p>
-       Request Format:
-      </p>
-      <ul class="parameters-list">
-       <li>
-        {"method": "ucs", "nodes":
-        <i>
-         Nodes
-        </i>
-        , "edges":
-        <i>
-         Edges
-        </i>
-        , "start":
-        <i>
-         nodeID
-        </i>
-        , "end":
-        <i>
-         nodeID
-        </i>
-        }
-       </li>
-      </ul>
-      <p>
-       Request Parameters:
-      </p>
-      <ul class="parameters-list">
-       <li>
-        <b>
-         method
-        </b>
-        : "ucs"
-       </li>
-       <li>
-        <b>
-         nodes
-        </b>
-        : structure containing node information following format
-       </li>
-       <li>
-        <b>
-         edges
-        </b>
-        : structure containing edge information following format
-       </li>
-       <li>
-        <b>
-         start
-        </b>
-        : string id for graph search starting node
-       </li>
-       <li>
-        <b>
-         end
-        </b>
-        (
-        <i>
-         optional
-        </i>
-        ): string id for graph search end node
-       </li>
-      </ul>
-      <p>
-       Response Format:
-      </p>
-      <ul class="parameters-list">
-       <li>
-        {"steps":
-        <i>
-         StepsArray
-        </i>
-        , "error":
-        <i>
-         ErrorFlag
-        </i>
-        }
-       </li>
-      </ul>
-      <p>
-       Response Parameters:
-      </p>
-      <ul class="parameters-list">
-       <li>
-        <b>
-         steps
-        </b>
-        : list of dictionaries containing information for the frontier and selected path at each step of the algorithm in format [{"frontier": [,...,], "path": },...,{"frontier": [,...,], "path": }]
-       </li>
-       <li>
-        <b>
-         error
-        </b>
-        : int value indicating error status for method call (0 for success, any other number for error)
-       </li>
-      </ul>
-     </div>
-    </div>
-   </div>
-  </div>
-  <div class="doc_module_div" id="test_module_div">
-   <div class="add_module_component_div">
-    <h3 id="test_module_title">Test</h3>
-    <div class="add_module_btn_div">
-        <button class="btn btn-primary add_module_btn" id="test_add_component_btn">+</button>
-        <button class="btn btn-primary add_module_btn" id="test_del_component_btn">Delete</button>
-    </div>
+</div>
+</div>
+<div id="module_form">
 </div>
 <hr/>
-  </div>
- </div>
+<div class="doc_module_div" id="ucs_module_div">
+<div class="add_module_component_div">
+<h3 id="ucs_module_title">
+     Uniform Cost Search
+    </h3>
+<div class="add_module_btn_div">
+<button class="btn btn-primary add_module_btn" id="ucs_del_btn">
+      Delete
+     </button>
+</div>
+</div>
+<hr/>
+<div class="module_subcomponent_div" id="ucs_purpose">
+<div class="add_subcomponent_entry_div">
+<h4>
+      Purpose
+     </h4>
+<div class="add_module_btn_div">
+<button class="btn btn-primary add_module_btn" id="ucs_purpose_edit_btn">
+       Edit
+      </button>
+</div>
+</div>
+<hr/>
+<div class="module_subcomponent_div" id="ucs_purpose_description">
+<ul class="parameters-list">
+<li id="ucs_purpose_description_text">
+       The uniform cost search module is meant to be used for demonstrating the steps taken to perform graph searches using the uniform cost search algorithm. The module includes a graph builder to allow users to construct custom graphs to perform the search on, as well as a description panel used to provide text descriptions of each step of the algorithm.
+      </li>
+</ul>
+</div>
+<div class="module_subcomponent_div" id="ucs_purpose_edit_form">
+</div>
+</div>
+<br/>
+<div class="module_subcomponent_div" id="ucs_methods">
+<div class="add_subcomponent_entry_div">
+<h4>
+      Methods
+     </h4>
+<div class="add_module_btn_div">
+<button class="btn btn-primary add_module_btn" id="ucs_methods_add_btn">
+       +
+      </button>
+</div>
+</div>
+<hr/>
+<div class="module_subcomponent_div" id="ucs_methods_add_form">
+</div>
+<div class="module_subcomponent_div" id="ucs_methods_subcomponents">
+<div class="module_subcomponent_div" id="ucs_methods_subcomponent_div">
+<h5>ucs</h5>
+<div class="module_subcomponent_div">
+<p>Function:</p>
+<ul class="parameters-list">
+<li id="ucs_ucs_function_desc">used to run uniform cost search algorithm on graphs</li>
+</ul>
+<p>Returns:</p>
+<ul class="parameters-list">
+<li id="ucs_ucs_return_desc">returns some path information</li>
+</ul>
+<p>Request Format:</p>
+<ul class="parameters-list">
+<li id="ucs_ucs_req_format_desc">request graph information</li>
+</ul>
+<p>Request Parameters:</p>
+<ul class="parameters-list" id="ucs_ucs_req_params_list"></ul>
+<p>
+    Response Format:
+    </p>
+<ul class="parameters-list">
+<li id="ucs_ucs_res_format_desc">some path information</li>
+</ul>
+<p>
+    Response Parameters:
+    </p>
+<ul class="parameters-list" id="ucs_ucs_res_params_list"></ul>
+</div>
+</div><div class="module_subcomponent_div" id="ucs_methods_subcomponent_div">
+<h5>second method</h5>
+<div class="module_subcomponent_div">
+    <p>Function:</p>
+    <ul class="parameters-list">
+        <li id="ucs_second method_function_desc">some additional functionality</li>
+    </ul>
+    <p>Returns:</p>
+    <ul class="parameters-list">
+        <li id="ucs_second method_return_desc">return values for method</li>
+    </ul>
+    <p>Request Format:</p>
+    <ul class="parameters-list">
+        <li id="ucs_second method_req_format_desc">new method request format</li>
+    </ul>
+    <p>Request Parameters:</p>
+    <ul class="parameters-list" id="ucs_second method_req_params_list"></ul>
+    <p>
+    Response Format:
+    </p>
+    <ul class="parameters-list">
+        <li id="ucs_second method_res_format_desc">new method response format</li>
+    </ul>
+    <p>
+    Response Parameters:
+    </p>
+    <ul class="parameters-list" id="ucs_second method_res_params_list"></ul>
+</div>
+</div></div>
+</div>
+</div>
+</div>
 </div>
