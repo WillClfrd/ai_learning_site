@@ -1,5 +1,10 @@
-<h5>$method_name$</h5>
-<div class="module_subcomponent_div">
+<div class="add_subcomponent_entry_div">
+    <h5 id="$module_name$_$method_name$_method_name">$method_name$</h5>
+    <div class="add_module_btn_div">
+        <button class="btn btn-primary add_module_btn" id="$module_name$_$method_name$_method_edit_btn">Edit</button>
+    </div>
+</div>
+<div class="module_subcomponent_div" id="$module_name$_$method_name$_subcomponent_div">
     <p>Function:</p>
     <ul class="parameters-list">
         <li id="$module_name$_$method_name$_function_desc">$function$</li>
@@ -13,7 +18,7 @@
         <li id="$module_name$_$method_name$_req_format_desc">$request_format$</li>
     </ul>
     <p>Request Parameters:</p>
-    <ul class="parameters-list" id="$module_name$_$method_name$_req_params_list"></ul>
+    <ul class="parameters-list" id="$module_name$_$method_name$_req_params_list">$request_params$</ul>
     <p>
     Response Format:
     </p>
@@ -23,5 +28,6 @@
     <p>
     Response Parameters:
     </p>
-    <ul class="parameters-list" id="$module_name$_$method_name$_res_params_list"></ul>
+    <ul class="parameters-list" id="$module_name$_$method_name$_res_params_list">$response_params$</ul>
 </div>
+<div id="$module_name$_$method_name$_method_edit_form"></div>
