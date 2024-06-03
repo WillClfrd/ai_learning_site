@@ -416,7 +416,7 @@ for(let i = 0; i < modules.length; ++i){
             submit_btn.setAttribute('type', 'submit');
             submit_btn.classList.add("btn");
             submit_btn.classList.add("btn-primary");
-            submit_btn.textContent = 'add';
+            submit_btn.textContent = 'save';
 
             name_div.appendChild(name);
             func_div.appendChild(func);
@@ -495,7 +495,7 @@ for(let i = 0; i < modules.length; ++i){
                 method_edit_form.classList.remove("add-form");
                 method_edit_form.innerHTML = "";
 
-                //location.reload();
+                location.reload();
             });
 
             method_edit_form.appendChild(form);
