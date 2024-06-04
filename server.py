@@ -9,12 +9,10 @@ import re
 
 pages = ["a_star_search","id3_dec_tree","minmax_adv_search","gen_algo","stoch_grad_desc","uni_cost_search","home","wsid"]
 js_scripts = ["a_star_search", "gen_algo", "home.js", "id3_dec_tree", "index.js", "minmax_adv_search", "model", "stoch_grad_desc", "uni_cost_search", "wsid"]
-conn = 0
 
-# define websocket here to make calls to minimax_engine methods and return call results
 async def handle_req(websocket):
     print("connection established")
-    # catches input from websocket
+
     async for message in websocket:
         res = {}
         req = json.loads(message)
@@ -48,7 +46,6 @@ async def handle_req(websocket):
             me.board = req["board"]
             res["move"] = me.GetMinMaxMove(req["player"])
             me.movePiece(res["move"][0],res["move"][1],me.board)
-            #res["board"] = me.board
             res["checkmate"] = me.IsCheckmate(req["opponent"])
         elif req["method"] == "geteval":
             me.board = req["board"]
@@ -119,9 +116,6 @@ async def handle_req(websocket):
                 res["steps"] = []
                 res["error"] = -1
         elif req["method"] == "a_star":
-            print("a star search")
-
-            # parse out nodes, edges, h_n values, start, and goal
             nodes = []
             edges = []
             h_n = {}
@@ -132,14 +126,12 @@ async def handle_req(websocket):
 
             result_path = a_star.a_star()
 
-            # package result_path appropriately
             res["result"] = result_path
         elif req["method"] == "sgd":
             print("stochastic gradient descent")
         elif req["method"] == "id3":
             print("id3 decision tree")
         elif req["method"] == "add_doc_module":
-            print(req)
             try:
                 with open("html/wsid.html","r+") as base:
                     page = base.read()
@@ -204,15 +196,7 @@ async def handle_req(websocket):
                 soup = bs(page, "html.parser")
                 
                 element = soup.find(id=req["el_id"])
-                print(f"previous string: {element.string}")
                 element.string = req["new_text"]
-                print(f"string after assignment: {element.string}")
-
-                # lt_pattern = re.compile(r'(&lt;)')
-                # gt_pattern = re.compile(r'(&gt;)')
-                # out_text = soup.prettify()
-                # out_text = re.sub(lt_pattern,'<',out_text)
-                # out_text = re.sub(gt_pattern,'>',out_text)
 
                 with open("html/wsid.html","w") as outFile:
                     outFile.write(str(soup))
@@ -220,7 +204,6 @@ async def handle_req(websocket):
             except:
                 res["error"] = -1
         elif req["method"] == "add_module_method":
-            print(req)
             try:
                 page = open("html/wsid.html","r+").read()
                 content = open("html/methods_component.html","r").read().split("$")
@@ -271,48 +254,29 @@ async def handle_req(websocket):
                 res["error"] = -1
         elif req["method"] == "edit_module_method":
             try:
-                print("in method")
                 page = open("html/wsid.html","r").read()
                 soup = bs(page,"html.parser")
 
-                print("created soup")
                 name = soup.find(id="" + req["module_name"] + "_" + req["method_name"] + "_method_name")
-                print(f"{req["module_name"]}")
-                print(f"{req["method_name"]}")
-                print(name)
-                print(f"name before: {name.string}")
                 name.string = req["new_method_name"]
-                print(f"name after: {name.string}")
 
                 func = soup.find(id="" + req["module_name"] + "_" + req["method_name"] + "_function_desc")
-                print(f"func before: {func.string}")
                 func.string = req["func"]
-                print(f"func after: {func.string}")
 
                 returns = soup.find(id="" + req["module_name"] + "_" + req["method_name"] + "_return_desc")
-                print(f"returns before: {returns.string}")
                 returns.string = req["returns"]
-                print(f"returns after: {returns.string}")
 
                 req_format = soup.find(id="" + req["module_name"] + "_" + req["method_name"] + "_req_format_desc")
-                print(f"req_format before: {req_format.string}")
                 req_format.string = req["req_format"]
-                print(f"req_format after: {req_format.string}")
 
                 req_params = soup.find(id="" + req["module_name"] + "_" + req["method_name"] + "_req_params_list")
-                print(f"req_params before: {req_params.string}")
                 req_params.string = req["req_params"]
-                print(f"req_params after: {req_params.string}")
 
                 res_format = soup.find(id="" + req["module_name"] + "_" + req["method_name"] + "_res_format_desc")
-                print(f"res_format before: {res_format.string}")
                 res_format.string = req["res_format"]
-                print(f"res_format after: {res_format.string}")
 
                 res_params = soup.find(id="" + req["module_name"] + "_" + req["method_name"] + "_res_params_list")
-                print(f"res_params before: {res_params.string}")
                 res_params.string = req["res_params"]
-                print(f"res_params after: {res_params.string}")
 
                 lt_pattern = re.compile(r'(&lt;)')
                 gt_pattern = re.compile(r'(&gt;)')
