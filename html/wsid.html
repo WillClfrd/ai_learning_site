@@ -64,7 +64,7 @@
 </ul>
 <p>Request Format:</p>
 <ul class="parameters-list">
-<li id="ucs_ucs_req_format_desc">{"method": "ucs", "nodes": Nodes, "edges": Edges, "start": nodeID, "end": $classes$string@nodeID@string$}
+<li id="ucs_ucs_req_format_desc">{"method": "ucs", "nodes": Nodes, "edges": Edges, "start": nodeID, "end": nodeIDString}
 </li>
 </ul>
 <p>Request Parameters:</p>
@@ -109,12 +109,12 @@
     </p>
 <ul class="parameters-list" id="ucs_ucs_res_params_list"><li><b>steps</b>
 <ul>
-<li>[{"frontier": [<span class="custom tooltip-container">Path<span class="tooltip flex wrap">Custom data structure of format {"nodes": [<span class="string tooltip-container">nodeID</span>,...,<span class="string tooltip-container">nodeID</span>], "cost": <span class="int tooltip-container">val</span>}</span></span>, . . . ], "path": {"nodes": [(srcID,destID), . . . ], "cost": val}, "total_path": {"nodes": [(srcID,destID), . . . ], "cost": val}}, . . . ]</li>
+<li>[{"frontier": [<span class="custom tooltip-container">Path<span class="tooltip flex wrap">Custom data structure of format {"nodes": [<span class="string tooltip-container">nodeID</span>,...,<span class="string tooltip-container">nodeID</span>], "cost": <span class="int tooltip-container">val</span>}</span></span>, . . . , <span class="custom tooltip-container">Path<span class="tooltip">Custom data structure of format {"nodes": [<span class="string">nodeID</span>,...,<span class="string">nodeID</span>], "cost": <span class="int">val</span>}</span></span>], "path": <span class="custom tooltip-container">Path<span class="tooltip">Custom data structure of format {"nodes": [<span class="string">nodeID</span>,...,<span class="string">nodeID</span>], "cost": <span class="int">val</span>}</span></span>, "total_path": [<span class="custom tooltip-container">Path<span class="tooltip">Custom data structure of format {"nodes": [<span class="string">nodeID</span>,...,<span class="string">nodeID</span>], "cost": <span class="int">val</span>}</span></span>, . . . , <span class="custom tooltip-container">Path<span class="tooltip">Custom data structure of format {"nodes": [<span class="string">nodeID</span>,...,<span class="string">nodeID</span>], "cost": <span class="int">val</span>}</span></span>]}, . . . , {"frontier": [<span class="custom tooltip-container">Path<span class="tooltip">Custom data structure of format {"nodes": [<span class="string">nodeID</span>,...,<span class="string">nodeID</span>], "cost": <span class="int">val</span>}</span></span>, . . . , <span class="custom tooltip-container">Path<span class="tooltip">Custom data structure of format {"nodes": [<span class="string">nodeID</span>,...,<span class="string">nodeID</span>], "cost": <span class="int">val</span>}</span></span>], "path": <span class="custom tooltip-container">Path<span class="tooltip">Custom data structure of format {"nodes": [<span class="string">nodeID</span>,...,<span class="string">nodeID</span>], "cost": <span class="int">val</span>}</span></span>, "total_path": [<span class="custom tooltip-container">Path<span class="tooltip">Custom data structure of format {"nodes": [<span class="string">nodeID</span>,...,<span class="string">nodeID</span>], "cost": <span class="int">val</span>}</span></span>, . . . , <span class="custom tooltip-container">Path<span class="tooltip">Custom data structure of format {"nodes": [<span class="string">nodeID</span>,...,<span class="string">nodeID</span>], "cost": <span class="int">val</span>}</span></span>]}]</li>
 </ul>
 </li>
 <li><b>error</b>
 <ul>
-<li>Value: 0 -> success, -1 -> failure</li>
+<li>Value: $classes$int@val@int$</li>
 </ul>
 </li></ul>
 </div>
