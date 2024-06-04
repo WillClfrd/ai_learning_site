@@ -1,0 +1,50 @@
+.string {
+    color:yellow;
+}
+
+.int {
+    color:magenta;
+}
+
+.float {
+    color:orange;
+}
+
+.boolean {
+    color:aqua;
+}
+
+.custom {
+    color:yellowgreen;
+}
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+  
+.tooltip-container .tooltip {
+    visibility: hidden;
+    background-color: #353a3f;
+    border:solid;
+    border-color:#2b2f33;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    z-index: 1;
+    bottom: 0%;
+    left: 100%;
+    margin-left: 0px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    width:fit-content;
+    white-space: nowrap;
+    word-wrap: break-word;
+}
+  
+.tooltip-container:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}

@@ -9,6 +9,14 @@ import re
 
 pages = ["a_star_search","id3_dec_tree","minmax_adv_search","gen_algo","stoch_grad_desc","uni_cost_search","home","wsid"]
 js_scripts = ["a_star_search", "gen_algo", "home.js", "id3_dec_tree", "index.js", "minmax_adv_search", "model", "stoch_grad_desc", "uni_cost_search", "wsid"]
+tooltips = {
+    "method-name": "Name must match exactly for method to function correctly.",
+    "path": "Custom data structure of format {\"nodes\": [$classes$string@nodeID$,...,$classes$string@nodeID$], \"cost\": $classes$int@val$}",
+    "int": "Int",
+    "string": "String",
+    "float": "Float",
+    "boolean": "Boolean"
+}
 
 async def handle_req(websocket):
     print("connection established")
@@ -53,7 +61,9 @@ async def handle_req(websocket):
         elif req["method"] == "getpage":
             if req["page"] in pages:
                 with open("html/" + req["page"] + ".html", "r") as file:
-                    res["content"] = file.read()
+                    page = file.read()
+
+                    res["content"] = htmlParser(page)
                     res["error"] = "none"
                     
                     scripts = []
@@ -304,5 +314,20 @@ async def main():
     async with serve(handle_req, "localhost", 11111):
         print("websocket running")
         await asyncio.Future()
+
+def htmlParser(content):
+    tokens = content.split("$")
+    for i in range(0,len(tokens)):
+        if tokens[i] == "classes":
+            tempTokens = tokens[i+1].split("@")
+            try:
+                tokens[i+1] = f"<span class=\"{tempTokens[0]} tooltip-container\">{tempTokens[1]}<span class=\"tooltip\">{htmlParser(tooltips[tempTokens[2]])}</span></span>"
+            except:
+                tokens[i+1] = f"<span class=\"{tempTokens[0]}\">{tempTokens[1]}</span>"
+            tokens[i] = ""
+    newContent = ""
+    for token in tokens:
+        newContent += token
+    return newContent
 
 asyncio.run(main())

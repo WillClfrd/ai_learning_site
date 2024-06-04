@@ -64,7 +64,7 @@
 </ul>
 <p>Request Format:</p>
 <ul class="parameters-list">
-<li id="ucs_ucs_req_format_desc">{"method": "ucs", "nodes": Nodes, "edges": Edges, "start": nodeID, "end": nodeID}
+<li id="ucs_ucs_req_format_desc">{"method": "ucs", "nodes": Nodes, "edges": Edges, "start": nodeID, "end": $classes$string@nodeID@string$}
 </li>
 </ul>
 <p>Request Parameters:</p>
@@ -109,12 +109,12 @@
     </p>
 <ul class="parameters-list" id="ucs_ucs_res_params_list"><li><b>steps</b>
 <ul>
-<li>[{"frontier": [{"nodes": [(srcID,destID), . . . ], "cost": val}, . . . ], "path": {"nodes": [(srcID,destID), . . . ], "cost": val}, "total_path": {"nodes": [(srcID,destID), . . . ], "cost": val}}, . . . ]</li>
+<li>[{"frontier": [<span class="custom tooltip-container">Path<span class="tooltip flex wrap">Custom data structure of format {"nodes": [<span class="string tooltip-container">nodeID</span>,...,<span class="string tooltip-container">nodeID</span>], "cost": <span class="int tooltip-container">val</span>}</span></span>, . . . ], "path": {"nodes": [(srcID,destID), . . . ], "cost": val}, "total_path": {"nodes": [(srcID,destID), . . . ], "cost": val}}, . . . ]</li>
 </ul>
 </li>
 <li><b>error</b>
 <ul>
-<li>Value: 0 -&gt; success, -1 -&gt; failure</li>
+<li>Value: 0 -> success, -1 -> failure</li>
 </ul>
 </li></ul>
 </div>
