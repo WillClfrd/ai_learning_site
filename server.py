@@ -12,10 +12,14 @@ js_scripts = ["a_star_search", "gen_algo", "home.js", "id3_dec_tree", "index.js"
 tooltips = {
     "method-name": "Name must match exactly for method to function correctly.",
     "path": "Custom data structure of format {\"nodes\": [$classes$string@nodeID$,...,$classes$string@nodeID$], \"cost\": $classes$int@val$}",
+    "board": "2D character array with possible values in the set ['R','r','B','b','T','t','Q','q','K','k','P','p','.'], with uppercase indicating white pieces and lowercase indicating black pieces.",
+    "move": "Custom data structure of format {\"from\": [$classes$int@row$,$classes$int@col$], \"to\": [$classes$int@row$,$classes$int@col$]}",
+    "en-passant-targets": "Custom array of the format [[$classes$int@row$,$classes$int@col$],[$classes$int@row$,$classes$int@col$]]",
     "int": "Int",
     "string": "String",
     "float": "Float",
-    "boolean": "Boolean"
+    "boolean": "Boolean",
+    "char": "Char"
 }
 
 async def handle_req(websocket):

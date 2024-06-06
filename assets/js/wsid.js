@@ -6,10 +6,12 @@ console.log("wsid");
 let allElements = document.querySelectorAll('*');
 allElements.forEach(element => {
     if(element.id){
+        //console.log(element.id);
         if(element.id.includes("_module_div")){
             modules.push(element.id.slice(0,element.id.indexOf('_')));
         }
         if(element.id.includes("_method_edit_btn")){
+            console.log(element.id);
             tok = element.id.split('_');
             if(!methods[tok[0]]){
                 methods[tok[0]] = [];
@@ -308,199 +310,203 @@ for(let i = 0; i < modules.length; ++i){
         add_method_form.classList.add("add-form");
     });
 
-    for(let j = 0; j < methods[modules[i]].length; ++j){
-        methodEditButtons["" + modules[i] + '_' + methods[modules[i]][j]] = document.getElementById("" + modules[i] + "_" + methods[modules[i]][j] + "_method_edit_btn");
-        methodEditButtons["" + modules[i] + '_' + methods[modules[i]][j]].addEventListener("click", (event) => {
-            let module_name;
-            let method_name;
-            let tok = event.target.id.split('_');
-            for(let i = 0; i < modules.length; ++i){
-                if(tok[0] == modules[i]){
-                    module_name = modules[i];
+    console.log(methods);
+    console.log(modules[i]);
+
+    if(methods[modules[i]]){
+        for(let j = 0; j < methods[modules[i]].length; ++j){
+            methodEditButtons["" + modules[i] + '_' + methods[modules[i]][j]] = document.getElementById("" + modules[i] + "_" + methods[modules[i]][j] + "_method_edit_btn");
+            methodEditButtons["" + modules[i] + '_' + methods[modules[i]][j]].addEventListener("click", (event) => {
+                let module_name;
+                let method_name;
+                let tok = event.target.id.split('_');
+                for(let i = 0; i < modules.length; ++i){
+                    if(tok[0] == modules[i]){
+                        module_name = modules[i];
+                    }
                 }
-            }
-            for(let i = 0; i < methods[module_name].length; ++i){
-                if(tok[1] == methods[module_name][i]){
-                    method_name = methods[module_name][i];
-                }
-            }
-
-            let currName = document.getElementById("" + module_name + "_" + method_name + "_method_name").textContent;
-            console.log(currName);
-            let currFunc = document.getElementById("" + module_name + "_" + method_name + "_function_desc").textContent;
-            console.log(currFunc);
-            let currRet = document.getElementById("" + module_name + "_" + method_name + "_return_desc").textContent;
-            console.log(currRet);
-            let currReqFormat = document.getElementById("" + module_name + "_" + method_name + "_req_format_desc").textContent;
-            console.log(currReqFormat);
-            let currReqParams = document.getElementById("" + module_name + "_" + method_name + "_req_params_list").innerHTML;
-            console.log(currReqParams);
-            let currResFormat = document.getElementById("" + module_name + "_" + method_name + "_res_format_desc").textContent;
-            console.log(currResFormat);
-            let currResParams = document.getElementById("" + module_name + "_" + method_name + "_res_params_list").innerHTML;
-            console.log(currResParams);
-            let editEl = document.getElementById("" + module_name + "_" + method_name + "_subcomponent_div");
-
-            editEl.innerHTML = "";
-
-            method_edit_form = document.getElementById("" + module_name + "_" + method_name + "_method_edit_form");
-        
-            const form = document.createElement('form');
-            form.setAttribute('id', 'add_method_form');
-
-            const name_div = document.createElement('div');
-            name_div.classList.add("form-group");
-
-            const name = document.createElement('input');
-            name.classList.add("form-control");
-            name.setAttribute('type', 'text');
-            name.setAttribute('name', 'method_name');
-            name.setAttribute('id', 'method_name');
-            name.setAttribute('value',currName);
-
-            const func_div = document.createElement('div');
-            func_div.classList.add("form-group");
-
-            const func = document.createElement('textarea');
-            func.classList.add("form-control");
-            func.setAttribute('name', 'method_func');
-            func.setAttribute('id', 'method_func');
-            func.innerHTML = currFunc;
-
-            const returns_div = document.createElement('div');
-            returns_div.classList.add("form-group");
-
-            const returns = document.createElement('textarea');
-            returns.classList.add("form-control");
-            returns.setAttribute('name', 'method_returns');
-            returns.setAttribute('id', 'method_returns');
-            returns.innerHTML = currRet;
-
-            const req_format_div = document.createElement('div');
-            req_format_div.classList.add("form-group");
-
-            const req_format = document.createElement('textarea');
-            req_format.classList.add("form-control");
-            req_format.setAttribute('name', 'method_req_format');
-            req_format.setAttribute('id', 'method_req_format');
-            req_format.innerHTML = currReqFormat;
-
-            const req_params_div = document.createElement('div');
-            req_params_div.classList.add("form-group");
-
-            const req_params = document.createElement('textarea');
-            req_params.classList.add("form-control");
-            req_params.setAttribute('name', 'method_req_params');
-            req_params.setAttribute('id', 'method_req_params');
-            req_params.innerHTML = currReqParams;
-
-            const res_format_div = document.createElement('div');
-            res_format_div.classList.add("form-group");
-
-            const res_format = document.createElement('textarea');
-            res_format.classList.add("form-control");
-            res_format.setAttribute('name', 'method_res_format');
-            res_format.setAttribute('id', 'method_res_format');
-            res_format.innerHTML = currResFormat;
-
-            const res_params_div = document.createElement('div');
-            res_params_div.classList.add("form-group");
-
-            const res_params = document.createElement('textarea');
-            res_params.classList.add("form-control");
-            res_params.setAttribute('name', 'method_res_params');
-            res_params.setAttribute('id', 'method_res_params');
-            res_params.innerHTML = currResParams;
-
-            const submit_btn = document.createElement('button');
-            submit_btn.setAttribute('type', 'submit');
-            submit_btn.classList.add("btn");
-            submit_btn.classList.add("btn-primary");
-            submit_btn.textContent = 'save';
-
-            name_div.appendChild(name);
-            func_div.appendChild(func);
-            returns_div.appendChild(returns);
-            req_format_div.appendChild(req_format);
-            req_params_div.appendChild(req_params);
-            res_format_div.appendChild(res_format);
-            res_params_div.appendChild(res_params);
-
-            form.append(name_div);
-            form.appendChild(document.createElement('br'));
-            form.append(func_div);
-            form.appendChild(document.createElement('br'));
-            form.append(returns_div);
-            form.appendChild(document.createElement('br'));
-            form.append(req_format_div);
-            form.appendChild(document.createElement('br'));
-            form.append(req_params_div);
-            form.appendChild(document.createElement('br'));
-            form.append(res_format_div);
-            form.appendChild(document.createElement('br'));
-            form.append(res_params_div);
-            form.appendChild(document.createElement('br'));
-            form.appendChild(submit_btn);
-
-            form.addEventListener('submit',(event)=>{
-                event.preventDefault();
-                
-                const formEl = event.target;
-                data = new FormData(formEl);
-                let name = data.get("method_name");
-                if(!name){
-                    name = "Empty";
-                }
-                let func = data.get("method_func");
-                if(!func){
-                    func = "Empty";
-                }
-                let returns = data.get("method_returns");
-                if(!returns){
-                    returns = "Empty";
-                }
-                let req_format = data.get("method_req_format");
-                if(!req_format){
-                    req_format = "Empty";
-                }
-                let req_params = data.get("method_req_params");
-                if(!req_params){
-                    req_params = "Empty";
-                }
-                let res_format = data.get("method_res_format");
-                if(!res_format){
-                    res_format = "Empty";
-                }
-                let res_params = data.get("method_res_params");
-                if(!res_params){
-                    res_params = "Empty";
+                for(let i = 0; i < methods[module_name].length; ++i){
+                    if(tok[1] == methods[module_name][i]){
+                        method_name = methods[module_name][i];
+                    }
                 }
 
-                let req = {
-                    method: "edit_module_method",
-                    module_name: module_name,
-                    method_name: method_name,
-                    new_method_name: name,
-                    func: func,
-                    returns: returns,
-                    req_format: req_format,
-                    req_params: req_params,
-                    res_format: res_format,
-                    res_params: res_params
-                }
+                let currName = document.getElementById("" + module_name + "_" + method_name + "_method_name").textContent;
+                console.log(currName);
+                let currFunc = document.getElementById("" + module_name + "_" + method_name + "_function_desc").textContent;
+                console.log(currFunc);
+                let currRet = document.getElementById("" + module_name + "_" + method_name + "_return_desc").textContent;
+                console.log(currRet);
+                let currReqFormat = document.getElementById("" + module_name + "_" + method_name + "_req_format_desc").textContent;
+                console.log(currReqFormat);
+                let currReqParams = document.getElementById("" + module_name + "_" + method_name + "_req_params_list").innerHTML;
+                console.log(currReqParams);
+                let currResFormat = document.getElementById("" + module_name + "_" + method_name + "_res_format_desc").textContent;
+                console.log(currResFormat);
+                let currResParams = document.getElementById("" + module_name + "_" + method_name + "_res_params_list").innerHTML;
+                console.log(currResParams);
+                let editEl = document.getElementById("" + module_name + "_" + method_name + "_subcomponent_div");
+                editEl.innerHTML = "";
 
-                console.log(JSON.stringify(req));
-                docSocket.send(JSON.stringify(req));
+                method_edit_form = document.getElementById("" + module_name + "_" + method_name + "_method_edit_form");
+            
+                const form = document.createElement('form');
+                form.setAttribute('id', 'add_method_form');
 
-                method_edit_form.classList.remove("add-form");
-                method_edit_form.innerHTML = "";
+                const name_div = document.createElement('div');
+                name_div.classList.add("form-group");
 
-                location.reload();
+                const name = document.createElement('input');
+                name.classList.add("form-control");
+                name.setAttribute('type', 'text');
+                name.setAttribute('name', 'method_name');
+                name.setAttribute('id', 'method_name');
+                name.setAttribute('value',currName);
+
+                const func_div = document.createElement('div');
+                func_div.classList.add("form-group");
+
+                const func = document.createElement('textarea');
+                func.classList.add("form-control");
+                func.setAttribute('name', 'method_func');
+                func.setAttribute('id', 'method_func');
+                func.innerHTML = currFunc;
+
+                const returns_div = document.createElement('div');
+                returns_div.classList.add("form-group");
+
+                const returns = document.createElement('textarea');
+                returns.classList.add("form-control");
+                returns.setAttribute('name', 'method_returns');
+                returns.setAttribute('id', 'method_returns');
+                returns.innerHTML = currRet;
+
+                const req_format_div = document.createElement('div');
+                req_format_div.classList.add("form-group");
+
+                const req_format = document.createElement('textarea');
+                req_format.classList.add("form-control");
+                req_format.setAttribute('name', 'method_req_format');
+                req_format.setAttribute('id', 'method_req_format');
+                req_format.innerHTML = currReqFormat;
+
+                const req_params_div = document.createElement('div');
+                req_params_div.classList.add("form-group");
+
+                const req_params = document.createElement('textarea');
+                req_params.classList.add("form-control");
+                req_params.setAttribute('name', 'method_req_params');
+                req_params.setAttribute('id', 'method_req_params');
+                req_params.innerHTML = currReqParams;
+
+                const res_format_div = document.createElement('div');
+                res_format_div.classList.add("form-group");
+
+                const res_format = document.createElement('textarea');
+                res_format.classList.add("form-control");
+                res_format.setAttribute('name', 'method_res_format');
+                res_format.setAttribute('id', 'method_res_format');
+                res_format.innerHTML = currResFormat;
+
+                const res_params_div = document.createElement('div');
+                res_params_div.classList.add("form-group");
+
+                const res_params = document.createElement('textarea');
+                res_params.classList.add("form-control");
+                res_params.setAttribute('name', 'method_res_params');
+                res_params.setAttribute('id', 'method_res_params');
+                res_params.innerHTML = currResParams;
+
+                const submit_btn = document.createElement('button');
+                submit_btn.setAttribute('type', 'submit');
+                submit_btn.classList.add("btn");
+                submit_btn.classList.add("btn-primary");
+                submit_btn.textContent = 'save';
+
+                name_div.appendChild(name);
+                func_div.appendChild(func);
+                returns_div.appendChild(returns);
+                req_format_div.appendChild(req_format);
+                req_params_div.appendChild(req_params);
+                res_format_div.appendChild(res_format);
+                res_params_div.appendChild(res_params);
+
+                form.append(name_div);
+                form.appendChild(document.createElement('br'));
+                form.append(func_div);
+                form.appendChild(document.createElement('br'));
+                form.append(returns_div);
+                form.appendChild(document.createElement('br'));
+                form.append(req_format_div);
+                form.appendChild(document.createElement('br'));
+                form.append(req_params_div);
+                form.appendChild(document.createElement('br'));
+                form.append(res_format_div);
+                form.appendChild(document.createElement('br'));
+                form.append(res_params_div);
+                form.appendChild(document.createElement('br'));
+                form.appendChild(submit_btn);
+
+                form.addEventListener('submit',(event)=>{
+                    event.preventDefault();
+                    
+                    const formEl = event.target;
+                    data = new FormData(formEl);
+                    let name = data.get("method_name");
+                    if(!name){
+                        name = "Empty";
+                    }
+                    let func = data.get("method_func");
+                    if(!func){
+                        func = "Empty";
+                    }
+                    let returns = data.get("method_returns");
+                    if(!returns){
+                        returns = "Empty";
+                    }
+                    let req_format = data.get("method_req_format");
+                    if(!req_format){
+                        req_format = "Empty";
+                    }
+                    let req_params = data.get("method_req_params");
+                    if(!req_params){
+                        req_params = "Empty";
+                    }
+                    let res_format = data.get("method_res_format");
+                    if(!res_format){
+                        res_format = "Empty";
+                    }
+                    let res_params = data.get("method_res_params");
+                    if(!res_params){
+                        res_params = "Empty";
+                    }
+
+                    let req = {
+                        method: "edit_module_method",
+                        module_name: module_name,
+                        method_name: method_name,
+                        new_method_name: name,
+                        func: func,
+                        returns: returns,
+                        req_format: req_format,
+                        req_params: req_params,
+                        res_format: res_format,
+                        res_params: res_params
+                    }
+
+                    console.log(JSON.stringify(req));
+                    docSocket.send(JSON.stringify(req));
+
+                    method_edit_form.classList.remove("add-form");
+                    method_edit_form.innerHTML = "";
+
+                    location.reload();
+                });
+
+                method_edit_form.appendChild(form);
+                method_edit_form.classList.add("add-form");
             });
-
-            method_edit_form.appendChild(form);
-            method_edit_form.classList.add("add-form");
-        });
+        }
     }
 }
 
