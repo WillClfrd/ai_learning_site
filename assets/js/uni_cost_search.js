@@ -32,7 +32,7 @@ class Line{
 
 
 ucsSocket.addEventListener("open", (event) => {
-    console.log("UCS SOCKET hAHA CONNECTED");
+    console.log("UCS SOCKET HAHA CONNECTED");
 })
 
 ucsSocket.addEventListener("message", (event) => {
@@ -47,7 +47,11 @@ var lines = [];
 var id = 0;
 var lineID = 0;
 var panel = document.getElementById("drawing_panel");
-var panelParent = document.getElementById("drawing_panel_parent")
+var panelParent = document.getElementById("drawing_panel_parent");
+
+var details = document.getElementById("ucs_details");
+details.textContent = "BEGINNING WITH STEP 0";
+
 let parentPadding = 5;
 panel.width = panelParent.clientWidth - (parentPadding * 2);
 panel.height = panelParent.clientHeight - (parentPadding * 2);
@@ -59,6 +63,15 @@ var startNode = null;
 var endNode = null;
 var selStart = false;
 var selEnd = false;
+var step = 0;
+var instructions = [
+    "first do $node[i].id$ blah blah", 
+    "step[1] eating",
+]
+i=0;
+instructions[0] = instructions[0].replace("$node[i].id$", i);
+details.textContent = instructions[0];
+
 
 function reverseColor(ctx){
     for(i = 0; i < nodes.length; ++i){
@@ -134,6 +147,7 @@ function drawShapes(ctx){
                 ctx.fillStyle = "red";
         }
         ctx.fill();
+        ctx.strokeText(nodes[i].id, nodes[i].x, nodes[i].y);
     }
 }
 
@@ -514,10 +528,17 @@ gen_graph_btn.addEventListener("click",(event)=>{
 });
 
 prev_step_btn.addEventListener("click",(event)=>{
+    if (step <= 0){
+
+    }
+    step --;
     console.log("prev step");
+    console.log(step);
 });
 
 next_step_btn.addEventListener("click",(event)=>{
+    step++;
+    console.log(step);
     console.log("next step");
 });
 
@@ -532,16 +553,30 @@ reset_btn.addEventListener("click",(event)=>{
 
 search_btn.addEventListener("click", (event)=>{
     nod = {"0": {"x": 0, "y": 0}, "1": {"x": 20, "y": 0}, "2": {"x": 20, "y": 20}, "3": {"x": 30, "y": 0}, "4": {"x": 30, "y": 5}, "5": {"x": 30, "y": 20}, "6": {"x": 30, "y": 30}}
-    edg = {"0": {"weight": 20, "par1": "0", "par2": "1"}, "1": {"weight": 20, "par1": "1", "par2": "2"}, "2": {"weight": 28.28, "par1": "2", "par2": "0"}, "3": {"weight": 10, "par1": "1", "par2": "3"}, "4": {"weight": 5, "par1": "3", "par2": "4"}, "5": {"weight": 18.03, "par1": "4", "par2": "2"}, "6": {"weight": 10, "par1": "5", "par2": "2"}, "7": {"weight": 10, "par1": "5", "par2": "6"}}
+    edg = {"0": {"weight": 20, "par1": "0", "par2": "1"}, "1": {"weight": 20, "par1": "1", "par2": "2"}, "2": {"weight": 28.28, "par1": "2", "par2": "0"}, "3": {"weight": 10, "par1": "1", "par2": "3"}, "4": {"weight": 5, "par1": "3", "par2": "4"}, "5": {"weight": 18.03, "par1": "4", "par2": "2"}, "6": {"weight": 10, "par1": "5", "par2": "2"}, "7": {"weight": 10, "par1": "5", "par2": "6"}};
+    
+    for(let i = 0; i < nodes.length; ++i){
+        nod[nodes[i].id] = {"x": nodes[i].x, "y": nodes[i].y};
+      }
+
+    for(let i = 0; i < lines.length; ++i){
+        if(lines[i].parStart){
+            var id1 = lines[i].parStart.id;
+          }
+
+          if(lines[i].parEnd){
+            var id2 = lines[i].parEnd.id;
+          }
+        edg[lines[i].id] = {"weight": lines[i].weight, "par1": id1, "par2": id2};
+        }
+
     const req = {
         method: "ucs", 
         nodes: nod, 
-        egdes: edg, 
+        edges: edg, 
         start: "0", 
         end: "6"
     };
 
     ucsSocket.send(JSON.stringify(req));
-    
-    
 })
