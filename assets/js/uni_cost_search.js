@@ -1,3 +1,5 @@
+const ucsSocket = new WebSocket( 'ws://localhost:11111')
+
 class Circle{
     constructor(x,y,radius,id){
         this.x = x;
@@ -27,6 +29,19 @@ class Line{
         // console.log(this.weight);
     }
 }
+
+
+ucsSocket.addEventListener("open", (event) => {
+    console.log("UCS SOCKET hAHA CONNECTED");
+})
+
+ucsSocket.addEventListener("message", (event) => {
+    const res = JSON.parse(event.data);
+    
+    console.log(res.error);
+    
+})
+
 
 var nodes = [];
 var lines = [];
@@ -98,14 +113,14 @@ function drawShapes(ctx){
         if(delMode){
             ctx.fillStyle = "black";
         } //update startNode and endNode to be null on
-        else if (nodes[i].start == true || nodes[i].end == true){
-            ctx.fillStyle = "blue";
-        }
-        else if(selStart){
+        else if (nodes[i].start == true){
             ctx.fillStyle = "green";
         }
-        else if(selEnd){
+        else if (nodes[i].end == true){
             ctx.fillStyle = "red";
+        }
+        else if(selStart || selEnd){
+            ctx.fillStyle = "grey";
         }
         else{
             ctx.fillStyle = "blue";
@@ -277,14 +292,10 @@ panel.addEventListener("mousemove",(event)=>{
         }
         else if(currNode.start){
             if (selStart)
-                ctx.fillStyle = "blue";
-            else
                 ctx.fillStyle = "green";
         }
         else if(currNode.end){
             if (selEnd)
-                ctx.fillStyle = "blue";
-            else
                 ctx.fillStyle = "red";
         }
         else{
