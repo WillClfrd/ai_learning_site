@@ -1,264 +1,266 @@
 <div class="doc_content_div" id="doc_div">
-<div id="modules_div">
-<div class="add_module_div">
-<h1>
+ <div id="modules_div">
+  <div class="add_module_div">
+   <h1>
     Modules
    </h1>
-<div class="add_module_btn_div">
-<button class="btn btn-primary add_module_btn" id="add_module_btn">
+   <div class="add_module_btn_div">
+    <button class="btn btn-primary add_module_btn" id="add_module_btn">
      +
     </button>
-</div>
-</div>
-<div id="module_form">
-</div>
-<hr/>
-<div class="doc_module_div" id="ucs_module_div">
-<div class="add_module_component_div">
-<h3 id="ucs_module_title">
+   </div>
+  </div>
+  <div id="module_form">
+  </div>
+  <hr/>
+  <div class="doc_module_div" id="ucs_module_div">
+   <div class="add_module_component_div">
+    <h3 id="ucs_module_title">
      Uniform Cost Search
     </h3>
-<div class="add_module_btn_div">
-<button class="btn btn-primary add_module_btn" id="ucs_del_btn">
+    <div class="add_module_btn_div">
+     <button class="btn btn-primary add_module_btn" id="ucs_del_btn">
       Delete
      </button>
-</div>
-</div>
-<hr/>
-<div class="module_subcomponent_div" id="ucs_purpose">
-<div class="add_subcomponent_entry_div">
-<h4>
+    </div>
+   </div>
+   <hr/>
+   <div class="module_subcomponent_div" id="ucs_purpose">
+    <div class="add_subcomponent_entry_div">
+     <h4>
       Purpose
      </h4>
-<div class="add_module_btn_div">
-<button class="btn btn-primary add_module_btn" id="ucs_purpose_edit_btn">
+     <div class="add_module_btn_div">
+      <button class="btn btn-primary add_module_btn" id="ucs_purpose_edit_btn">
        Edit
       </button>
-</div>
-</div>
-<hr/>
-<div class="module_subcomponent_div" id="ucs_purpose_description">
-<ul class="parameters-list">
-<li id="ucs_purpose_description_text">
+     </div>
+    </div>
+    <hr/>
+    <div class="module_subcomponent_div" id="ucs_purpose_description">
+     <ul class="parameters-list">
+      <li id="ucs_purpose_description_text">
        Provide users with a visualization of the uniform cost search algorithm. Module provides users with a graph building tool that can be used to build custom graphs, a set of controls to assist with the graph builder tool, and a view for the explanation of the algorithmic steps as they are performed on the user's custom graph.
       </li>
-</ul>
-</div>
-<div class="module_subcomponent_div" id="ucs_purpose_edit_form">
-</div>
-</div>
-<br/>
-<div class="module_subcomponent_div" id="ucs_methods">
-<div class="add_subcomponent_entry_div">
-<h4>
+     </ul>
+    </div>
+    <div class="module_subcomponent_div" id="ucs_purpose_edit_form">
+    </div>
+   </div>
+   <br/>
+   <div class="module_subcomponent_div" id="ucs_methods">
+    <div class="add_subcomponent_entry_div">
+     <h4>
       Methods
      </h4>
-<div class="add_module_btn_div">
-<button class="btn btn-primary add_module_btn" id="ucs_methods_add_btn">
+     <div class="add_module_btn_div">
+      <button class="btn btn-primary add_module_btn" id="ucs_methods_add_btn">
        +
       </button>
-</div>
-</div>
-<hr/>
-<div class="module_subcomponent_div" id="ucs_methods_add_form">
-</div>
-<div class="module_subcomponent_div" id="ucs_methods_subcomponents">
-<div class="module_subcomponent_div" id="ucs_methods_subcomponent_div">
-<div class="add_subcomponent_entry_div">
-<h5 id="ucs_ucs_method_name">        ucs       </h5>
-<div class="add_module_btn_div">
-<button class="btn btn-primary add_module_btn" id="ucs_ucs_method_edit_btn">
+     </div>
+    </div>
+    <hr/>
+    <div class="module_subcomponent_div" id="ucs_methods_add_form">
+    </div>
+    <div class="module_subcomponent_div" id="ucs_methods_subcomponents">
+     <div class="module_subcomponent_div" id="ucs_methods_subcomponent_div">
+      <div class="add_subcomponent_entry_div">
+       <h5 id="ucs_ucs_method_name">
+        ucs
+       </h5>
+       <div class="add_module_btn_div">
+        <button class="btn btn-primary add_module_btn" id="ucs_ucs_method_edit_btn">
          Edit
         </button>
-</div>
-</div>
-<div class="module_subcomponent_div" id="ucs_ucs_subcomponent_div">
-<p>
+       </div>
+      </div>
+      <div class="module_subcomponent_div" id="ucs_ucs_subcomponent_div">
+       <p>
         Function:
        </p>
-<ul class="parameters-list">
-<li id="ucs_ucs_function_desc">
+       <ul class="parameters-list">
+        <li id="ucs_ucs_function_desc">
          Allows users to perform graph searches on custom graphs using the uniform cost search algorithm.
         </li>
-</ul>
-<p>
+       </ul>
+       <p>
         Returns:
        </p>
-<ul class="parameters-list">
-<li id="ucs_ucs_return_desc">
+       <ul class="parameters-list">
+        <li id="ucs_ucs_return_desc">
          The path information for the shortest path found from start to end, or if no end node was given, a tree of the shortest paths from the start node to every other node in the graph.
         </li>
-</ul>
-<p>
+       </ul>
+       <p>
         Request Format:
        </p>
-<ul class="parameters-list">
-<li id="ucs_ucs_req_format_desc">
+       <ul class="parameters-list">
+        <li id="ucs_ucs_req_format_desc">
          {"method": "ucs", "nodes": Nodes, "edges": Edges, "start": nodeID, "end": nodeIDString}
         </li>
-</ul>
-<p>
+       </ul>
+       <p>
         Request Parameters:
        </p>
-<ul class="parameters-list" id="ucs_ucs_req_params_list">
-<li>
-<b>
+       <ul class="parameters-list" id="ucs_ucs_req_params_list">
+        <li>
+         <b>
           method
          </b>
-<ul>
-<li>
+         <ul>
+          <li>
            Value:
            <span class="string tooltip-container">
             ucs
             <span class="tooltip">
              Name must match exactly for method to function correctly.
             </span>
-</span>
-</li>
-</ul>
-</li>
-<li>
-<b>
+           </span>
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
           nodes
          </b>
-<ul>
-<li>
+         <ul>
+          <li>
            Value: {"nodeID_1": {"x":
            <span class="int tooltip-container">
             nodeX
             <span class="tooltip">
              Int
             </span>
-</span>
+           </span>
            , "y":
            <span class="int tooltip-container">
             nodeY
             <span class="tooltip">
              Int
             </span>
-</span>
+           </span>
            }, . . . , "nodeID_N": {"x":
            <span class="int tooltip-container">
             nodeX
             <span class="tooltip">
              Int
             </span>
-</span>
+           </span>
            , "y":
            <span class="int tooltip-container">
             nodeY
             <span class="tooltip">
              Int
             </span>
-</span>
+           </span>
            }}
           </li>
-</ul>
-</li>
-<li>
-<b>
+         </ul>
+        </li>
+        <li>
+         <b>
           edges
          </b>
-<ul>
-<li>
+         <ul>
+          <li>
            Value: {"edgeID_1": {"weight":
            <span class="float tooltip-container">
             edgeWeight
             <span class="tooltip">
              Float
             </span>
-</span>
+           </span>
            , "parent_1":
            <span class="string tooltip-container">
             nodeID
             <span class="tooltip">
              String
             </span>
-</span>
+           </span>
            , "parent_2":
            <span class="string tooltip-container">
             nodeID
             <span class="tooltip">
              String
             </span>
-</span>
+           </span>
            }, . . . , "edgeID_N": {"weight":
            <span class="float tooltip-container">
             edgeWeight
             <span class="tooltip">
              Float
             </span>
-</span>
+           </span>
            , "parent_1":
            <span class="string tooltip-container">
             nodeID
             <span class="tooltip">
              String
             </span>
-</span>
+           </span>
            , "parent_2":
            <span class="string tooltip-container">
             nodeID
             <span class="tooltip">
              String
             </span>
-</span>
+           </span>
            }}
           </li>
-</ul>
-</li>
-<li>
-<b>
+         </ul>
+        </li>
+        <li>
+         <b>
           start
          </b>
-<ul>
-<li>
+         <ul>
+          <li>
            Value:
            <span class="string tooltip-container">
             nodeID
             <span class="tooltip">
              String
             </span>
-</span>
-</li>
-</ul>
-</li>
-<li>
-<b>
+           </span>
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
           end
          </b>
          (optional)
          <ul>
-<li>
+          <li>
            Value:
            <span class="string tooltip-container">
             nodeID
             <span class="tooltip">
              String
             </span>
-</span>
-</li>
-</ul>
-</li>
-</ul>
-<p>
+           </span>
+          </li>
+         </ul>
+        </li>
+       </ul>
+       <p>
         Response Format:
        </p>
-<ul class="parameters-list">
-<li id="ucs_ucs_res_format_desc">
+       <ul class="parameters-list">
+        <li id="ucs_ucs_res_format_desc">
          {"steps": Steps, "error": Error}
         </li>
-</ul>
-<p>
+       </ul>
+       <p>
         Response Parameters:
        </p>
-<ul class="parameters-list" id="ucs_ucs_res_params_list">
-<li>
-<b>
+       <ul class="parameters-list" id="ucs_ucs_res_params_list">
+        <li>
+         <b>
           steps
          </b>
-<ul>
-<li>
+         <ul>
+          <li>
            [{"frontier": [
            <span class="custom tooltip-container">
             Path
@@ -277,7 +279,7 @@
              </span>
              }
             </span>
-</span>
+           </span>
            , . . . ,
            <span class="custom tooltip-container">
             Path
@@ -296,7 +298,7 @@
              </span>
              }
             </span>
-</span>
+           </span>
            ], "path":
            <span class="custom tooltip-container">
             Path
@@ -315,7 +317,7 @@
              </span>
              }
             </span>
-</span>
+           </span>
            , "total_path": [
            <span class="custom tooltip-container">
             Path
@@ -334,7 +336,7 @@
              </span>
              }
             </span>
-</span>
+           </span>
            , . . . ,
            <span class="custom tooltip-container">
             Path
@@ -353,7 +355,7 @@
              </span>
              }
             </span>
-</span>
+           </span>
            ]}, . . . , {"frontier": [
            <span class="custom tooltip-container">
             Path
@@ -372,7 +374,7 @@
              </span>
              }
             </span>
-</span>
+           </span>
            , . . . ,
            <span class="custom tooltip-container">
             Path
@@ -391,7 +393,7 @@
              </span>
              }
             </span>
-</span>
+           </span>
            ], "path":
            <span class="custom tooltip-container">
             Path
@@ -410,7 +412,7 @@
              </span>
              }
             </span>
-</span>
+           </span>
            , "total_path": [
            <span class="custom tooltip-container">
             Path
@@ -429,7 +431,7 @@
              </span>
              }
             </span>
-</span>
+           </span>
            , . . . ,
            <span class="custom tooltip-container">
             Path
@@ -448,377 +450,755 @@
              </span>
              }
             </span>
-</span>
+           </span>
            ]}]
           </li>
-</ul>
-</li>
-<li>
-<b>
+         </ul>
+        </li>
+        <li>
+         <b>
           error
          </b>
-<ul>
-<li>
+         <ul>
+          <li>
            Value:
            <span class="int tooltip-container">
             Error
             <span class="tooltip">
              Int
             </span>
-</span>
-</li>
-</ul>
-</li>
-</ul>
-</div>
-<div id="ucs_ucs_method_edit_form">
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="doc_module_div" id="astar_module_div">
-<div class="add_module_component_div">
-<h3 id="astar_module_title">
+           </span>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </div>
+      <div id="ucs_ucs_method_edit_form">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="doc_module_div" id="astar_module_div">
+   <div class="add_module_component_div">
+    <h3 id="astar_module_title">
      A* Search
     </h3>
-<div class="add_module_btn_div">
-<button class="btn btn-primary add_module_btn" id="astar_del_btn">
+    <div class="add_module_btn_div">
+     <button class="btn btn-primary add_module_btn" id="astar_del_btn">
       Delete
      </button>
-</div>
-</div>
-<hr/>
-<div class="module_subcomponent_div" id="astar_purpose">
-<div class="add_subcomponent_entry_div">
-<h4>
+    </div>
+   </div>
+   <hr/>
+   <div class="module_subcomponent_div" id="astar_purpose">
+    <div class="add_subcomponent_entry_div">
+     <h4>
       Purpose
      </h4>
-<div class="add_module_btn_div">
-<button class="btn btn-primary add_module_btn" id="astar_purpose_edit_btn">
+     <div class="add_module_btn_div">
+      <button class="btn btn-primary add_module_btn" id="astar_purpose_edit_btn">
        Edit
       </button>
-</div>
-</div>
-<hr/>
-<div class="module_subcomponent_div" id="astar_purpose_description">
-<ul class="parameters-list">
-<li id="astar_purpose_description_text">
+     </div>
+    </div>
+    <hr/>
+    <div class="module_subcomponent_div" id="astar_purpose_description">
+     <ul class="parameters-list">
+      <li id="astar_purpose_description_text">
        Provide users with a visualization of the a* search algorithm. Module provides users with a graph building tool that can be used to build custom graphs, a set of controls to assist with the graph builder tool, and a view for the explanation of the algorithmic steps as they are performed on the user's custom graph.
       </li>
-</ul>
-</div>
-<div class="module_subcomponent_div" id="astar_purpose_edit_form">
-</div>
-</div>
-<br/>
-<div class="module_subcomponent_div" id="astar_methods">
-<div class="add_subcomponent_entry_div">
-<h4>
+     </ul>
+    </div>
+    <div class="module_subcomponent_div" id="astar_purpose_edit_form">
+    </div>
+   </div>
+   <br/>
+   <div class="module_subcomponent_div" id="astar_methods">
+    <div class="add_subcomponent_entry_div">
+     <h4>
       Methods
      </h4>
-<div class="add_module_btn_div">
-<button class="btn btn-primary add_module_btn" id="astar_methods_add_btn">
+     <div class="add_module_btn_div">
+      <button class="btn btn-primary add_module_btn" id="astar_methods_add_btn">
        +
       </button>
-</div>
-</div>
-<hr/>
-<div class="module_subcomponent_div" id="astar_methods_add_form">
-</div>
-<div class="module_subcomponent_div" id="astar_methods_subcomponents">
-<div class="module_subcomponent_div" id="astar_methods_subcomponent_div">
-<div class="add_subcomponent_entry_div">
-<h5 id="astar_astar_method_name">        astar       </h5>
-<div class="add_module_btn_div">
-<button class="btn btn-primary add_module_btn" id="astar_astar_method_edit_btn">
+     </div>
+    </div>
+    <hr/>
+    <div class="module_subcomponent_div" id="astar_methods_add_form">
+    </div>
+    <div class="module_subcomponent_div" id="astar_methods_subcomponents">
+     <div class="module_subcomponent_div" id="astar_methods_subcomponent_div">
+      <div class="add_subcomponent_entry_div">
+       <h5 id="astar_astar_method_name">
+        astar
+       </h5>
+       <div class="add_module_btn_div">
+        <button class="btn btn-primary add_module_btn" id="astar_astar_method_edit_btn">
          Edit
         </button>
-</div>
-</div>
-<div class="module_subcomponent_div" id="astar_astar_subcomponent_div">
-<p>
+       </div>
+      </div>
+      <div class="module_subcomponent_div" id="astar_astar_subcomponent_div">
+       <p>
         Function:
        </p>
-<ul class="parameters-list">
-<li id="astar_astar_function_desc">
+       <ul class="parameters-list">
+        <li id="astar_astar_function_desc">
          Allows users to perform graph searches on custom made graphs using the A* Search algorithm.
         </li>
-</ul>
-<p>
+       </ul>
+       <p>
         Returns:
        </p>
-<ul class="parameters-list">
-<li id="astar_astar_return_desc">
+       <ul class="parameters-list">
+        <li id="astar_astar_return_desc">
          The path information for the shortest path from the given start node to the given goal node.
         </li>
-</ul>
-<p>
+       </ul>
+       <p>
         Request Format:
        </p>
-<ul class="parameters-list">
-<li id="astar_astar_req_format_desc">TBD
+       <ul class="parameters-list">
+        <li id="astar_astar_req_format_desc">
+         TBD
         </li>
-</ul>
-<p>
+       </ul>
+       <p>
         Request Parameters:
        </p>
-<ul class="parameters-list" id="astar_astar_req_params_list">TBD</ul>
-<p>
+       <ul class="parameters-list" id="astar_astar_req_params_list">
+        TBD
+       </ul>
+       <p>
         Response Format:
        </p>
-<ul class="parameters-list">
-<li id="astar_astar_res_format_desc">TBD
+       <ul class="parameters-list">
+        <li id="astar_astar_res_format_desc">
+         TBD
         </li>
-</ul>
-<p>
+       </ul>
+       <p>
         Response Parameters:
        </p>
-<ul class="parameters-list" id="astar_astar_res_params_list">TBD</ul>
-</div>
-<div id="astar_astar_method_edit_form">
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="doc_module_div" id="minimax_module_div">
-<div class="add_module_component_div">
-<h3 id="minimax_module_title">Minimax Adversarial Search</h3>
-<div class="add_module_btn_div">
-<button class="btn btn-primary add_module_btn" id="minimax_del_btn">Delete</button>
-</div>
-</div>
-<hr/>
-<div class="module_subcomponent_div" id="minimax_purpose">
-<div class="add_subcomponent_entry_div">
-<h4>Purpose</h4>
-<div class="add_module_btn_div">
-<button class="btn btn-primary add_module_btn" id="minimax_purpose_edit_btn">Edit</button>
-</div>
-</div>
-<hr/>
-<div class="module_subcomponent_div" id="minimax_purpose_description">
-<ul class="parameters-list">
-<li id="minimax_purpose_description_text">Allows users to interact with an intelligent agent utilizing an adversarial search algorithm in a game of chess.</li>
-</ul>
-</div>
-<div class="module_subcomponent_div" id="minimax_purpose_edit_form"></div>
-</div>
-<br/>
-<div class="module_subcomponent_div" id="minimax_methods">
-<div class="add_subcomponent_entry_div">
-<h4>Methods</h4>
-<div class="add_module_btn_div">
-<button class="btn btn-primary add_module_btn" id="minimax_methods_add_btn">+</button>
-</div>
-</div>
-<hr/>
-<div class="module_subcomponent_div" id="minimax_methods_add_form"></div>
-<div class="module_subcomponent_div" id="minimax_methods_subcomponents"><div class="module_subcomponent_div" id="minimax_methods_subcomponent_div">
-<div class="add_subcomponent_entry_div">
-<h5 id="minimax_ismovelegal_method_name">ismovelegal</h5>
-<div class="add_module_btn_div">
-<button class="btn btn-primary add_module_btn" id="minimax_ismovelegal_method_edit_btn">Edit</button>
-</div>
-</div>
-<div class="module_subcomponent_div" id="minimax_ismovelegal_subcomponent_div">
-<p>Function:</p>
-<ul class="parameters-list">
-<li id="minimax_ismovelegal_function_desc">Used to check the legality of the provided move on the provided board.</li>
-</ul>
-<p>Returns:</p>
-<ul class="parameters-list">
-<li id="minimax_ismovelegal_return_desc">A boolean value indicating the legality of the provided move.</li>
-</ul>
-<p>Request Format:</p>
-<ul class="parameters-list">
-<li id="minimax_ismovelegal_req_format_desc">{"method": "ismovelegal", "board": Board, "move": Move, "flags": Flags, "en_passant_targets": Targets, "player": Player, "opponent": Opponent}</li>
-</ul>
-<p>Request Parameters:</p>
-<ul class="parameters-list" id="minimax_ismovelegal_req_params_list"><li><b>method</b>
-<ul>
-<li>Value: <span class="string tooltip-container">ismovelegal<span class="tooltip">Name must match exactly for method to function correctly.</span></span></li>
-</ul>
-</li>
-<li><b>board</b>
-<ul>
-<li>Value: <span class="custom tooltip-container">Board<span class="tooltip">2D character array with possible values in the set ['R','r','B','b','T','t','Q','q','K','k','P','p','.'], with uppercase indicating white pieces and lowercase indicating black pieces.</span></span></li>
-</ul>
-</li>
-<li><b>move</b>
-<ul>
-<li>Value: <span class="custom tooltip-container">Move<span class="tooltip">Custom data structure of format {"from": [<span class="int">row</span>,<span class="int">col</span>], "to": [<span class="int">row</span>,<span class="int">col</span>]}</span></span></li>
-</ul>
-</li>
-<li><b>flags</b>
-<ul>
-<li>Value: [<span class="boolean tooltip-container">white_king<span class="tooltip">Boolean</span></span>, <span class="boolean tooltip-container">white_krook<span class="tooltip">Boolean</span></span>, <span class="boolean tooltip-container">white_qrook<span class="tooltip">Boolean</span></span>, <span class="boolean tooltip-container">black_king<span class="tooltip">Boolean</span></span>, <span class="boolean tooltip-container">black_krook<span class="tooltip">Boolean</span></span>, <span class="boolean tooltip-container">black_qrook<span class="tooltip">Boolean</span></span>, <span class="boolean tooltip-container">en_passant<span class="tooltip">Boolean</span></span>]</li>
-</ul>
-</li>
-<li><b>en_passant_targets</b>
-<ul>
-<li>Value: <span class="custom tooltip-container">Targets<span class="tooltip">Custom array of the format [[<span class="int">row</span>,<span class="int">col</span>],[<span class="int">row</span>,<span class="int">col</span>]]</span></span></li>
-</ul>
-</li>
-<li><b>player</b>
-<ul>
-<li>Value: $classes$char@Player@char$</li>
-</ul>
-</li>
-<li><b>opponent</b>
-<ul>
-<li>Value: $classes$char@Opponent@char$</li>
-</ul>
-</li></ul>
-<p>
-    Response Format:
-    </p>
-<ul class="parameters-list">
-<li id="minimax_ismovelegal_res_format_desc">{"result": Result, "checkmate": Checkmate, "error": Error}</li>
-</ul>
-<p>
-    Response Parameters:
-    </p>
-<ul class="parameters-list" id="minimax_ismovelegal_res_params_list"><li><b>result</b>
-<ul>
-<li><span class="boolean tooltip-container">Result<span class="tooltip">Boolean</span></span></li>
-</ul>
-</li>
-<li><b>checkmate</b>
-<ul>
-<li><span class="boolean tooltip-container">Checkmate<span class="tooltip">Boolean</span></span></li>
-</ul>
-</li>
-<li><b>error</b>
-<ul>
-<li><span class="int tooltip-container">Error<span class="tooltip">Int</span></span></li>
-</ul>
-</li></ul>
-</div>
-<div id="minimax_ismovelegal_method_edit_form"></div>
-</div><div class="module_subcomponent_div" id="minimax_methods_subcomponent_div">
-<div class="add_subcomponent_entry_div">
-<h5 id="minimax_getminimaxmove_method_name">getminimaxmove</h5>
-<div class="add_module_btn_div">
-<button class="btn btn-primary add_module_btn" id="minimax_getminimaxmove_method_edit_btn">Edit</button>
-</div>
-</div>
-<div class="module_subcomponent_div" id="minimax_getminimaxmove_subcomponent_div">
-<p>Function:</p>
-<ul class="parameters-list">
-<li id="minimax_getminimaxmove_function_desc">Used to get a move chosen using the minimax adversarial search algorithm on the provided chessboard layout.</li>
-</ul>
-<p>Returns:</p>
-<ul class="parameters-list">
-<li id="minimax_getminimaxmove_return_desc">The move chosen using the minimax adversarial search algorithm.</li>
-</ul>
-<p>Request Format:</p>
-<ul class="parameters-list">
-<li id="minimax_getminimaxmove_req_format_desc">{"method": getminimaxmove, "board": Board, "player": Player, "opponent": Opponent}</li>
-</ul>
-<p>Request Parameters:</p>
-<ul class="parameters-list" id="minimax_getminimaxmove_req_params_list"><li><b>method</b>
-<ul>
-<li>Value: <span class="string tooltip-container">getminimaxmove<span class="tooltip">Name must match exactly for method to function correctly.</span></span></li>
-</ul>
-</li>
-<li><b>board</b>
-<ul>
-<li>Value: <span class="custom tooltip-container">Board<span class="tooltip">2D character array with possible values in the set ['R','r','B','b','T','t','Q','q','K','k','P','p','.'], with uppercase indicating white pieces and lowercase indicating black pieces.</span></span></li>
-</ul>
-</li>
-<li><b>player</b>
-<ul>
-<li>Value: <span class="char tooltip-container">Player<span class="tooltip">Char</span></span></li>
-</ul>
-</li>
-<li><b>opponent</b>
-<ul>
-<li>Value: <span class="char tooltip-container">Opponent<span class="tooltip">Char</span></span></li>
-</ul>
-</li></ul>
-<p>
-    Response Format:
-    </p>
-<ul class="parameters-list">
-<li id="minimax_getminimaxmove_res_format_desc">{"move": Move, "checkmate": Checkmate, "error": Error}</li>
-</ul>
-<p>
-    Response Parameters:
-    </p>
-<ul class="parameters-list" id="minimax_getminimaxmove_res_params_list"><li><b>move</b>
-<ul>
-<li>Value: $classes$custom@Move@move$</li>
-</ul>
-</li>
-<li><b>checkmate</b>
-<ul>
-<li>Value: $classes$boolean@Checkmate@boolean$</li>
-</ul>
-</li>
-<li><b>error</b>
-<ul>
-<li>Value: $classes$int@Error@int$</li>
-</ul>
-</li></ul>
-</div>
-<div id="minimax_getminimaxmove_method_edit_form"></div>
-</div><div class="module_subcomponent_div" id="minimax_methods_subcomponent_div">
-<div class="add_subcomponent_entry_div">
-<h5 id="minimax_geteval_method_name">geteval</h5>
-<div class="add_module_btn_div">
-<button class="btn btn-primary add_module_btn" id="minimax_geteval_method_edit_btn">Edit</button>
-</div>
-</div>
-<div class="module_subcomponent_div" id="minimax_geteval_subcomponent_div">
-<p>Function:</p>
-<ul class="parameters-list">
-<li id="minimax_geteval_function_desc">Provides the point evaluation of the current chess game board.</li>
-</ul>
-<p>Returns:</p>
-<ul class="parameters-list">
-<li id="minimax_geteval_return_desc">The point evaluation of the given board.</li>
-</ul>
-<p>Request Format:</p>
-<ul class="parameters-list">
-<li id="minimax_geteval_req_format_desc">{"method": "geteval", "board": Board, "player": Player}</li>
-</ul>
-<p>Request Parameters:</p>
-<ul class="parameters-list" id="minimax_geteval_req_params_list"><li><b>method</b>
-<ul>
-<li>Value: <span class="string tooltip-container">geteval<span class="tooltip">Name must match exactly for method to function correctly.</span></span></li>
-</ul>
-</li>
-<li><b>board</b>
-<ul>
-<li>Value: <span class="custom tooltip-container">Board<span class="tooltip">2D character array with possible values in the set ['R','r','B','b','T','t','Q','q','K','k','P','p','.'], with uppercase indicating white pieces and lowercase indicating black pieces.</span></span></li>
-<li>Structure: 2D char array of size 8x8</li>
-</ul>
-</li>
-<li><b>player</b>
-<ul>
-<li>Value: <span class="char tooltip-container">Player<span class="tooltip">Char</span></span></li>
-</ul>
-</li></ul>
-<p>
-    Response Format:
-    </p>
-<ul class="parameters-list">
-<li id="minimax_geteval_res_format_desc">{"eval": Eval}</li>
-</ul>
-<p>
-    Response Parameters:
-    </p>
-<ul class="parameters-list" id="minimax_geteval_res_params_list"><li><b>eval</b>
-<ul>
-<li>Value: <span class="int tooltip-container">Eval<span class="tooltip">Int</span></span></li>
-</ul>
-</li></ul>
-</div>
-<div id="minimax_geteval_method_edit_form"></div>
-</div></div>
-</div>
-</div>
-</div>
+       <ul class="parameters-list" id="astar_astar_res_params_list">
+        TBD
+       </ul>
+      </div>
+      <div id="astar_astar_method_edit_form">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="doc_module_div" id="minimax_module_div">
+   <div class="add_module_component_div">
+    <h3 id="minimax_module_title">
+     Minimax Adversarial Search
+    </h3>
+    <div class="add_module_btn_div">
+     <button class="btn btn-primary add_module_btn" id="minimax_del_btn">
+      Delete
+     </button>
+    </div>
+   </div>
+   <hr/>
+   <div class="module_subcomponent_div" id="minimax_purpose">
+    <div class="add_subcomponent_entry_div">
+     <h4>
+      Purpose
+     </h4>
+     <div class="add_module_btn_div">
+      <button class="btn btn-primary add_module_btn" id="minimax_purpose_edit_btn">
+       Edit
+      </button>
+     </div>
+    </div>
+    <hr/>
+    <div class="module_subcomponent_div" id="minimax_purpose_description">
+     <ul class="parameters-list">
+      <li id="minimax_purpose_description_text">
+       Allows users to interact with an intelligent agent utilizing an adversarial search algorithm in a game of chess.
+      </li>
+     </ul>
+    </div>
+    <div class="module_subcomponent_div" id="minimax_purpose_edit_form">
+    </div>
+   </div>
+   <br/>
+   <div class="module_subcomponent_div" id="minimax_methods">
+    <div class="add_subcomponent_entry_div">
+     <h4>
+      Methods
+     </h4>
+     <div class="add_module_btn_div">
+      <button class="btn btn-primary add_module_btn" id="minimax_methods_add_btn">
+       +
+      </button>
+     </div>
+    </div>
+    <hr/>
+    <div class="module_subcomponent_div" id="minimax_methods_add_form">
+    </div>
+    <div class="module_subcomponent_div" id="minimax_methods_subcomponents">
+     <div class="module_subcomponent_div" id="minimax_methods_subcomponent_div">
+      <div class="add_subcomponent_entry_div">
+       <h5 id="minimax_ismovelegal_method_name">
+        ismovelegal
+       </h5>
+       <div class="add_module_btn_div">
+        <button class="btn btn-primary add_module_btn" id="minimax_ismovelegal_method_edit_btn">
+         Edit
+        </button>
+       </div>
+      </div>
+      <div class="module_subcomponent_div" id="minimax_ismovelegal_subcomponent_div">
+       <p>
+        Function:
+       </p>
+       <ul class="parameters-list">
+        <li id="minimax_ismovelegal_function_desc">
+         Used to check the legality of the provided move on the provided board.
+        </li>
+       </ul>
+       <p>
+        Returns:
+       </p>
+       <ul class="parameters-list">
+        <li id="minimax_ismovelegal_return_desc">
+         A boolean value indicating the legality of the provided move.
+        </li>
+       </ul>
+       <p>
+        Request Format:
+       </p>
+       <ul class="parameters-list">
+        <li id="minimax_ismovelegal_req_format_desc">
+         {"method": "ismovelegal", "board": Board, "move": Move, "flags": Flags, "en_passant_targets": Targets, "player": Player, "opponent": Opponent}
+        </li>
+       </ul>
+       <p>
+        Request Parameters:
+       </p>
+       <ul class="parameters-list" id="minimax_ismovelegal_req_params_list">
+        <li>
+         <b>
+          method
+         </b>
+         <ul>
+          <li>
+           Value:
+           <span class="string tooltip-container">
+            ismovelegal
+            <span class="tooltip">
+             Name must match exactly for method to function correctly.
+            </span>
+           </span>
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
+          board
+         </b>
+         <ul>
+          <li>
+           Value:
+           <span class="custom tooltip-container">
+            Board
+            <span class="tooltip">
+             2D character array with possible values in the set ['R','r','B','b','T','t','Q','q','K','k','P','p','.'], with uppercase indicating white pieces and lowercase indicating black pieces.
+            </span>
+           </span>
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
+          move
+         </b>
+         <ul>
+          <li>
+           Value:
+           <span class="custom tooltip-container">
+            Move
+            <span class="tooltip">
+             Custom data structure of format {"from": [
+             <span class="int">
+              row
+             </span>
+             ,
+             <span class="int">
+              col
+             </span>
+             ], "to": [
+             <span class="int">
+              row
+             </span>
+             ,
+             <span class="int">
+              col
+             </span>
+             ]}
+            </span>
+           </span>
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
+          flags
+         </b>
+         <ul>
+          <li>
+           Value: [
+           <span class="boolean tooltip-container">
+            white_king
+            <span class="tooltip">
+             Boolean
+            </span>
+           </span>
+           ,
+           <span class="boolean tooltip-container">
+            white_krook
+            <span class="tooltip">
+             Boolean
+            </span>
+           </span>
+           ,
+           <span class="boolean tooltip-container">
+            white_qrook
+            <span class="tooltip">
+             Boolean
+            </span>
+           </span>
+           ,
+           <span class="boolean tooltip-container">
+            black_king
+            <span class="tooltip">
+             Boolean
+            </span>
+           </span>
+           ,
+           <span class="boolean tooltip-container">
+            black_krook
+            <span class="tooltip">
+             Boolean
+            </span>
+           </span>
+           ,
+           <span class="boolean tooltip-container">
+            black_qrook
+            <span class="tooltip">
+             Boolean
+            </span>
+           </span>
+           ,
+           <span class="boolean tooltip-container">
+            en_passant
+            <span class="tooltip">
+             Boolean
+            </span>
+           </span>
+           ]
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
+          en_passant_targets
+         </b>
+         <ul>
+          <li>
+           Value:
+           <span class="custom tooltip-container">
+            Targets
+            <span class="tooltip">
+             Custom array of the format [[
+             <span class="int">
+              row
+             </span>
+             ,
+             <span class="int">
+              col
+             </span>
+             ],[
+             <span class="int">
+              row
+             </span>
+             ,
+             <span class="int">
+              col
+             </span>
+             ]]
+            </span>
+           </span>
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
+          player
+         </b>
+         <ul>
+          <li>
+           Value: $classes$char@Player@char$
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
+          opponent
+         </b>
+         <ul>
+          <li>
+           Value: $classes$char@Opponent@char$
+          </li>
+         </ul>
+        </li>
+       </ul>
+       <p>
+        Response Format:
+       </p>
+       <ul class="parameters-list">
+        <li id="minimax_ismovelegal_res_format_desc">
+         {"result": Result, "checkmate": Checkmate, "error": Error}
+        </li>
+       </ul>
+       <p>
+        Response Parameters:
+       </p>
+       <ul class="parameters-list" id="minimax_ismovelegal_res_params_list">
+        <li>
+         <b>
+          result
+         </b>
+         <ul>
+          <li>
+           <span class="boolean tooltip-container">
+            Result
+            <span class="tooltip">
+             Boolean
+            </span>
+           </span>
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
+          checkmate
+         </b>
+         <ul>
+          <li>
+           <span class="boolean tooltip-container">
+            Checkmate
+            <span class="tooltip">
+             Boolean
+            </span>
+           </span>
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
+          error
+         </b>
+         <ul>
+          <li>
+           <span class="int tooltip-container">
+            Error
+            <span class="tooltip">
+             Int
+            </span>
+           </span>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </div>
+      <div id="minimax_ismovelegal_method_edit_form">
+      </div>
+     </div>
+     <div class="module_subcomponent_div" id="minimax_methods_subcomponent_div">
+      <div class="add_subcomponent_entry_div">
+       <h5 id="minimax_getminimaxmove_method_name">
+        getminimaxmove
+       </h5>
+       <div class="add_module_btn_div">
+        <button class="btn btn-primary add_module_btn" id="minimax_getminimaxmove_method_edit_btn">
+         Edit
+        </button>
+       </div>
+      </div>
+      <div class="module_subcomponent_div" id="minimax_getminimaxmove_subcomponent_div">
+       <p>
+        Function:
+       </p>
+       <ul class="parameters-list">
+        <li id="minimax_getminimaxmove_function_desc">
+         Used to get a move chosen using the minimax adversarial search algorithm on the provided chessboard layout.
+        </li>
+       </ul>
+       <p>
+        Returns:
+       </p>
+       <ul class="parameters-list">
+        <li id="minimax_getminimaxmove_return_desc">
+         The move chosen using the minimax adversarial search algorithm.
+        </li>
+       </ul>
+       <p>
+        Request Format:
+       </p>
+       <ul class="parameters-list">
+        <li id="minimax_getminimaxmove_req_format_desc">
+         {"method": getminimaxmove, "board": Board, "player": Player, "opponent": Opponent}
+        </li>
+       </ul>
+       <p>
+        Request Parameters:
+       </p>
+       <ul class="parameters-list" id="minimax_getminimaxmove_req_params_list">
+        <li>
+         <b>
+          method
+         </b>
+         <ul>
+          <li>
+           Value:
+           <span class="string tooltip-container">
+            getminimaxmove
+            <span class="tooltip">
+             Name must match exactly for method to function correctly.
+            </span>
+           </span>
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
+          board
+         </b>
+         <ul>
+          <li>
+           Value:
+           <span class="custom tooltip-container">
+            Board
+            <span class="tooltip">
+             2D character array with possible values in the set ['R','r','B','b','T','t','Q','q','K','k','P','p','.'], with uppercase indicating white pieces and lowercase indicating black pieces.
+            </span>
+           </span>
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
+          player
+         </b>
+         <ul>
+          <li>
+           Value:
+           <span class="char tooltip-container">
+            Player
+            <span class="tooltip">
+             Char
+            </span>
+           </span>
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
+          opponent
+         </b>
+         <ul>
+          <li>
+           Value:
+           <span class="char tooltip-container">
+            Opponent
+            <span class="tooltip">
+             Char
+            </span>
+           </span>
+          </li>
+         </ul>
+        </li>
+       </ul>
+       <p>
+        Response Format:
+       </p>
+       <ul class="parameters-list">
+        <li id="minimax_getminimaxmove_res_format_desc">
+         {"move": Move, "checkmate": Checkmate, "error": Error}
+        </li>
+       </ul>
+       <p>
+        Response Parameters:
+       </p>
+       <ul class="parameters-list" id="minimax_getminimaxmove_res_params_list">
+        <li>
+         <b>
+          move
+         </b>
+         <ul>
+          <li>
+           Value: $classes$custom@Move@move$
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
+          checkmate
+         </b>
+         <ul>
+          <li>
+           Value: $classes$boolean@Checkmate@boolean$
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
+          error
+         </b>
+         <ul>
+          <li>
+           Value: $classes$int@Error@int$
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </div>
+      <div id="minimax_getminimaxmove_method_edit_form">
+      </div>
+     </div>
+     <div class="module_subcomponent_div" id="minimax_methods_subcomponent_div">
+      <div class="add_subcomponent_entry_div">
+       <h5 id="minimax_geteval_method_name">
+        geteval
+       </h5>
+       <div class="add_module_btn_div">
+        <button class="btn btn-primary add_module_btn" id="minimax_geteval_method_edit_btn">
+         Edit
+        </button>
+       </div>
+      </div>
+      <div class="module_subcomponent_div" id="minimax_geteval_subcomponent_div">
+       <p>
+        Function:
+       </p>
+       <ul class="parameters-list">
+        <li id="minimax_geteval_function_desc">
+         Provides the point evaluation of the current chess game board.
+        </li>
+       </ul>
+       <p>
+        Returns:
+       </p>
+       <ul class="parameters-list">
+        <li id="minimax_geteval_return_desc">
+         The point evaluation of the given board.
+        </li>
+       </ul>
+       <p>
+        Request Format:
+       </p>
+       <ul class="parameters-list">
+        <li id="minimax_geteval_req_format_desc">
+         {"method": "geteval", "board": Board, "player": Player}
+        </li>
+       </ul>
+       <p>
+        Request Parameters:
+       </p>
+       <ul class="parameters-list" id="minimax_geteval_req_params_list">
+        <li>
+         <b>
+          method
+         </b>
+         <ul>
+          <li>
+           Value:
+           <span class="string tooltip-container">
+            geteval
+            <span class="tooltip">
+             Name must match exactly for method to function correctly.
+            </span>
+           </span>
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
+          board
+         </b>
+         <ul>
+          <li>
+           Value:
+           <span class="custom tooltip-container">
+            Board
+            <span class="tooltip">
+             2D character array with possible values in the set ['R','r','B','b','T','t','Q','q','K','k','P','p','.'], with uppercase indicating white pieces and lowercase indicating black pieces.
+            </span>
+           </span>
+          </li>
+          <li>
+           Structure: 2D char array of size 8x8
+          </li>
+         </ul>
+        </li>
+        <li>
+         <b>
+          player
+         </b>
+         <ul>
+          <li>
+           Value:
+           <span class="char tooltip-container">
+            Player
+            <span class="tooltip">
+             Char
+            </span>
+           </span>
+          </li>
+         </ul>
+        </li>
+       </ul>
+       <p>
+        Response Format:
+       </p>
+       <ul class="parameters-list">
+        <li id="minimax_geteval_res_format_desc">
+         {"eval": Eval}
+        </li>
+       </ul>
+       <p>
+        Response Parameters:
+       </p>
+       <ul class="parameters-list" id="minimax_geteval_res_params_list">
+        <li>
+         <b>
+          eval
+         </b>
+         <ul>
+          <li>
+           Value:
+           <span class="int tooltip-container">
+            Eval
+            <span class="tooltip">
+             Int
+            </span>
+           </span>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </div>
+      <div id="minimax_geteval_method_edit_form">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
 </div>
