@@ -1,4 +1,4 @@
-const ucsSocket = new WebSocket( 'ws://localhost:11111')
+const ucsSocket = new WebSocket( 'ws://localhost:11111');
 
 class Circle{
     constructor(x,y,radius,id){
@@ -38,8 +38,7 @@ ucsSocket.addEventListener("open", (event) => {
 ucsSocket.addEventListener("message", (event) => {
     const res = JSON.parse(event.data);
     
-    console.log(res.error);
-    
+    console.log(res.steps);
 })
 
 
@@ -217,6 +216,7 @@ gen_graph_btn = document.getElementById("gen_graph_btn");
 prev_step_btn = document.getElementById("prev_step_btn");
 next_step_btn = document.getElementById("next_step_btn");
 reset_btn = document.getElementById("reset_btn");
+search_btn = document.getElementById("search_btn");
 
 window.addEventListener("resize",(event)=>{
     panel.width = panelParent.clientWidth - (parentPadding * 2);
@@ -529,3 +529,19 @@ reset_btn.addEventListener("click",(event)=>{
     drawShapes(ctx);
     console.log("resetting");
 });
+
+search_btn.addEventListener("click", (event)=>{
+    nod = {"0": {"x": 0, "y": 0}, "1": {"x": 20, "y": 0}, "2": {"x": 20, "y": 20}, "3": {"x": 30, "y": 0}, "4": {"x": 30, "y": 5}, "5": {"x": 30, "y": 20}, "6": {"x": 30, "y": 30}}
+    edg = {"0": {"weight": 20, "par1": "0", "par2": "1"}, "1": {"weight": 20, "par1": "1", "par2": "2"}, "2": {"weight": 28.28, "par1": "2", "par2": "0"}, "3": {"weight": 10, "par1": "1", "par2": "3"}, "4": {"weight": 5, "par1": "3", "par2": "4"}, "5": {"weight": 18.03, "par1": "4", "par2": "2"}, "6": {"weight": 10, "par1": "5", "par2": "2"}, "7": {"weight": 10, "par1": "5", "par2": "6"}}
+    const req = {
+        method: "ucs", 
+        nodes: nod, 
+        egdes: edg, 
+        start: "0", 
+        end: "6"
+    };
+
+    ucsSocket.send(JSON.stringify(req));
+    
+    
+})
