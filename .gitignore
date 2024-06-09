@@ -7,3 +7,5 @@ notes.txt
 UCS_message_template.txt
 __pycache__
 html/test.html
+assets/js/chess_test.js
+html/chess_test.html

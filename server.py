@@ -1,14 +1,15 @@
 from site_python_files.engine import minimax_engine as me
 import site_python_files.uniform_cost as UCS
 import site_python_files.a_star as AS
+import site_python_files.minimax as mini
 import asyncio
 from websockets.server import serve
 import json
 from bs4 import BeautifulSoup as bs
 import re
 
-pages = ["a_star_search","id3_dec_tree","minmax_adv_search","gen_algo","stoch_grad_desc","uni_cost_search","home","wsid"]
-js_scripts = ["a_star_search", "gen_algo", "home.js", "id3_dec_tree", "index.js", "minmax_adv_search", "model", "stoch_grad_desc", "uni_cost_search", "wsid"]
+pages = ["a_star_search","id3_dec_tree","minmax_adv_search","gen_algo","stoch_grad_desc","uni_cost_search","home","wsid","chess_test"]
+js_scripts = ["a_star_search", "gen_algo", "home.js", "id3_dec_tree", "index.js", "minmax_adv_search", "model", "stoch_grad_desc", "uni_cost_search", "wsid","chess_test"]
 tooltips = {
     "method-name": "Name must match exactly for method to function correctly.",
     "path": "Custom data structure of format {\"nodes\": [$classes$string@nodeID$,...,$classes$string@nodeID$], \"cost\": $classes$int@val$}",
@@ -21,6 +22,7 @@ tooltips = {
     "boolean": "Boolean",
     "char": "Char"
 }
+chess_game = mini.Minimax()
 
 async def handle_req(websocket):
     print("connection established")
@@ -28,6 +30,7 @@ async def handle_req(websocket):
     async for message in websocket:
         res = {}
         req = json.loads(message)
+        print(f"Request: {req}")
 
         if req["method"] == "ismovelegal":
             me.board = req["board"]
@@ -303,8 +306,65 @@ async def handle_req(websocket):
                 res["error"] = 0
             except:
                 res["error"] = -1
+
+        if req["method"] == "test_ismovelegal":
+            try:
+                try:
+                    res["method"] = "test_ismovelegal"
+                    print("1")
+                    if chess_game.isMoveLegal(req["move"],req["game_id"]):
+                        print("2")
+                        chess_game.movePiece(req["move"],req["game_id"])
+                    print("3")
+                    res["board"] = chess_game.getBoard(req["game_id"])
+                    print("4")
+                    res["error"] = 0
+                except:
+                    res["error"] = 2
+            except:
+                res["error"] = -1
+
+        elif req["method"] == "test_getminimaxmove":
+            try:
+                res["method"] = "test_getminimaxmove"
+
+                try:
+                    chess_game.getMinimaxMove(req["player"],req["game_id"])
+                    res["board"] = chess_game.getBoard(req["game_id"])
+
+                    res["error"] = 0
+                except:
+                    res["error"] = 2
+            except:
+                res["error"] = -1
+
+        elif req["method"] == "test_geteval":
+            try:
+                res["method"] = "test_geteval"
+                res["eval"] = chess_game.getEval(req["player"],req["game_id"])
+
+                res["error"] = 0
+            except:
+                res["error"] = -1
+        elif req["method"] == "test_getboard":
+            try:
+                res["method"] = "test_getboard"
+                if "game_id" in req:
+                    print(req["game_id"])
+                    try:
+                        res["board"] = chess_game.getBoard(req["game_id"])
+                        res["error"] = 0
+                    except:
+                        res["error"] = 2
+                else:
+                    res["board"],res["game_id"] = chess_game.getBoard()
+                    res["error"] = 0
+            except:
+                res["error"] = -1
+
         else:
-            res["error"] = "invalid command"
+            res["error"] = 1
+
         await websocket.send(json.dumps(res))
 
 # use to test if websocket is listening, obtaining messages, and responding correctly
