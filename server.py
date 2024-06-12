@@ -311,11 +311,13 @@ async def handle_req(websocket):
             try:
                 try:
                     res["method"] = "test_ismovelegal"
-                    res["result"] = chess_game.isMoveLegal(req["move"],req["game_id"])
-
+                    #print("01")
+                    #print(chess_game.isMoveLegal(req["move"],req["game_id"]))
+                    res["result"] = chess_game.isMoveLegal(req["move"],req["game_id"]) and not chess_game.willMovePutPlayerInCheck(req["move"],req["player"],req["game_id"])
+                    #print("02")
                     if res["result"]:
                         chess_game.movePiece(req["move"],req["game_id"])
-
+                    #print("03")
                     res["board"] = chess_game.getBoard(req["game_id"])
                     res["error"] = 0
                 except:
