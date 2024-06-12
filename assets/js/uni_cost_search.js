@@ -36,11 +36,56 @@ ucsSocket.addEventListener("open", (event) => {
 })
 
 ucsSocket.addEventListener("message", (event) => {
+    console.log('Message from server: ', event.data);
+
     const res = JSON.parse(event.data);
     
-    console.log(res.steps);
+    // if (res.steps){
+    //         console.log("Step message received: ", res)
+    //     }
+    // else {
+    //     console.log('Error parsing message');
+    // }
+
+    
+    // // if (res.steps)
+    // //     console.log("Received message successfully");
+    // // else 
+    // //     console.log("fail");
+
+
+    try {
+        const message = JSON.parse(event.data); // Attempt to parse the incoming message as JSON
+        if (message.steps) {
+            // Handle the message if it has a 'steps' property
+            console.log("Step message received:", message);
+        } else {
+            // Handle any messages that don't match the expected format
+            console.log("Received message does not contain expected data:", message);
+        }
+    } catch (error) {
+        // Handle any errors that occur during message parsing
+        console.error("Error parsing message from server:", error);
+    }
+
+    let instructions = `
+        <h1>Start node: ${event.data}\t Our goal: ${event.data}<\h1>     
+        <p>Blu<\p>
+    `;
+
+    if (instructions.length){
+        details.textContent = instructions;
+    }
 })
 
+
+// ucsSocket.addEventListener('error', function(event) {
+//     console.error('WebSocket error observed:', event);
+// });
+
+// ucsSocket.addEventListener('close', function(event) {
+//     console.log('WebSocket connection closed:', event.code, event.reason);
+// });
 
 var nodes = [];
 var lines = [];
@@ -63,14 +108,14 @@ var startNode = null;
 var endNode = null;
 var selStart = false;
 var selEnd = false;
-var step = 0;
-var instructions = [
-    "first do $node[i].id$ blah blah", 
-    "step[1] eating",
-]
-i=0;
-instructions[0] = instructions[0].replace("$node[i].id$", i);
-details.textContent = instructions[0];
+var numstep = 0;
+// var instructions = [
+//     "first do $node[i].id$ blah blah", 
+//     "step[1] eating",
+// ]
+// i=0;
+// instructions[0] = instructions[0].replace("$node[i].id$", i);
+// details.textContent = instructions[0];
 
 
 function reverseColor(ctx){
@@ -87,6 +132,11 @@ function reverseColor(ctx){
             ctx.fillStyle = "blue";
         }
         ctx.fill();
+        ctx.strokeStyle = "black";
+        ctx.font = "bold 24px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "black";
+        ctx.fillText(nodes[i].id, nodes[i].x, nodes[i].y);
     }
 }
 
@@ -147,7 +197,12 @@ function drawShapes(ctx){
                 ctx.fillStyle = "red";
         }
         ctx.fill();
-        ctx.strokeText(nodes[i].id, nodes[i].x, nodes[i].y);
+
+        ctx.strokeStyle = "black";
+        ctx.font = "bold 24px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "black";
+        ctx.fillText(nodes[i].id, nodes[i].x, nodes[i].y);
     }
 }
 
@@ -445,7 +500,7 @@ panel.addEventListener("click",(event)=>{
                 }
                 startNode = nodes[i];
                 nodes[i].start = true;
-                console.log("start node is " + nodes[i]);
+                console.log("start node is " + startNode.id);
                 drawShapes(ctx);
             }
         }
@@ -458,7 +513,7 @@ panel.addEventListener("click",(event)=>{
                 }
                 endNode = nodes[i];
                 nodes[i].end = true;
-                console.log("end node is " + nodes[i]);
+                console.log("end node is " + endNode.id);
                 drawShapes(ctx);
             }
         }
@@ -528,17 +583,17 @@ gen_graph_btn.addEventListener("click",(event)=>{
 });
 
 prev_step_btn.addEventListener("click",(event)=>{
-    if (step <= 0){
+    if (numstep <= 0){
 
     }
     step --;
     console.log("prev step");
-    console.log(step);
+    console.log(numstep);
 });
 
 next_step_btn.addEventListener("click",(event)=>{
-    step++;
-    console.log(step);
+    numstep++;
+    console.log(numstep);
     console.log("next step");
 });
 
@@ -570,13 +625,24 @@ search_btn.addEventListener("click", (event)=>{
         edg[lines[i].id] = {"weight": lines[i].weight, "par1": id1, "par2": id2};
         }
 
+    // if (!endNode){
+
+    // }
+
     const req = {
         method: "ucs", 
         nodes: nod, 
         edges: edg, 
-        start: "0", 
-        end: "6"
+        start: String(startNode.id), 
+        end: String(endNode.id)
     };
-
+    console.log(req);
     ucsSocket.send(JSON.stringify(req));
+
+    // instructions = [
+    //     ''
+    // ]
+    // for (let i = 0 ; i < nodes.length; ++i){
+
+    // }
 })
