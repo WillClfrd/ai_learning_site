@@ -74,7 +74,7 @@ ucsSocket.addEventListener("message", (event) => {
     `;
 
     if (instructions.length){
-        details.textContent = instructions;
+        details.innerHTML = instructions;
     }
 })
 
@@ -616,11 +616,12 @@ search_btn.addEventListener("click", (event)=>{
 
     for(let i = 0; i < lines.length; ++i){
         if(lines[i].parStart){
-            var id1 = lines[i].parStart.id;
+            var id1 = String(lines[i].parStart.id);
+
           }
 
           if(lines[i].parEnd){
-            var id2 = lines[i].parEnd.id;
+            var id2 = String(lines[i].parEnd.id);
           }
         edg[lines[i].id] = {"weight": lines[i].weight, "par1": id1, "par2": id2};
         }
