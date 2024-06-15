@@ -308,17 +308,32 @@ async def handle_req(websocket):
                 res["error"] = -1
 
         if req["method"] == "test_ismovelegal":
+            res["method"] = "test_ismovelegal"
             try:
                 try:
-                    res["method"] = "test_ismovelegal"
+                    if chess_game.checkValidPlayerForMove(req["move"],req["color_id"],req["game_id"]):
+                        res["result"] = chess_game.isMoveLegal(req["move"],req["game_id"]) and not chess_game.willMovePutPlayerInCheck(req["move"],req["player"],req["game_id"])
 
-                    res["result"] = chess_game.isMoveLegal(req["move"],req["game_id"]) and not chess_game.willMovePutPlayerInCheck(req["move"],req["player"],req["game_id"])
+                        mateResult = chess_game.isCheckmateStalemate(req["player"],req["game_id"])
 
-                    if res["result"]:
-                        chess_game.movePiece(req["move"],req["game_id"])
+                        if mateResult == 1:
+                            res["checkmate"] = True
+                            res["stalemate"] = False
+                        elif mateResult == 2:
+                            res["checkmate"] = False
+                            res["stalemate"] = True
+                        else:
+                            res["checkmate"] = False
+                            res["stalemate"] = False
 
-                    res["board"] = chess_game.getBoard(req["game_id"])
-                    res["error"] = 0
+                        if res["result"]:
+                            chess_game.movePiece(req["move"],req["game_id"])
+
+                        res["board"] = chess_game.getBoard(id=req["game_id"])
+                        res["error"] = 0
+                    else:
+                        res["board"] = chess_game.getBoard(id=req["game_id"])
+                        res["result"] = False
                 except:
                     res["error"] = 2
             except:
@@ -330,7 +345,7 @@ async def handle_req(websocket):
 
                 try:
                     chess_game.getMinimaxMove(req["player"],req["game_id"])
-                    res["board"] = chess_game.getBoard(req["game_id"])
+                    res["board"] = chess_game.getBoard(id=req["game_id"])
 
                     res["error"] = 0
                 except:
