@@ -311,13 +311,12 @@ async def handle_req(websocket):
             try:
                 try:
                     res["method"] = "test_ismovelegal"
-                    #print("01")
-                    #print(chess_game.isMoveLegal(req["move"],req["game_id"]))
+
                     res["result"] = chess_game.isMoveLegal(req["move"],req["game_id"]) and not chess_game.willMovePutPlayerInCheck(req["move"],req["player"],req["game_id"])
-                    #print("02")
+
                     if res["result"]:
                         chess_game.movePiece(req["move"],req["game_id"])
-                    #print("03")
+
                     res["board"] = chess_game.getBoard(req["game_id"])
                     res["error"] = 0
                 except:
@@ -348,20 +347,20 @@ async def handle_req(websocket):
             except:
                 res["error"] = -1
         elif req["method"] == "test_getboard":
+            res["method"] = "test_getboard"
             try:
-                res["method"] = "test_getboard"
-                if "game_id" in req:
-                    print(req["game_id"])
-                    try:
-                        res["board"] = chess_game.getBoard(req["game_id"])
-                        res["error"] = 0
-                    except:
-                        res["error"] = 2
+                if "game_id" in req and "color_id" in req:
+                    res["board"],res["color_id"] = chess_game.getBoard(id=req["game_id"], color=req["color_id"])
+                elif "game_id" in req and "color_id" not in req:
+                    res["board"],res["color_id"] = chess_game.getBoard(id=req["game_id"])
+                elif "game_id" not in req and "color_id" in req:
+                    res["board"],res["game_id"],res["color_id"] = chess_game.getBoard(color=req["color_id"])
                 else:
-                    res["board"],res["game_id"] = chess_game.getBoard()
-                    res["error"] = 0
+                    res["board"] = chess_game.getBoard()
+                
+                res["error"] = 0
             except:
-                res["error"] = -1
+                res["error"] = -9999
 
         else:
             res["error"] = 1
