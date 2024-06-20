@@ -40,52 +40,73 @@ ucsSocket.addEventListener("message", (event) => {
 
     const res = JSON.parse(event.data);
     
-    // if (res.steps){
-    //         console.log("Step message received: ", res)
-    //     }
-    // else {
+    // if (res.steps) {
+    //     console.log("Step message received: ", res);
+
+    //     res.steps.forEach((step, index) => {
+    //         console.log(`Step ${index + 1} frontier:`, step.frontier);
+    //         details.textContent += `Step ${index+1}: `;
+
+    //         for (var key in step.frontier){ 
+    //             const x = step.frontier[key];
+    //             for (let i = 0; i < x.nodes.length; ++i){
+    //                 details.textContent += `[${x.nodes[i]}], `;
+    //             }
+    //             details.textContent += `\n`;
+    //         }
+    //     });
+    // } else {
     //     console.log('Error parsing message');
     // }
 
-    
-    // // if (res.steps)
-    // //     console.log("Received message successfully");
-    // // else 
-    // //     console.log("fail");
+    reverseColor(ctx);
 
+    if (numStep < 0 || numStep >= res.steps.length) {
+        alert( "Invalid step");
+    }
+    else if (res && Array.isArray(res.steps)){
+        const step = res.steps[numStep];
+        console.log("Current step: ", step);
+        if (step){
+            instructions = 
+                `Start Node: ${startNode.id} | Goal: ${endNode.id}\n
+                Current step ${numStep}
+                Frontier: 
+                Path: ${printPath(res)}
+                Cost: ${printCost(res,numStep)}
 
-    try {
-        const message = JSON.parse(event.data); // Attempt to parse the incoming message as JSON
-        if (message.steps) {
-            // Handle the message if it has a 'steps' property
-            console.log("Step message received:", message);
-        } else {
-            // Handle any messages that don't match the expected format
-            console.log("Received message does not contain expected data:", message);
+                `;
+
+            details.textContent = instructions.trim();
+            
+            colorFrontier(res,ctx);
+            console.log("Printing the instruction successfully");
         }
-    } catch (error) {
-        // Handle any errors that occur during message parsing
-        console.error("Error parsing message from server:", error);
+        else{
+            console.log("Step is undefined OR numStep is out of bound");
+            details.textContent += `doesnt work`;
+        }
     }
-
-    let instructions = `
-        <h1>Start node: ${event.data}\t Our goal: ${event.data}<\h1>     
-        <p>Blu<\p>
-    `;
-
-    if (instructions.length){
-        details.innerHTML = instructions;
+    else {
+           console.log('res is undefined or res.steps is not an array');
     }
-})
+//print all the step out in the console
+    if (res && Array.isArray(res.steps)) {
+        res.steps.forEach((step, index) => {
+            console.log(`Step ${index}:`, step);
+        });
+    } else {
+        console.log('res is undefined or res.steps is not an array');
+    }
+});
 
+ucsSocket.addEventListener('error', function(event) {
+    console.error('WebSocket error observed:', event);
+});
 
-// ucsSocket.addEventListener('error', function(event) {
-//     console.error('WebSocket error observed:', event);
-// });
-
-// ucsSocket.addEventListener('close', function(event) {
-//     console.log('WebSocket connection closed:', event.code, event.reason);
-// });
+ucsSocket.addEventListener('close', function(event) {
+    console.log('WebSocket connection closed:', event.code, event.reason);
+});
 
 var nodes = [];
 var lines = [];
@@ -95,7 +116,7 @@ var panel = document.getElementById("drawing_panel");
 var panelParent = document.getElementById("drawing_panel_parent");
 
 var details = document.getElementById("ucs_details");
-details.textContent = "BEGINNING WITH STEP 0";
+details.textContent = "LETS START THE UCS ALGORITHM";
 
 let parentPadding = 5;
 panel.width = panelParent.clientWidth - (parentPadding * 2);
@@ -108,15 +129,125 @@ var startNode = null;
 var endNode = null;
 var selStart = false;
 var selEnd = false;
-var numstep = 0;
-// var instructions = [
-//     "first do $node[i].id$ blah blah", 
-//     "step[1] eating",
-// ]
-// i=0;
-// instructions[0] = instructions[0].replace("$node[i].id$", i);
-// details.textContent = instructions[0];
+var searchingmode = false;
+var numStep = 0;
+var instructions = [];
 
+function printPath(res){
+    const step = res.steps[numStep];
+    let pathContent = '';
+
+    const x = step.path;
+    if (Array.isArray(x.nodes)){
+    for (let i = 0; i < x.nodes.length; ++i){
+        pathContent += `[${x.nodes[i]}], `;
+    }
+    pathContent = pathContent.trimEnd().slice(0, -1) + '\n';
+    }
+    else {
+        pathContent = "isnt arr";
+    }
+    return pathContent.trim();
+}
+
+function printCost(res, numStep){
+    const step = res.steps[numStep];
+    let costContent = '';
+
+    if (step.path && step.path.cost != undefined){
+        const x = ``+step.path.cost ;
+
+        costContent += x + '\n';
+    }
+    else {
+        costContent = "cost doesnt exist";
+    }
+    return costContent.trim();
+}
+
+function sendMessage(){
+    nod = {"0": {"x": 0, "y": 0}, "1": {"x": 20, "y": 0}, "2": {"x": 20, "y": 20}, "3": {"x": 30, "y": 0}, "4": {"x": 30, "y": 5}, "5": {"x": 30, "y": 20}, "6": {"x": 30, "y": 30}}
+    edg = {"0": {"weight": 20, "par1": "0", "par2": "1"}, "1": {"weight": 20, "par1": "1", "par2": "2"}, "2": {"weight": 28.28, "par1": "2", "par2": "0"}, "3": {"weight": 10, "par1": "1", "par2": "3"}, "4": {"weight": 5, "par1": "3", "par2": "4"}, "5": {"weight": 18.03, "par1": "4", "par2": "2"}, "6": {"weight": 10, "par1": "5", "par2": "2"}, "7": {"weight": 10, "par1": "5", "par2": "6"}};
+    
+    for(let i = 0; i < nodes.length; ++i){
+        nod[nodes[i].id] = {"x": nodes[i].x, "y": nodes[i].y};
+      }
+
+    for(let i = 0; i < lines.length; ++i){
+        if(lines[i].parStart){
+            var id1 = String(lines[i].parStart.id);
+          }
+
+          if(lines[i].parEnd){
+            var id2 = String(lines[i].parEnd.id);
+          }
+        edg[lines[i].id] = {"weight": lines[i].weight, "par1": id1, "par2": id2};
+        }
+
+    // if (!endNode){
+
+    // }
+
+    const req = {
+        method: "ucs", 
+        nodes: nod, 
+        edges: edg, 
+        start: String(startNode.id), 
+        end: String(endNode.id)
+    };
+    
+    console.log(req);
+    ucsSocket.send(JSON.stringify(req));
+}
+
+function colorFrontier(res,ctx){
+    console.log("coloring Frontier processing");
+    if (res == undefined){
+        console.error("the parameter res is undefined");
+        return;
+    }
+
+    const step = res.steps[numStep];
+    if (!step || !step.frontier) {
+        console.error("step or step.frontier is not defined");
+        return;
+    }
+    console.log(`Frontier of step: `,step.frontier);
+    for (const key in step.frontier) {
+        const x = step.frontier[key];
+        if (!x || !Array.isArray(x.nodes)) {
+            console.error("Invalid frontier data");
+            continue;
+        }
+
+        for (let i = 0; i < x.nodes.length; ++i) {
+            for (let j = 0; j < 2; ++j){
+                const a = parseInt(x.nodes[i][j], 10) ;
+                if (isNaN(a) || !nodes[a]) {
+                    console.error(`Invalid node index: ${x.nodes[i]}`);
+                    continue;
+                }
+                if (a == startNode.id || a == endNode.id){
+                    continue;
+                }
+                console.log(numStep);
+                console.log(`the node will be colored to purple: ${a} and ${nodes[a].id}`);
+                ctx.beginPath();
+                ctx.arc(nodes[a].x, nodes[a].y, nodes[a].radius, nodes[a].startAng, nodes[a].endAng); 
+                console.log(`node id is: ${nodes[a].id}`)
+                ctx.fillStyle = "purple";
+                ctx.fill();
+    
+                ctx.strokeStyle = "black";
+                ctx.font = "bold 24px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillStyle = "white";
+                ctx.fillText(nodes[a].id, nodes[a].x, nodes[a].y);   
+            }
+        }
+    }
+
+}
 
 function reverseColor(ctx){
     for(i = 0; i < nodes.length; ++i){
@@ -583,18 +714,34 @@ gen_graph_btn.addEventListener("click",(event)=>{
 });
 
 prev_step_btn.addEventListener("click",(event)=>{
-    if (numstep <= 0){
-
+    //NEED TO CHECK IF WE'RE IN THE SEARCHING MODE
+    if (searchingmode){
+        if (numStep <= 0){
+            console.log("We're in step 0. Can't go to the previous step");
+            alert("Can't go to the previous step");
+        }
+        else if (!startNode){
+            console.log("There is no start node to execute the algorithm");
+            alert("You have to pick the start node");
+        }
+        else{
+            numStep--;
+            console.log("prev step");
+            console.log(numStep);
+            sendMessage();
+        }
     }
-    step --;
-    console.log("prev step");
-    console.log(numstep);
+    else{
+        console.log("Cant execute. We're not in the searching mode");
+        alert("Need to be in the searching mode");
+    }
 });
 
 next_step_btn.addEventListener("click",(event)=>{
-    numstep++;
-    console.log(numstep);
+    numStep++;
+    console.log(numStep);
     console.log("next step");
+    sendMessage();
 });
 
 reset_btn.addEventListener("click",(event)=>{
@@ -602,48 +749,17 @@ reset_btn.addEventListener("click",(event)=>{
     lines = [];
     id = 0;
     lineID = 0;
+    numStep = 0;
+    searchingmode = false;
     drawShapes(ctx);
     console.log("resetting");
+    details.textContent = `DO THE SEARCHING AGAIN`;
 });
 
 search_btn.addEventListener("click", (event)=>{
-    nod = {"0": {"x": 0, "y": 0}, "1": {"x": 20, "y": 0}, "2": {"x": 20, "y": 20}, "3": {"x": 30, "y": 0}, "4": {"x": 30, "y": 5}, "5": {"x": 30, "y": 20}, "6": {"x": 30, "y": 30}}
-    edg = {"0": {"weight": 20, "par1": "0", "par2": "1"}, "1": {"weight": 20, "par1": "1", "par2": "2"}, "2": {"weight": 28.28, "par1": "2", "par2": "0"}, "3": {"weight": 10, "par1": "1", "par2": "3"}, "4": {"weight": 5, "par1": "3", "par2": "4"}, "5": {"weight": 18.03, "par1": "4", "par2": "2"}, "6": {"weight": 10, "par1": "5", "par2": "2"}, "7": {"weight": 10, "par1": "5", "par2": "6"}};
-    
-    for(let i = 0; i < nodes.length; ++i){
-        nod[nodes[i].id] = {"x": nodes[i].x, "y": nodes[i].y};
-      }
+    selEnd = false;
+    selStart = false;
+    sendMessage();
+    searchingmode  = true;
 
-    for(let i = 0; i < lines.length; ++i){
-        if(lines[i].parStart){
-            var id1 = String(lines[i].parStart.id);
-
-          }
-
-          if(lines[i].parEnd){
-            var id2 = String(lines[i].parEnd.id);
-          }
-        edg[lines[i].id] = {"weight": lines[i].weight, "par1": id1, "par2": id2};
-        }
-
-    // if (!endNode){
-
-    // }
-
-    const req = {
-        method: "ucs", 
-        nodes: nod, 
-        edges: edg, 
-        start: String(startNode.id), 
-        end: String(endNode.id)
-    };
-    console.log(req);
-    ucsSocket.send(JSON.stringify(req));
-
-    // instructions = [
-    //     ''
-    // ]
-    // for (let i = 0 ; i < nodes.length; ++i){
-
-    // }
-})
+});
