@@ -277,34 +277,6 @@ function colorFrontier(res,ctx){
         //console.log (`Checking the path node ${node1} and ${node2}`);
         ctx.clearRect(0, 0, panel.width, panel.height);
             for (let j = 0; j < lines.length; ++j){
-                // ctx.beginPath();
-                // ctx.strokeStyle = 'white';
-                // ctx.lineWidth = 3 ;
-                // ctx.moveTo(lines[j].startX, lines[j].startY);
-                // ctx.lineTo(lines[j].endX, lines[j].endY);
-                // ctx.closePath();
-                // ctx.stroke();
-
-                // if (!((lines[j].parStart.id == node1 || lines[j].parStart.id == node2)&&(lines[j].parEnd.id == node1 || lines[j].parEnd.id == node2))){ 
-                //     ctx.strokeStyle = "black";
-                //     ctx.lineWidth = 1;
-                // }
-                // else{
-                //     if (numStep == res.steps.length - 1){
-                //         ctx.strokeStyle = "red";
-                //         ctx.lineWidth = 5;
-                //         console.log(``+ node1 + ` ` + node2);
-                //     }
-                //     else {
-                //         ctx.strokeStyle = "purple";
-                //         ctx.lineWidth = 1;
-                //     }
-                // }
-                // ctx.beginPath();
-                // ctx.moveTo(lines[j].startX, lines[j].startY);
-                // ctx.lineTo(lines[j].endX, lines[j].endY);
-                // ctx.stroke();
-            
                 let isPath = (lines[j].parStart.id == node1 || lines[j].parStart.id == node2) &&
                 (lines[j].parEnd.id == node1 || lines[j].parEnd.id == node2);
                 if (isPath) {
@@ -372,7 +344,6 @@ function colorFrontier(res,ctx){
 }
        
      //Coloring the path node
-    //  const y = step.path;
         for (let i = 0; i < y.nodes.length; ++i){
             //console.log(`Printing the node of the frontier index ${i}: ${x.nodes[i]} and ${y.nodes[i]}`);
          for (let j = 0; j < 2; ++j){
@@ -948,5 +919,4 @@ search_btn.addEventListener("click", (event)=>{
     selStart = false;
     sendMessage();
     searchingmode  = true;
-
 });
