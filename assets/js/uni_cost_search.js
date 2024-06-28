@@ -59,8 +59,8 @@ ucsSocket.addEventListener("message", (event) => {
     //     console.log('Error parsing message');
     // }
 
-    reverseColor(ctx);
-
+    //drawShapes(ctx);
+    
     if (numStep < 0 || numStep >= res.steps.length) {
         alert( "Invalid step");
     }
@@ -68,18 +68,42 @@ ucsSocket.addEventListener("message", (event) => {
         const step = res.steps[numStep];
         console.log("Current step: ", step);
         if (step){
-            instructions = 
-                `Start Node: ${startNode.id} | Goal: ${endNode.id}\n
-                Current step ${numStep}
-                Frontier: 
-                Path: ${printPath(res)}
-                Cost: ${printCost(res,numStep)}
-
+            instructions = `
+            <style>
+                h1{
+                    font-size: 26px;
+                }
+                p2{
+                    color: yellow;
+                    font-size: 16px;
+                }
+            </style>    
+            <h1> Start Node: <span style="color:green; font-size: 23px">  ${startNode.id}</span> | Goal: <span style="color:red; font-size: 23px"> ${endNode.id}</span></h1>
+                <p1>Current step ${numStep}<br></p1>
+                <p2>First, look at the current node and check the neigbors as the pink node in the graph</p2><br>
+                Current path: ${printInstruction(res,0)}<br>
+                Cost: ${printInstruction(res,1)}<br>
+                <p2>check the neigbors as the pink node in the graph</p2><br>
+                <p2>Update the new node's weight as we travelled to the cost</p2><br>
+                Priority queue: <ul type="1">${printInstruction(res,2)}</ul>
+               ${printInstruction(res,3)}</br>
                 `;
 
-            details.textContent = instructions.trim();
+                if (numStep == res.steps.length - 1){
+                    instructions += `
+                    <p1>----------</p1><br>
+                    <h1>Goal reached!!</h1>
+                    <p1><span style="color:red; font-size:40px">Result:</span> ${printInstruction(res, 0)}</p1>`;
+                }
+                else {
+                    instructions += `
+                    <p1>----------</p1><br>
+                    <p2>It's not our goal node yet :((</p2>`;
+                }
+            details.innerHTML = instructions;
             
             colorFrontier(res,ctx);
+        
             console.log("Printing the instruction successfully");
         }
         else{
@@ -91,13 +115,13 @@ ucsSocket.addEventListener("message", (event) => {
            console.log('res is undefined or res.steps is not an array');
     }
 //print all the step out in the console
-    if (res && Array.isArray(res.steps)) {
-        res.steps.forEach((step, index) => {
-            console.log(`Step ${index}:`, step);
-        });
-    } else {
-        console.log('res is undefined or res.steps is not an array');
-    }
+    // if (res && Array.isArray(res.steps)) {
+    //     res.steps.forEach((step, index) => {
+    //         console.log(`Step ${index}:`, step);
+    //     });
+    // } else {
+    //     console.log('res is undefined or res.steps is not an array');
+    // }
 });
 
 ucsSocket.addEventListener('error', function(event) {
@@ -131,38 +155,66 @@ var selStart = false;
 var selEnd = false;
 var searchingmode = false;
 var numStep = 0;
-var instructions = [];
+var instructions = ``;
 
-function printPath(res){
+function printInstruction(res, mode){
     const step = res.steps[numStep];
-    let pathContent = '';
+    let content = '';
 
-    const x = step.path;
-    if (Array.isArray(x.nodes)){
-    for (let i = 0; i < x.nodes.length; ++i){
-        pathContent += `[${x.nodes[i]}], `;
+    if (mode == 0){
+        const x = step.path;
+        if (Array.isArray(x.nodes)){
+        for (let i = 0; i < x.nodes.length; ++i){
+            content += `[${x.nodes[i]}], `;
+        }
+        content = content.trimEnd().slice(0, -1) + '\n';
+        }
+        else {
+            content = "isnt arr";
+        }
     }
-    pathContent = pathContent.trimEnd().slice(0, -1) + '\n';
+    else if (mode == 1){
+        const x = step.path;
+        if (x && x.cost != undefined){
+            content += Math.ceil(x.cost * 100)/100 + '\n';
+        }
+        else {
+            content = "cost doesnt exist";
+        }
     }
-    else {
-        pathContent = "isnt arr";
-    }
-    return pathContent.trim();
-}
+    else if (mode == 2){
+        for (var key in step.frontier){ 
+            const y = step.frontier[key];
+            content += `<li>`
+            for (let i = 0; i < y.nodes.length; ++i){
+                content += `[${y.nodes[i]}], `;
+                }
+            content = content.trimEnd().slice(0, -1) + ' - ';
 
-function printCost(res, numStep){
-    const step = res.steps[numStep];
-    let costContent = '';
-
-    if (step.path && step.path.cost != undefined){
-        const x = ``+step.path.cost ;
-
-        costContent += x + '\n';
+            content += `Cost: ${Math.ceil(y.cost * 100)/100}</li>`;
+        }
     }
-    else {
-        costContent = "cost doesnt exist";
+    else if (mode == 3){
+        let arr = [];
+
+        const x = step.path;
+
+        for (let i = 0; i < x.nodes.length; ++i){
+            for (let j = 0; j < 2; ++j){
+                if (!arr.includes(x.nodes[i][j])){
+                    arr.push(x.nodes[i][j]);
+                    console.log(`Chanking arr of visited set:`, arr);
+                }
+            }
+        }
+        var lastNode = arr[arr.length - 1];
+
+        content =  `
+            <p2>Expand ${lastNode} into the visited set</p2><br>
+            <p1>Visited set: ${arr}</p1>
+        `;
     }
-    return costContent.trim();
+    return content.trim();
 }
 
 function sendMessage(){
@@ -202,52 +254,162 @@ function sendMessage(){
 
 function colorFrontier(res,ctx){
     console.log("coloring Frontier processing");
+
     if (res == undefined){
         console.error("the parameter res is undefined");
         return;
     }
 
     const step = res.steps[numStep];
-    if (!step || !step.frontier) {
-        console.error("step or step.frontier is not defined");
+    if (!step || !step.frontier  || !step.path) {
+        console.error("step or step.frontier or step.path is not defined");
         return;
     }
+
+    // //Coloring the path node
+    const y = step.path;
+    console.log(y.nodes);
+    for (let i = 0; i < y.nodes.length; ++i){
+        //Coloring the line
+    if (y.nodes[i][0] != y.nodes[i][1]){
+        let node1 = y.nodes[i][0];
+        let node2 = y.nodes[i][1];
+        //console.log (`Checking the path node ${node1} and ${node2}`);
+        ctx.clearRect(0, 0, panel.width, panel.height);
+            for (let j = 0; j < lines.length; ++j){
+                // ctx.beginPath();
+                // ctx.strokeStyle = 'white';
+                // ctx.lineWidth = 3 ;
+                // ctx.moveTo(lines[j].startX, lines[j].startY);
+                // ctx.lineTo(lines[j].endX, lines[j].endY);
+                // ctx.closePath();
+                // ctx.stroke();
+
+                // if (!((lines[j].parStart.id == node1 || lines[j].parStart.id == node2)&&(lines[j].parEnd.id == node1 || lines[j].parEnd.id == node2))){ 
+                //     ctx.strokeStyle = "black";
+                //     ctx.lineWidth = 1;
+                // }
+                // else{
+                //     if (numStep == res.steps.length - 1){
+                //         ctx.strokeStyle = "red";
+                //         ctx.lineWidth = 5;
+                //         console.log(``+ node1 + ` ` + node2);
+                //     }
+                //     else {
+                //         ctx.strokeStyle = "purple";
+                //         ctx.lineWidth = 1;
+                //     }
+                // }
+                // ctx.beginPath();
+                // ctx.moveTo(lines[j].startX, lines[j].startY);
+                // ctx.lineTo(lines[j].endX, lines[j].endY);
+                // ctx.stroke();
+            
+                let isPath = (lines[j].parStart.id == node1 || lines[j].parStart.id == node2) &&
+                (lines[j].parEnd.id == node1 || lines[j].parEnd.id == node2);
+                if (isPath) {
+                    ctx.beginPath();
+                    if (numStep == res.steps.length - 1) {
+                        ctx.strokeStyle = "red";
+                        ctx.lineWidth = 5;
+                        console.log(`Node path: ${node1} ${node2}`);
+                    } else {
+                        ctx.strokeStyle = "purple";
+                        ctx.lineWidth = 3;
+                    }
+                    ctx.moveTo(lines[j].startX, lines[j].startY);
+                    ctx.lineTo(lines[j].endX, lines[j].endY);
+                    ctx.stroke();
+                } else {
+                    ctx.beginPath();
+                    ctx.strokeStyle = "black";
+                    ctx.lineWidth = 1;
+                    ctx.moveTo(lines[j].startX, lines[j].startY);
+                    ctx.lineTo(lines[j].endX, lines[j].endY);
+                    ctx.stroke();
+                }
+                
+            }
+        }
+    }
+
+    reverseColor(ctx);
+    //Coloring the frontier node
     console.log(`Frontier of step: `,step.frontier);
     for (const key in step.frontier) {
         const x = step.frontier[key];
+
+        console.log(`the elements of the array in frontier ${x.nodes} with key ${key}`);
         if (!x || !Array.isArray(x.nodes)) {
             console.error("Invalid frontier data");
             continue;
         }
 
-        for (let i = 0; i < x.nodes.length; ++i) {
-            for (let j = 0; j < 2; ++j){
-                const a = parseInt(x.nodes[i][j], 10) ;
-                if (isNaN(a) || !nodes[a]) {
-                    console.error(`Invalid node index: ${x.nodes[i]}`);
-                    continue;
+     for (let i = 0; i < x.nodes.length; ++i) {
+        for (let j = 0; j < 2; ++j){
+            //console.log(`each one: ${x.nodes[i][j]}`);
+            const a = parseInt(x.nodes[i][j], 10) ;
+            if (isNaN(a) || !nodes[a]) {
+                console.error(`Invalid node index: ${x.nodes[i][j]} at x.nodes[${i}][${j}]`);
+                continue;
                 }
-                if (a == startNode.id || a == endNode.id){
-                    continue;
-                }
-                console.log(numStep);
-                console.log(`the node will be colored to purple: ${a} and ${nodes[a].id}`);
-                ctx.beginPath();
-                ctx.arc(nodes[a].x, nodes[a].y, nodes[a].radius, nodes[a].startAng, nodes[a].endAng); 
-                console.log(`node id is: ${nodes[a].id}`)
-                ctx.fillStyle = "purple";
-                ctx.fill();
-    
-                ctx.strokeStyle = "black";
-                ctx.font = "bold 24px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillStyle = "white";
-                ctx.fillText(nodes[a].id, nodes[a].x, nodes[a].y);   
+            if (a == startNode.id || a == endNode.id){
+                // console.log(`Same with the targeted node: ${a}`);
+                continue;
             }
+            ctx.beginPath();
+            ctx.arc(nodes[a].x, nodes[a].y, nodes[a].radius, nodes[a].startAng, nodes[a].endAng); 
+            //console.log(`node id is: ${nodes[a].id}`)
+            ctx.fillStyle = "pink";
+            ctx.fill();
+        
+            ctx.font = "bold 24px sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillStyle = "white";
+            ctx.fillText(nodes[a].id, nodes[a].x, nodes[a].y);                   
         }
     }
-
 }
+       
+     //Coloring the path node
+    //  const y = step.path;
+        for (let i = 0; i < y.nodes.length; ++i){
+            //console.log(`Printing the node of the frontier index ${i}: ${x.nodes[i]} and ${y.nodes[i]}`);
+         for (let j = 0; j < 2; ++j){
+             console.log(`In the progress of coloring the path node`);
+             const b = parseInt(y.nodes[i][j], 10) ;
+             if (isNaN(b) || !nodes[b]) {
+                 console.error(`Invalid node index: ${y.nodes[i][j]} at y.nodes[${i}][${j}]`);
+                 continue;
+             }
+             if (b == startNode.id || b == endNode.id){
+                 //console.log(`Coloring the path, Same with the targeted node: ${b}`);
+                 continue;
+             }
+ 
+             ctx.beginPath();
+             ctx.arc(nodes[b].x, nodes[b].y, nodes[b].radius, nodes[b].startAng, nodes[b].endAng); 
+             ctx.fillStyle = "purple";
+             ctx.fill();
+ 
+             ctx.font = "bold 24px sans-serif";
+             ctx.textAlign = "center";
+             ctx.fillStyle = "white";
+             ctx.fillText(nodes[b].id, nodes[b].x, nodes[b].y);   
+         }
+          
+    }
+}
+ 
+// //Testing 
+//     for (let i = 0; i < nodes.length; ++i){
+//         console.log(`With index ${i}: ${nodes[i].id}`);
+//     }
+//     if(!nodes[startNode.id]){
+//         console.error(`Error`);
+//     }
+//     else
+//         console.log(`${nodes[startNode.id]}`);
 
 function reverseColor(ctx){
     for(i = 0; i < nodes.length; ++i){
@@ -356,6 +518,7 @@ function genGraph(){
         }
 
         nodes.push(new Circle(randX,randY,30,id++));
+        // console.log("x: " + nodes[i].x + " | y: " + nodes[i].y + " | i: " + i + " | id:" + nodes[i].id );
     }
 
     console.log(nodes);
@@ -387,6 +550,11 @@ function genGraph(){
     console.log(lines);
 
     drawShapes(ctx);
+
+    // for (let i = 0; i < nodes.length; ++i){
+
+    //     console.log("x: " + nodes[i].x + " | y: " + nodes[i].y + " | i: " + i + " | id:" + nodes[i].id );
+    // }
 }
 
 function checkEdgeseachCir (x,y){
@@ -432,8 +600,9 @@ panel.addEventListener("mousedown",(event)=>{
     for(i = 0; i < nodes.length; ++i){
         if((mouseX >= (nodes[i].x - nodes[i].radius) && mouseX <= (nodes[i].x + nodes[i].radius)) && (mouseY >= (nodes[i].y - nodes[i].radius) && mouseY <= (nodes[i].y + nodes[i].radius))){
             currNode = nodes[i];
-            //console.log("Set current node");
-            nodes.splice(i,1);
+            console.log("node.id: " + nodes[i].id + " with index "+i);
+            //nodes.splice(i,1);
+            console.log("node.id: " + nodes[i].id + " with index "+i);
             //console.log(currNode);
             //console.log(nodes);
         }
@@ -549,7 +718,7 @@ panel.addEventListener("mousemove",(event)=>{
 
 panel.addEventListener("mouseup",(event)=>{
     if(currNode != null){
-        nodes.push(currNode);
+        //nodes.push(currNode);
         currNode = null;
         drawShapes(ctx);
     }
@@ -586,7 +755,14 @@ panel.addEventListener("click",(event)=>{
     mouseX = event.clientX - panel.getBoundingClientRect().left;
     mouseY = event.clientY - panel.getBoundingClientRect().top;
 
-    console.log("x: " + mouseX + " | y: " + mouseY);
+    for(let i = 0; i < nodes.length; ++i){
+        if((mouseX >= (nodes[i].x - nodes[i].radius) && mouseX <= (nodes[i].x + nodes[i].radius)) && (mouseY >= (nodes[i].y - nodes[i].radius) && mouseY <= (nodes[i].y + nodes[i].radius))){
+            console.log("x: " + mouseX + " | y: " + mouseY + " | i: " + i + " | id:" + nodes[i].id );
+            break;
+        }
+        // else 
+        //      console.log("x: " + mouseX + " | y: " + mouseY);
+    }
 
     if(delMode){
         for(i = 0; i < nodes.length; ++i){
@@ -624,15 +800,24 @@ panel.addEventListener("click",(event)=>{
         }
     }
     else if(selStart){
+        // for(let i = 0; i < nodes.length; ++i){
+        //     console.log(`Checking node ${i} with id ${nodes[i].id}:`);
+        // }
+
         for(i = 0; i < nodes.length; ++i){
+            //debugger
+            console.log(`Checking node ${i} with id ${nodes[i].id}:`);
             if((mouseX >= (nodes[i].x - nodes[i].radius) && mouseX <= (nodes[i].x + nodes[i].radius)) && (mouseY >= (nodes[i].y - nodes[i].radius) && mouseY <= (nodes[i].y + nodes[i].radius)) && !nodes[i].end){
                 if(startNode != null){
                     startNode.start = false;
                 }
+                // startNode.id = i;
+                // console.log(`StartNOde.id: `+ startNode.id + ` with index `, i);
                 startNode = nodes[i];
                 nodes[i].start = true;
-                console.log("start node is " + startNode.id);
+                //console.log("start node is " + startNode.id + " with index i = "+ i + " and node: "+ nodes[i].id);
                 drawShapes(ctx);
+                break;
             }
         }
     }
@@ -685,11 +870,17 @@ sel_start_btn.addEventListener("click",(event)=>{
         delMode = false;
         drawShapes(ctx);
         console.log("Entering Select Start Mode");
+        // for (let i = 0; i < nodes.length; ++i){
+        //     console.log(`With index ${i}: ${nodes[i].id}`);
+        // }
     }
     else{
         selStart = false;
         reverseColor(ctx);
         console.log("Exiting Select Start Mode");
+        // for (let i = 0; i < nodes.length; ++i){
+        //     console.log(`With index ${i}: ${nodes[i].id}`);
+        // }
     }
 });
 
@@ -716,11 +907,7 @@ gen_graph_btn.addEventListener("click",(event)=>{
 prev_step_btn.addEventListener("click",(event)=>{
     //NEED TO CHECK IF WE'RE IN THE SEARCHING MODE
     if (searchingmode){
-        if (numStep <= 0){
-            console.log("We're in step 0. Can't go to the previous step");
-            alert("Can't go to the previous step");
-        }
-        else if (!startNode){
+        if (!startNode){
             console.log("There is no start node to execute the algorithm");
             alert("You have to pick the start node");
         }
