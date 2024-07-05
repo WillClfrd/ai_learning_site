@@ -85,7 +85,7 @@ body {
     width:100%;
     background-color:black;
     color:white;
-    font-size: 20px;
+    font-size: 15px;
     font-family: serif;
     padding-top:2%;
     padding-left:300px;
@@ -147,6 +147,8 @@ body {
     border-radius: 5px;
     height:100%;
     width:100%;
+    font-size: 15p;
+    overflow: auto;
 }
 
 .ucs_table {

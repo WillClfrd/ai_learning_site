@@ -72,13 +72,14 @@ ucsSocket.addEventListener("message", (event) => {
             <style>
                 h1{
                     font-size: 26px;
+                    font-weight: bold;
                 }
                 p2{
                     color: yellow;
                     font-size: 16px;
                 }
             </style>    
-            <h1> Start Node: <span style="color:green; font-size: 23px">  ${startNode.id}</span> | Goal: <span style="color:red; font-size: 23px"> ${endNode.id}</span></h1>
+            <h1> Start Node: <span style="color:green; font-size: 23px">  ${startNode.id}</span> | Goal: <span style="color:red; font-size: 23px"> ${endNodechecking()}</span></h1>
                 <p1>Current step ${numStep}<br></p1>
                 <p2>First, look at the current node and check the neigbors as the pink node in the graph</p2><br>
                 Current path: ${printInstruction(res,0)}<br>
@@ -157,6 +158,9 @@ var searchingmode = false;
 var numStep = 0;
 var instructions = ``;
 
+function endNodechecking(){
+    return (!endNode) ? '-1' : String(endNode.id);
+}
 function printInstruction(res, mode){
     const step = res.steps[numStep];
     let content = '';
@@ -236,16 +240,16 @@ function sendMessage(){
         edg[lines[i].id] = {"weight": lines[i].weight, "par1": id1, "par2": id2};
         }
 
-    // if (!endNode){
+    if (!endNode){
 
-    // }
+    }
 
     const req = {
         method: "ucs", 
         nodes: nod, 
         edges: edg, 
         start: String(startNode.id), 
-        end: String(endNode.id)
+        end: endNodechecking(),
     };
     
     console.log(req);
@@ -776,8 +780,8 @@ panel.addEventListener("click",(event)=>{
         // }
 
         for(i = 0; i < nodes.length; ++i){
-            //debugger
-            console.log(`Checking node ${i} with id ${nodes[i].id}:`);
+            // //debugger
+            // console.log(`Checking node ${i} with id ${nodes[i].id}:`);
             if((mouseX >= (nodes[i].x - nodes[i].radius) && mouseX <= (nodes[i].x + nodes[i].radius)) && (mouseY >= (nodes[i].y - nodes[i].radius) && mouseY <= (nodes[i].y + nodes[i].radius)) && !nodes[i].end){
                 if(startNode != null){
                     startNode.start = false;
@@ -906,7 +910,11 @@ reset_btn.addEventListener("click",(event)=>{
     nodes = [];
     lines = [];
     id = 0;
-    lineID = 0;
+    lineID = 0; 
+    startNode = null;
+    endNode = null;
+    selStart = false;
+    selEnd = false;
     numStep = 0;
     searchingmode = false;
     drawShapes(ctx);
