@@ -133,17 +133,43 @@ async def handle_req(websocket):
                 res["steps"] = []
                 res["error"] = -1
         elif req["method"] == "a_star":
-            nodes = []
-            edges = []
-            h_n = {}
-            start = 0
-            goal = 0
+            try:
+                try:
+                    nodes = req["nodes"]
+                except:
+                    res["steps"] = []
+                    res["error"] = 2
 
-            a_star = AS.AStar(nodes, edges, h_n, start, goal)
+                try:
+                    edges = req["edges"]
+                except:
+                    res["steps"] = []
+                    res["error"] = 3
 
-            result_path = a_star.a_star()
+                try:
+                    h_n = req["h_n"]
+                except:
+                    res["steps"] = []
+                    res["error"] = 4
 
-            res["result"] = result_path
+                try:
+                    start = req["start"]
+                except:
+                    res["steps"] = []
+                    res["error"] = 5
+
+                try:
+                    goal = req["end"]
+                except:
+                    res["steps"] = []
+                    res["error"] = 6
+
+                a_star = AS.AStar(nodes, edges, h_n, start, goal)
+
+                res["steps"] = a_star.a_star()
+                res["error"] = 0
+            except:
+                res["error"] = -1
         elif req["method"] == "sgd":
             print("stochastic gradient descent")
         elif req["method"] == "id3":
