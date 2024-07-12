@@ -40,27 +40,6 @@ ucsSocket.addEventListener("message", (event) => {
 
     const res = JSON.parse(event.data);
 
-    // if (res.steps) {
-    //     console.log("Step message received: ", res);
-
-    //     res.steps.forEach((step, index) => {
-    //         console.log(`Step ${index + 1} frontier:`, step.frontier);
-    //         details.textContent += `Step ${index+1}: `;
-
-    //         for (var key in step.frontier){ 
-    //             const x = step.frontier[key];
-    //             for (let i = 0; i < x.nodes.length; ++i){
-    //                 details.textContent += `[${x.nodes[i]}], `;
-    //             }
-    //             details.textContent += `\n`;
-    //         }
-    //     });
-    // } else {
-    //     console.log('Error parsing message');
-    // }
-
-    //drawShapes(ctx);
-
     if (numStep < 0 || numStep >= res.steps.length) {
         alert("Invalid step");
     }
@@ -136,14 +115,6 @@ ucsSocket.addEventListener("message", (event) => {
     else {
         console.log('res is undefined or res.steps is not an array');
     }
-    //print all the step out in the console
-    // if (res && Array.isArray(res.steps)) {
-    //     res.steps.forEach((step, index) => {
-    //         console.log(`Step ${index}:`, step);
-    //     });
-    // } else {
-    //     console.log('res is undefined or res.steps is not an array');
-    // }
 });
 
 ucsSocket.addEventListener('error', function (event) {
@@ -189,17 +160,14 @@ function printInstruction(res, mode) {
     if (mode == 0) {
         const x = step.path;
         if (Array.isArray(x.nodes)) {
-            console.log(`Length of x.node: `, x.nodes.length);
             if (endNode != null) {
                 for (let i = 0; i < x.nodes.length; ++i) {
                     content += `[${x.nodes[i]}], `;
-                    console.log("PAth node printed out: " + x.nodes[i]);
                 }
                 content = content.trimEnd().slice(0, -1) + '\n';
             }
             else {
                 content += `[${x.nodes[0]},${x.nodes[1]}] `;
-                console.log("Path node printed out: " + x.nodes[0] + ` ` + x.nodes[1]);
             }
         }
         else {
@@ -239,7 +207,6 @@ function printInstruction(res, mode) {
                 for (let j = 0; j < 2; ++j) {
                     if (!arr.includes(x.nodes[i][j])) {
                         arr.push(x.nodes[i][j]);
-                        console.log(`Checking arr of visited set:`, arr);
                     }
                 }
             }
@@ -250,7 +217,6 @@ function printInstruction(res, mode) {
                 for (let j = 0; j < 2; ++j) {
                     if (!arr.includes(y.nodes[i][j])) {
                         arr.push(y.nodes[i][j]);
-                        console.log(`Checking arr of visited set:`, arr);
                     }
                 }
             }
@@ -265,10 +231,8 @@ function printInstruction(res, mode) {
     else if (mode == 4) {
         const x = step.total_path;
         if (Array.isArray(x.nodes)) {
-            console.log(`Length of x.node: `, x.nodes.length);
             for (let i = 0; i < x.nodes.length; ++i) {
                 content += `[${x.nodes[i]}], `;
-                console.log("PAth node printed out: " + x.nodes[i]);
             }
             content = content.trimEnd().slice(0, -1) + '\n';
         }
@@ -328,7 +292,6 @@ function colorFrontier(res, ctx) {
     const y = step.path;
     //And the total_path for thr case without a goal node
     const z = step.total_path;
-    console.log(y.nodes);
 
     if (numStep != 0) {
         ctx.clearRect(0, 0, panel.width, panel.height);
@@ -348,7 +311,6 @@ function colorFrontier(res, ctx) {
                         if (numStep == res.steps.length - 1) {
                             ctx.strokeStyle = "red";
                             ctx.lineWidth = 5;
-                            console.log(`Node path: ${node1} ${node2}`);
                         } else {
                             ctx.strokeStyle = "purple";
                             ctx.lineWidth = 3;
@@ -373,8 +335,6 @@ function colorFrontier(res, ctx) {
         console.log(`Frontier of step: `, step.frontier);
         for (const key in step.frontier) {
             const x = step.frontier[key];
-
-            console.log(`the elements of the array in frontier ${x.nodes} with key ${key}`);
             if (!x || !Array.isArray(x.nodes)) {
                 console.error("Invalid frontier data");
                 continue;
@@ -382,20 +342,18 @@ function colorFrontier(res, ctx) {
 
             for (let i = 0; i < x.nodes.length; ++i) {
                 for (let j = 0; j < 2; ++j) {
-                    //console.log(`each one: ${x.nodes[i][j]}`);
                     const a = parseInt(x.nodes[i][j], 10);
                     if (isNaN(a) || !nodes[a]) {
                         console.error(`Invalid node index: ${x.nodes[i][j]} at x.nodes[${i}][${j}]`);
                         continue;
                     }
                     if (a == startNode.id || a == endNode.id) {
-                        // console.log(`Same with the targeted node: ${a}`);
+                        console.log(`Same with the targeted node: ${a}`);
                         continue;
                     }
 
                     ctx.beginPath();
                     ctx.arc(nodes[a].x, nodes[a].y, nodes[a].radius, nodes[a].startAng, nodes[a].endAng);
-                    //console.log(`node id is: ${nodes[a].id}`)
                     ctx.fillStyle = "pink";
                     ctx.fill();
 
@@ -409,7 +367,6 @@ function colorFrontier(res, ctx) {
 
         //Coloring the path node
         for (let i = 0; i < y.nodes.length; ++i) {
-            //console.log(`Printing the node of the frontier index ${i}: ${x.nodes[i]} and ${y.nodes[i]}`);
             for (let j = 0; j < 2; ++j) {
                 console.log(`In the progress of coloring the path node`);
                 const b = parseInt(y.nodes[i][j], 10);
@@ -418,7 +375,7 @@ function colorFrontier(res, ctx) {
                     continue;
                 }
                 if (b == startNode.id || b == endNode.id) {
-                    //console.log(`Coloring the path, Same with the targeted node: ${b}`);
+                    console.log(`Coloring the path, Same with the targeted node: ${b}`);
                     continue;
                 }
 
@@ -437,7 +394,7 @@ function colorFrontier(res, ctx) {
     //Set the case without endNode
     else {
         //Color the lines
-        for (let i = 0; i < z.nodes.length; i++){
+        for (let i = 0; i < z.nodes.length; i++) {
             if (z.nodes[i][0] != z.nodes[i][1]) {
                 let node1 = z.nodes[i][0];
                 let node2 = z.nodes[i][1];
@@ -449,7 +406,6 @@ function colorFrontier(res, ctx) {
                         if (numStep == res.steps.length - 1) {
                             ctx.strokeStyle = "red";
                             ctx.lineWidth = 5;
-                            console.log(`Node path: ${node1} ${node2}`);
                         } else {
                             ctx.strokeStyle = "purple";
                             ctx.lineWidth = 3;
@@ -471,43 +427,38 @@ function colorFrontier(res, ctx) {
         }
         reverseColor(ctx);
         //Coloring the frontier node
-        console.log(`Frontier of step: `, step.frontier);
         for (const key in step.frontier) {
             const x = step.frontier[key];
 
-            console.log(`the elements of the array in frontier ${x.nodes} with key ${key}`);
             if (!x || !Array.isArray(x.nodes)) {
                 console.error("Invalid frontier data");
                 continue;
             }
-                for (let j = 0; j < 2; ++j) {
-                    //console.log(`each one: ${x.nodes[i][j]}`);
-                    const a = parseInt(x.nodes[j], 10);
-                    if (isNaN(a) || !nodes[a]) {
-                        console.error(`Invalid node index: ${x.nodes[j]} at x.nodes[${j}]`);
-                        continue;
-                    }
-                    if (a == startNode.id) {
-                        // console.log(`Same with the targeted node: ${a}`);
-                        continue;
-                    }
-
-                    ctx.beginPath();
-                    ctx.arc(nodes[a].x, nodes[a].y, nodes[a].radius, nodes[a].startAng, nodes[a].endAng);
-                    //console.log(`node id is: ${nodes[a].id}`)
-                    ctx.fillStyle = "pink";
-                    ctx.fill();
-
-                    ctx.font = "bold 24px sans-serif";
-                    ctx.textAlign = "center";
-                    ctx.fillStyle = "white";
-                    ctx.fillText(nodes[a].id, nodes[a].x, nodes[a].y);
+            for (let j = 0; j < 2; ++j) {
+                const a = parseInt(x.nodes[j], 10);
+                if (isNaN(a) || !nodes[a]) {
+                    console.error(`Invalid node index: ${x.nodes[j]} at x.nodes[${j}]`);
+                    continue;
                 }
+                if (a == startNode.id) {
+                    console.log(`Same with the targeted node: ${a}`);
+                    continue;
+                }
+
+                ctx.beginPath();
+                ctx.arc(nodes[a].x, nodes[a].y, nodes[a].radius, nodes[a].startAng, nodes[a].endAng);
+                ctx.fillStyle = "pink";
+                ctx.fill();
+
+                ctx.font = "bold 24px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillStyle = "white";
+                ctx.fillText(nodes[a].id, nodes[a].x, nodes[a].y);
+            }
         }
 
         //Coloring the path node
         for (let i = 0; i < z.nodes.length; ++i) {
-            //console.log(`Printing the node of the frontier index ${i}: ${x.nodes[i]} and ${y.nodes[i]}`);
             for (let j = 0; j < 2; ++j) {
                 console.log(`In the progress of coloring the path node`);
                 const b = parseInt(z.nodes[i][j], 10);
@@ -516,13 +467,11 @@ function colorFrontier(res, ctx) {
                     continue;
                 }
                 if (b == startNode.id) {
-                    //console.log(`Coloring the path, Same with the targeted node: ${b}`);
                     continue;
                 }
-                console.log(`i = ${i}, j = ${j} and b = ${b}`);
 
                 ctx.beginPath();
-                if(i == numStep && j == 1){
+                if (i == numStep && j == 1) {
                     ctx.fillStyle = "orange";
                 }
                 else {
@@ -540,16 +489,6 @@ function colorFrontier(res, ctx) {
 
     }
 }
-
-// //Testing 
-//     for (let i = 0; i < nodes.length; ++i){
-//         console.log(`With index ${i}: ${nodes[i].id}`);
-//     }
-//     if(!nodes[startNode.id]){
-//         console.error(`Error`);
-//     }
-//     else
-//         console.log(`${nodes[startNode.id]}`);
 
 function reverseColor(ctx) {
     for (i = 0; i < nodes.length; ++i) {
@@ -667,7 +606,6 @@ function genGraph() {
     for (i = 0; i < nodes.length; ++i) {
         let numEdges = genInt(3) + 1;
 
-        //console.log(i + " numLine "+ numEdges);
         for (j = 0; j < numEdges; ++j) {
             let randNode = nodes[genInt(nodes.length)];
 
@@ -685,16 +623,7 @@ function genGraph() {
             tempLine = null;
         }
     }
-
-    console.log(nodes);
-    console.log(lines);
-
     drawShapes(ctx);
-
-    // for (let i = 0; i < nodes.length; ++i){
-
-    //     console.log("x: " + nodes[i].x + " | y: " + nodes[i].y + " | i: " + i + " | id:" + nodes[i].id );
-    // }
 }
 
 function checkEdgeseachCir(x, y) {
@@ -743,8 +672,6 @@ panel.addEventListener("mousedown", (event) => {
             console.log("node.id: " + nodes[i].id + " with index " + i);
             //nodes.splice(i,1);
             console.log("node.id: " + nodes[i].id + " with index " + i);
-            //console.log(currNode);
-            //console.log(nodes);
         }
     }
 
@@ -755,16 +682,12 @@ panel.addEventListener("mousedown", (event) => {
                 currLine.movePoint = "start";
                 //console.log("Set current line for start point");
                 lines.splice(i, 1);
-                //console.log(currLine);
-                //console.log(lines);
             }
             else if ((mouseX >= (lines[i].endX - 5) && mouseX <= (lines[i].endX + 5)) && (mouseY >= (lines[i].endY - 5) && mouseY <= (lines[i].endY + 5))) {
                 currLine = lines[i];
                 currLine.movePoint = "end";
                 //console.log("Set current line for end point");
                 lines.splice(i, 1);
-                //console.log(currLine);
-                //console.log(lines);
             }
         }
     }
@@ -783,13 +706,11 @@ panel.addEventListener("mousemove", (event) => {
                 lines[i].startX = lines[i].parStart.x;
                 lines[i].startY = lines[i].parStart.y;
                 lines[i].weight = Math.sqrt(Math.pow(lines[i].endX - lines[i].startX, 2) + Math.pow(lines[i].endY - lines[i].startY, 2));
-                // console.log(lines[i].weight);
             }
             if (lines[i].parEnd != null) {
                 lines[i].endX = lines[i].parEnd.x;
                 lines[i].endY = lines[i].parEnd.y;
                 lines[i].weight = Math.sqrt(Math.pow(lines[i].endX - lines[i].startX, 2) + Math.pow(lines[i].endY - lines[i].startY, 2));
-                // console.log(lines[i].weight);
             }
         }
 
@@ -820,13 +741,11 @@ panel.addEventListener("mousemove", (event) => {
             currLine.startX = mouseX;
             currLine.startY = mouseY;
             currLine.weight = Math.sqrt(Math.pow(currLine.endX - currLine.startX, 2) + Math.pow(currLine.endY - currLine.startY, 2));
-            // console.log(currLine.weight);
         }
         else if (currLine.movePoint == "end") {
             currLine.endX = mouseX;
             currLine.endY = mouseY;
             currLine.weight = Math.sqrt(Math.pow(currLine.endX - currLine.startX, 2) + Math.pow(currLine.endY - currLine.startY, 2));
-            // console.log(currLine.weight);
         }
 
         drawShapes(ctx);
@@ -873,14 +792,12 @@ panel.addEventListener("mouseup", (event) => {
                     currLine.startX = nodes[i].x;
                     currLine.startY = nodes[i].y;
                     currLine.weight = Math.sqrt(Math.pow(currLine.endX - currLine.startX, 2) + Math.pow(currLine.endY - currLine.startY, 2));
-                    // console.log(currLine.weight);
                 }
                 else {
                     currLine.parEnd = nodes[i];
                     currLine.endX = nodes[i].x;
                     currLine.endY = nodes[i].y;
                     currLine.weight = Math.sqrt(Math.pow(currLine.endX - currLine.startX, 2) + Math.pow(currLine.endY - currLine.startY, 2));
-                    // console.log(currLine.weight);
                 }
             }
         }
@@ -900,8 +817,6 @@ panel.addEventListener("click", (event) => {
             console.log("x: " + mouseX + " | y: " + mouseY + " | i: " + i + " | id:" + nodes[i].id);
             break;
         }
-        // else 
-        //      console.log("x: " + mouseX + " | y: " + mouseY);
     }
 
     if (delMode) {
@@ -940,22 +855,13 @@ panel.addEventListener("click", (event) => {
         }
     }
     else if (selStart) {
-        // for(let i = 0; i < nodes.length; ++i){
-        //     console.log(`Checking node ${i} with id ${nodes[i].id}:`);
-        // }
-
         for (i = 0; i < nodes.length; ++i) {
-            // //debugger
-            // console.log(`Checking node ${i} with id ${nodes[i].id}:`);
             if ((mouseX >= (nodes[i].x - nodes[i].radius) && mouseX <= (nodes[i].x + nodes[i].radius)) && (mouseY >= (nodes[i].y - nodes[i].radius) && mouseY <= (nodes[i].y + nodes[i].radius)) && !nodes[i].end) {
                 if (startNode != null) {
                     startNode.start = false;
                 }
-                // startNode.id = i;
-                // console.log(`StartNOde.id: `+ startNode.id + ` with index `, i);
                 startNode = nodes[i];
                 nodes[i].start = true;
-                //console.log("start node is " + startNode.id + " with index i = "+ i + " and node: "+ nodes[i].id);
                 drawShapes(ctx);
                 break;
             }
@@ -1010,17 +916,11 @@ sel_start_btn.addEventListener("click", (event) => {
         delMode = false;
         drawShapes(ctx);
         console.log("Entering Select Start Mode");
-        // for (let i = 0; i < nodes.length; ++i){
-        //     console.log(`With index ${i}: ${nodes[i].id}`);
-        // }
     }
     else {
         selStart = false;
         reverseColor(ctx);
         console.log("Exiting Select Start Mode");
-        // for (let i = 0; i < nodes.length; ++i){
-        //     console.log(`With index ${i}: ${nodes[i].id}`);
-        // }
     }
 });
 
@@ -1041,7 +941,7 @@ sel_end_btn.addEventListener("click", (event) => {
 
 gen_graph_btn.addEventListener("click", (event) => {
     genGraph();
-    console.log("success");
+    console.log("Generated a random graph successfully");
 });
 
 prev_step_btn.addEventListener("click", (event) => {
@@ -1054,7 +954,7 @@ prev_step_btn.addEventListener("click", (event) => {
         else {
             numStep--;
             console.log("prev step");
-            console.log(numStep);
+            console.log(`Step: `,numStep);
             sendMessage();
         }
     }
@@ -1066,8 +966,9 @@ prev_step_btn.addEventListener("click", (event) => {
 
 next_step_btn.addEventListener("click", (event) => {
     numStep++;
-    console.log(numStep);
     console.log("next step");
+    console.log(`Step: `,numStep);
+
     sendMessage();
 });
 
