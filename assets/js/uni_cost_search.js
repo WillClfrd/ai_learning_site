@@ -80,52 +80,42 @@ ucsSocket.addEventListener("message", (event) => {
                     }
                     p1{
                         color: red;
-                        font-size: 13px;
+                        font-size: 16px;
                     }
                 </style>    
                 <h1>Start Node: <span style="color:green; font-size: 23px">  ${startNode.id}</span> | Goal: <span style="color:red; font-size: 23px"> ${endNodechecking()}</span></h1>
                     Current step ${numStep}<br>
-                    <p2>First, look at the current node as the orange node and check the neigbors as the pink node in the graph</p2><br>`;
+                    <ol type = "1">
+                    <li><p2><b>Inspect current node</b> (orange node) and check the neigbors (pink node) in the graph</p2></li>`;
             if (endNode != null) {
                 instructions += `
                             Current path: ${printInstruction(res, 0)}<br>
-                            Cost: ${printInstruction(res, 1)}<br>
-                            <p2>Check the neigbors as the pink node in the graph</p2><br>
-                            <p2>Adding the new node's weight as we travelled to the total cost</p2><br>
+                            Cost: ${printInstruction(res, 1)}<br><br>
+                            <li><p2>Adding the new node's weight as we travelled to the total cost</p2></li>
                         `
             }
             else {
                 instructions += `
-                            <p1>Without the goalnode, UCS will continue to expand nodes til it has explored all reachable nodes in the graph</p1><br>
+                            <br><li><p1>Without the goal node, UCS will continue to expand nodes til it has explored all reachable nodes in the graph</p1></li>
                             Current node: ${printInstruction(res, 0)}<br>
-                            Cost: ${printInstruction(res, 1)}<br>
-                            <p2>Check the neigbors as the pink node in the graph</p2><br>
-                            <p2>Adding the new node's weight as we travelled to the total cost</p2><br>
-                            Current path: ${printInstruction(res, 4)}<br>
+                            Cost: ${printInstruction(res, 1)}<br><br>
+                            <li><p2>Adding the new node's weight to the total cost as we travel</p2></li>
+                            Current path: ${printInstruction(res, 4)}<br><br>
                         `
             }
             instructions += `
-                        <p2>Prioritize adding the <b>NEAREST</b> node with the <b>SMALLEST</b> cost to the queue</p2><br>
-                        Priority queue: <ol type="1">${printInstruction(res, 2)}</ol>
+                        <li><p2>Prioritize adding the <b>NEAREST</b> node with the <b>SMALLEST</b> cost to the queue</p2></li>
+                        Priority queue: <ul>${printInstruction(res, 2)}</ul><br>
                         ${printInstruction(res, 3)}</br>
+                        </ol>
                         `;
-            //}
-            // else {
-            //     instruction += `
-            //     <style>
-            //         h1{
-            //         font-size: 26px;
-            //         font-weight: bold;
-            //         }
-            //     </style>
-            //     <h1>Start Node: <span style="color:green; font-size: 23px">  ${startNode.id}</span> | Goal: <span style="color:red; font-size: 23px"> ${endNodechecking()}</span></h1>
-            //     `
-            // }
+
             if (numStep == res.steps.length - 1) {
                 instructions += `
                     <p1>----------</p1><br>
                     <h1>Goal reached!!</h1>
-                    <p1><span style="color:red; font-size:40px">Result:</span> ${printInstruction(res, 0)}</p1>`;
+                    <p1><span style="color:red; font-size:30px">Result:</span> <span style = "font-size:25px">${printInstruction(res, 0)}</span></p1>
+                    `;
             }
             else {
                 instructions += `
@@ -268,7 +258,7 @@ function printInstruction(res, mode) {
         var lastNode = arr[arr.length - 1];
 
         content = `
-            <p2>Remove the node ${lastNode} from the priority queue and add it to the visited set</p2><br>
+            <li><p2>Remove the node ${lastNode} from the priority queue and add it to the visited set</p2></li>
             Visited set: ${arr}
         `;
     }
