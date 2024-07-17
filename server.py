@@ -416,7 +416,7 @@ async def echo(websocket):
             await websocket.send(f"{item}: {req[item]}")
 
 async def main():
-    async with serve(handle_req, "localhost", 11111):
+    async with serve(handle_req, "0.0.0.0", 11111):
         print("websocket running")
         await asyncio.Future()
 
