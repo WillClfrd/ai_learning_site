@@ -83,7 +83,7 @@ ucsSocket.addEventListener("message", (event) => {
                         `
             }
             instructions += `
-                        <li><p2>Prioritize adding the <b>NEAREST</b> node with the <b>SMALLEST</b> cost to the queue</p2></li>
+                        <li><p2>Prioritize adding the <b>NEAREST</b> node with the <b>LOWEST</b> cost to the queue</p2></li>
                         Priority queue: <ul>${printInstruction(res, 2)}</ul><br>
                         ${printInstruction(res, 3)}</br>
                         </ol>
@@ -91,14 +91,14 @@ ucsSocket.addEventListener("message", (event) => {
 
             if (numStep == res.steps.length - 1) {
                 instructions += `
-                    <p1>----------</p1><br>
+                    <hr>
                     <h1>Goal reached!!</h1>
                     <p1><span style="color:red; font-size:30px">Result:</span> <span style = "font-size:25px">${printInstruction(res, 0)}</span></p1>
                     `;
             }
             else {
                 instructions += `
-                    <p1>----------</p1><br>
+                    <hr>
                     <p2>It's not our goal node yet :((</p2>`;
             }
             details.innerHTML = instructions;
@@ -133,7 +133,13 @@ var panel = document.getElementById("drawing_panel");
 var panelParent = document.getElementById("drawing_panel_parent");
 
 var details = document.getElementById("ucs_details");
-details.textContent = "LETS START THE UCS ALGORITHM";
+details.innerHTML = `
+<style>
+    h1{font-size: 20px; font-weight: oblique;}
+</style>
+<h1>LETS START THE UCS ALGORITHM</h1>
+<span style="color: yellow; font-style: italic">Uniform Cost Search (UCS) algorithm - a pathfinding method that explores nodes in order of their cumulative cost from the start node, guaranteeing the shortest path in weighted graphs.</span>
+`;
 
 let parentPadding = 5;
 panel.width = panelParent.clientWidth - (parentPadding * 2);
@@ -225,7 +231,7 @@ function printInstruction(res, mode) {
 
         content = `
             <li><p2>Remove the node ${lastNode} from the priority queue and add it to the visited set</p2></li>
-            Visited set: ${arr}
+            Visited set: {${arr}}
         `;
     }
     else if (mode == 4) {
@@ -315,18 +321,38 @@ function colorFrontier(res, ctx) {
                             ctx.strokeStyle = "purple";
                             ctx.lineWidth = 3;
                         }
-                        ctx.moveTo(lines[j].startX, lines[j].startY);
-                        ctx.lineTo(lines[j].endX, lines[j].endY);
-                        ctx.stroke();
                     }
                     else {
                         ctx.beginPath();
                         ctx.strokeStyle = "black";
                         ctx.lineWidth = 1;
+                    }
                         ctx.moveTo(lines[j].startX, lines[j].startY);
                         ctx.lineTo(lines[j].endX, lines[j].endY);
                         ctx.stroke();
-                    }
+
+                         //Calculate the midpoint
+                        let midX = (lines[j].startX + lines[j].endX) / 2;
+                        let midY = (lines[j].startY + lines[j].endY) / 2;
+
+                        //Calculate the angle of the line
+                        let angle = Math.atan2(lines[j].endY - lines[j].startY, lines[j].endX - lines[j].startX);
+                        if (angle > Math.PI /2 || angle < -Math.PI / 2 ){
+                            angle += Math.PI;
+                        }
+                        
+                        //Make the rotation for the info
+                        ctx.save();
+                        ctx.translate(midX, midY);
+                        ctx.rotate(angle);
+
+                        ctx.font = "bold 15px sans-serif";
+                        ctx.fillStyle = "orange";
+                        ctx.fillText(Math.ceil(lines[j].weight * 100) / 100, 0, -5);
+                        ctx.closePath;
+                        
+                        //Restore the context state
+                        ctx.restore();
                 }
             }
         }
@@ -410,18 +436,38 @@ function colorFrontier(res, ctx) {
                             ctx.strokeStyle = "purple";
                             ctx.lineWidth = 3;
                         }
-                        ctx.moveTo(lines[j].startX, lines[j].startY);
-                        ctx.lineTo(lines[j].endX, lines[j].endY);
-                        ctx.stroke();
                     }
                     else {
                         ctx.beginPath();
                         ctx.strokeStyle = "black";
                         ctx.lineWidth = 1;
+                    }
                         ctx.moveTo(lines[j].startX, lines[j].startY);
                         ctx.lineTo(lines[j].endX, lines[j].endY);
                         ctx.stroke();
-                    }
+                    
+                         //Calculate the midpoint
+                        let midX = (lines[j].startX + lines[j].endX) / 2;
+                        let midY = (lines[j].startY + lines[j].endY) / 2;
+
+                        //Calculate the angle of the line
+                        let angle = Math.atan2(lines[j].endY - lines[j].startY, lines[j].endX - lines[j].startX);
+                        if (angle > Math.PI /2 || angle < -Math.PI / 2 ){
+                            angle += Math.PI;
+                        }
+                        
+                        //Make the rotation for the info
+                        ctx.save();
+                        ctx.translate(midX, midY);
+                        ctx.rotate(angle);
+
+                        ctx.font = "bold 15px sans-serif";
+                        ctx.fillStyle = "orange";
+                        ctx.fillText(Math.ceil(lines[j].weight * 100) / 100, 0, -5);
+                        ctx.closePath;
+                        
+                        //Restore the context state
+                        ctx.restore();
                 }
             }
         }
@@ -539,6 +585,29 @@ function drawShapes(ctx) {
         ctx.moveTo(lines[i].startX, lines[i].startY);
         ctx.lineTo(lines[i].endX, lines[i].endY);
         ctx.stroke();
+
+        //Calculate the midpoint
+        let midX = (lines[i].startX + lines[i].endX) / 2;
+        let midY = (lines[i].startY + lines[i].endY) / 2;
+
+        //Calculate the angle of the line
+        let angle = Math.atan2(lines[i].endY - lines[i].startY, lines[i].endX - lines[i].startX);
+        if (angle > Math.PI /2 || angle < -Math.PI / 2 ){
+            angle += Math.PI;
+        }
+        
+        //Make the rotation for the info
+        ctx.save();
+        ctx.translate(midX, midY);
+        ctx.rotate(angle);
+
+        ctx.font = "bold 15px sans-serif";
+        ctx.fillStyle = "orange";
+        ctx.fillText(Math.ceil(lines[i].weight * 100) / 100, 0, -5);
+        ctx.closePath;
+
+        //Restore the context state
+        ctx.restore();
     }
 
     for (i = 0; i < nodes.length; ++i) {
