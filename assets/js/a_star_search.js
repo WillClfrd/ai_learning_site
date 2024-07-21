@@ -38,10 +38,9 @@ a_Socket.addEventListener("message", (event) => {
 
     const res = JSON.parse(event.data);
 
-    if (numStep < 0 || numStep >= res.steps.length) {
-        alert("Invalid step");
-    }
-    else if (res && Array.isArray(res.steps)) {
+    totalStep = res.steps.length;
+
+    if (res && Array.isArray(res.steps)) {
         const step = res.steps[numStep];
         console.log("Current step: ", step);
         if (step) {
@@ -78,14 +77,14 @@ a_Socket.addEventListener("message", (event) => {
                 instructions += `
                     <li><p2>Initialize the Open and Closed Lists</p2></li>
                     <li><p2>Add the <b>Start Node</b> to the Open List with <b>g = 0</b> and the cost ONLY calculated using a heuristic function<b> h</b></p2></li>
-                    <p3 title="nodes to be evaluated">Open List: <ul type="a">${printInstruction(res,2)}</ul></p3>      
+                    <p3 title="nodes to be evaluated">Open List: <ul type="a">${printInstruction(res, 2)}</ul></p3>      
                     <p4><em>Total estimated cost <b>f</b> in every node is the addition of <b>g</b>(cost from start to current node) and <b>h</b>a(estimate of the cost from the current node to the goal)</em></p4>                                
 `;
             }
             else {
                 instructions += `
-                    <p3 title="nodes to be evaluated">Open List: <ul type="a">${printInstruction(res,2)}</ul></p3>      
-                    <li><p2>Pick the node <span style="color:orange; font-size:20px"> ${arr[arr.length - 1]}</span> from the open list with the lowest <b>f</b> value</p2></li>
+                    <p3 title="nodes to be evaluated">Open List: <ul type="a">${printInstruction(res, 2)}</ul></p3>      
+                    <li><p2>Pick the node <span style="color:orange; font-size:20px"> ${printInstruction(res, 5)}</span> from the open list with the lowest <b>f</b> value</p2></li>
                     Current Path: ${printInstruction(res, 0)}<br>
                     Cost: ${printInstruction(res, 1)}<br><br>
                 `
@@ -106,18 +105,18 @@ a_Socket.addEventListener("message", (event) => {
             else {
                 instructions += `
                     <hr>
-                    <p2>It's not our goal node yet :((</p2><br>
+                    <p2>It's not our goal node yet :((</p2><br><br>
                     `;
-                    if (numStep != 0){
-                        instructions += `
-                            <p2>Remove the top node from the open list for exploration</p2><br>
-                            <p2>Add the current node <span style="text-decoration-style: dashed; font-size:20px">${printInstruction(res, 4)}</span> to the closed list</p2><br>
-                        `;
-                    }
+                if (numStep != 0) {
                     instructions += `
-                        <p3 title="nodes already evaluated">Closed List: ${printInstruction(res,3)}</p3>  
+                            <p2>Remove the top node from the open list for exploration</p2><br>
+                            <p2>Add the current node <span style="text-decoration-style: dashed; font-size:20px">${printInstruction(res, 5)}</span> to the closed list</p2><br>
+                        `;
+                }
+                instructions += `
+                        <p3 title="nodes already evaluated">Closed List: ${printInstruction(res, 3)}</p3>  
                     `;
-                    
+
             }
             details.innerHTML = instructions;
 
@@ -178,6 +177,7 @@ var searchingmode = false;
 var numStep = 0;
 var instructions = ``;
 let arr = [];
+var totalStep;
 
 function printInstruction(res, mode) {
     const step = res.steps[numStep];
@@ -206,9 +206,8 @@ function printInstruction(res, mode) {
             const y = step.frontier[key];
             content += `<li>`
             content += `[`;
-                for (let i = 0; i < y.nodes.length; ++i) {
-                    content += `${y.nodes[i]}, `;
-                
+            for (let i = 0; i < y.nodes.length; ++i) {
+                content += `${y.nodes[i]}, `;
             }
             content = content.trimEnd().slice(0, -1) + '] - ';
 
@@ -217,14 +216,14 @@ function printInstruction(res, mode) {
     }
     else if (mode == 3) {
         for (let i = 0; i < x.length; ++i) {
-                if (!arr.includes(x[i])) {
-                    arr.push(x[i]);
+            if (!arr.includes(x[i])) {
+                arr.push(x[i]);
             }
         }
         content = `${arr}`;
     }
-    else if(mode == 5){
-        content += `x[x.length - 1]`;
+    else if (mode == 5) {
+        content += x[x.length - 1];
     }
     return content.trim();
 }
@@ -255,7 +254,7 @@ function sendMessage() {
     for (let i = 0; i < nodes.length; i++) {
         h_nArr[nodes[i].id] = Math.sqrt(Math.pow(nodes[i].x - endNode.x, 2) + Math.pow(nodes[i].y - endNode.y, 2));
         h_n[nodes[i].id] = Math.sqrt(Math.pow(nodes[i].x - endNode.x, 2) + Math.pow(nodes[i].y - endNode.y, 2));
-
+        h_n[nodes[i].id] = Math.ceil(h_n[nodes[i].id] * 100) / 100
     }
 
     const req = {
@@ -273,224 +272,142 @@ function sendMessage() {
 
 function colorFrontier(res, ctx) {
     console.log("coloring Frontier processing");
-
     if (res == undefined) {
         console.error("the parameter res is undefined");
         return;
     }
 
     const step = res.steps[numStep];
-    if (!step || !step.frontier || !step.path) {
+    if (!step || !step.frontier || !step.currPath) {
         console.error("step or step.frontier or step.currPath is not defined");
         return;
     }
-
-    // //Coloring the path line
-    const y = step.path;
-    //And the total_path for thr case without a goal node
-    const z = step.total_path;
+    //Coloring the Current path line
+    const y = step.currPath;
 
     if (numStep != 0) {
         ctx.clearRect(0, 0, panel.width, panel.height);
     }
-    //Set the case of endNode
-    if (endNode != null) {
-        for (let i = 0; i < y.nodes.length; ++i) {
-            //Coloring the line
-            if (y.nodes[i][0] != y.nodes[i][1]) {
-                let node1 = y.nodes[i][0];
-                let node2 = y.nodes[i][1];
 
-                for (let j = 0; j < lines.length; ++j) {
-                    let isPath = (lines[j].parStart.id == node1 || lines[j].parStart.id == node2) && (lines[j].parEnd.id == node1 || lines[j].parEnd.id == node2);
-                    if (isPath) {
-                        ctx.beginPath();
-                        if (numStep == res.steps.length - 1) {
-                            ctx.strokeStyle = "red";
-                            ctx.lineWidth = 5;
-                        } else {
-                            ctx.strokeStyle = "purple";
-                            ctx.lineWidth = 3;
-                        }
-                        ctx.moveTo(lines[j].startX, lines[j].startY);
-                        ctx.lineTo(lines[j].endX, lines[j].endY);
-                        ctx.stroke();
-                    }
-                    else {
-                        ctx.beginPath();
-                        ctx.strokeStyle = "black";
-                        ctx.lineWidth = 1;
-                        ctx.moveTo(lines[j].startX, lines[j].startY);
-                        ctx.lineTo(lines[j].endX, lines[j].endY);
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-        reverseColor(ctx);
-        //Coloring the frontier node
-        console.log(`Frontier of step: `, step.frontier);
-        for (const key in step.frontier) {
-            const x = step.frontier[key];
-            if (!x || !Array.isArray(x.nodes)) {
-                console.error("Invalid frontier data");
-                continue;
-            }
-
-            for (let i = 0; i < x.nodes.length; ++i) {
-                for (let j = 0; j < 2; ++j) {
-                    const a = parseInt(x.nodes[i][j], 10);
-                    if (isNaN(a) || !nodes[a]) {
-                        console.error(`Invalid node index: ${x.nodes[i][j]} at x.nodes[${i}][${j}]`);
-                        continue;
-                    }
-                    if (a == startNode.id || a == endNode.id) {
-                        console.log(`Same with the targeted node: ${a}`);
-                        continue;
-                    }
-
-                    ctx.beginPath();
-                    ctx.arc(nodes[a].x, nodes[a].y, nodes[a].radius, nodes[a].startAng, nodes[a].endAng);
-                    ctx.fillStyle = "pink";
-                    ctx.fill();
-
-                    ctx.font = "bold 24px sans-serif";
-                    ctx.textAlign = "center";
-                    ctx.fillStyle = "white";
-                    ctx.fillText(nodes[a].id, nodes[a].x, nodes[a].y);
-                }
-                ctx.font = "12px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillStyle = "white";
-                ctx.fillText(nodes[i].id, nodes[i].x, nodes[i].y - 10);
-            }
-        }
-
-        //Coloring the path node
-        for (let i = 0; i < y.nodes.length; ++i) {
-            for (let j = 0; j < 2; ++j) {
-                console.log(`In the progress of coloring the path node`);
-                const b = parseInt(y.nodes[i][j], 10);
-                if (isNaN(b) || !nodes[b]) {
-                    console.error(`Invalid node index: ${y.nodes[i][j]} at y.nodes[${i}][${j}]`);
-                    continue;
-                }
-                if (b == startNode.id || b == endNode.id) {
-                    console.log(`Coloring the path, Same with the targeted node: ${b}`);
-                    continue;
-                }
-
+    for (let i = 1; i < y.length; ++i) {
+        //Coloring the line
+        for (let j = 0; j < lines.length; ++j) {
+            let isPath = (lines[j].parStart.id == y[i] || lines[j].parStart.id == y[i - 1]) && (lines[j].parEnd.id == y[i] || lines[j].parEnd.id == y[i - 1]);
+            if (isPath) {
                 ctx.beginPath();
-                ctx.arc(nodes[b].x, nodes[b].y, nodes[b].radius, nodes[b].startAng, nodes[b].endAng);
-                ctx.fillStyle = "purple";
-                ctx.fill();
-
-                ctx.font = "bold 24px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillStyle = "white";
-                ctx.fillText(nodes[b].id, nodes[b].x, nodes[b].y);
+                if (numStep == res.steps.length - 1) {
+                    ctx.strokeStyle = "red";
+                    ctx.fillStyle = "red";
+                    ctx.lineWidth = 5;
+                } else {
+                    ctx.strokeStyle = "purple";
+                    ctx.fillStyle = "purple";
+                    ctx.lineWidth = 3;
+                }
             }
+            else {
+                ctx.strokeStyle = "black";
+                ctx.fillStyle = "orange";
+                ctx.lineWidth = 1;
+            }
+            ctx.moveTo(lines[j].startX, lines[j].startY);
+            ctx.lineTo(lines[j].endX, lines[j].endY);
+            ctx.stroke();
+
+            //Calculate the midpoint
+            let midX = (lines[j].startX + lines[j].endX) / 2;
+            let midY = (lines[j].startY + lines[j].endY) / 2;
+
+            //Calculate the angle of the line
+            let angle = Math.atan2(lines[j].endY - lines[j].startY, lines[j].endX - lines[j].startX);
+            if (angle > Math.PI / 2 || angle < -Math.PI / 2) {
+                angle += Math.PI;
+            }
+
+            //Make the rotation for the info
+            ctx.save();
+            ctx.translate(midX, midY);
+            ctx.rotate(angle);
+
+            ctx.font = "bold 15px sans-serif";
+            ctx.fillText(Math.ceil(lines[j].weight * 100) / 100, 0, -5);
+            ctx.closePath;
+
+            //Restore the context state
+            ctx.restore();
         }
     }
-    //Set the case without endNode
-    else {
-        //Color the lines
-        for (let i = 0; i < z.nodes.length; i++) {
-            if (z.nodes[i][0] != z.nodes[i][1]) {
-                let node1 = z.nodes[i][0];
-                let node2 = z.nodes[i][1];
 
-                for (let j = 0; j < lines.length; ++j) {
-                    let isPath = (lines[j].parStart.id == node1 || lines[j].parStart.id == node2) && (lines[j].parEnd.id == node1 || lines[j].parEnd.id == node2);
-                    if (isPath) {
-                        ctx.beginPath();
-                        if (numStep == res.steps.length - 1) {
-                            ctx.strokeStyle = "red";
-                            ctx.lineWidth = 5;
-                        } else {
-                            ctx.strokeStyle = "purple";
-                            ctx.lineWidth = 3;
-                        }
-                        ctx.moveTo(lines[j].startX, lines[j].startY);
-                        ctx.lineTo(lines[j].endX, lines[j].endY);
-                        ctx.stroke();
-                    }
-                    else {
-                        ctx.beginPath();
-                        ctx.strokeStyle = "black";
-                        ctx.lineWidth = 1;
-                        ctx.moveTo(lines[j].startX, lines[j].startY);
-                        ctx.lineTo(lines[j].endX, lines[j].endY);
-                        ctx.stroke();
-                    }
-                }
-            }
+    reverseColor(ctx);
+    //Coloring the frontier node
+    console.log(`Frontier of step: `, step.frontier);
+    for (const key in step.frontier) {
+        const x = step.frontier[key];
+        if (!x || !Array.isArray(x.nodes)) {
+            console.error("Invalid frontier data");
+            continue;
         }
-        reverseColor(ctx);
-        //Coloring the frontier node
-        for (const key in step.frontier) {
-            const x = step.frontier[key];
 
-            if (!x || !Array.isArray(x.nodes)) {
-                console.error("Invalid frontier data");
+        for (let i = 0; i < x.nodes.length; ++i) {
+            const a = parseInt(x.nodes[i], 10);
+            if (isNaN(a) || !nodes[a]) {
+                console.error(`Invalid node index: ${x.nodes[i]} at x.nodes[${i}]`);
                 continue;
             }
-            for (let j = 0; j < 2; ++j) {
-                const a = parseInt(x.nodes[j], 10);
-                if (isNaN(a) || !nodes[a]) {
-                    console.error(`Invalid node index: ${x.nodes[j]} at x.nodes[${j}]`);
-                    continue;
-                }
-                if (a == startNode.id) {
-                    console.log(`Same with the targeted node: ${a}`);
-                    continue;
-                }
-
-                ctx.beginPath();
-                ctx.arc(nodes[a].x, nodes[a].y, nodes[a].radius, nodes[a].startAng, nodes[a].endAng);
-                ctx.fillStyle = "pink";
-                ctx.fill();
-
-                ctx.font = "bold 24px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillStyle = "white";
-                ctx.fillText(nodes[a].id, nodes[a].x, nodes[a].y);
+            if (a == startNode.id || a == endNode.id) {
+                console.log(`Same with the targeted node: ${a}`);
+                continue;
             }
+
+            ctx.beginPath();
+            ctx.arc(nodes[a].x, nodes[a].y, nodes[a].radius, nodes[a].startAng, nodes[a].endAng);
+            ctx.fillStyle = "pink";
+            ctx.fill();
+
+            ctx.font = "bold 24px sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillStyle = "white";
+            ctx.fillText(nodes[a].id, nodes[a].x, nodes[a].y);
         }
 
         //Coloring the path node
-        for (let i = 0; i < z.nodes.length; ++i) {
-            for (let j = 0; j < 2; ++j) {
-                console.log(`In the progress of coloring the path node`);
-                const b = parseInt(z.nodes[i][j], 10);
-                if (isNaN(b) || !nodes[b]) {
-                    console.error(`Invalid node index: ${y.nodes[i][j]} at y.nodes[${i}][${j}]`);
-                    continue;
-                }
-                if (b == startNode.id) {
-                    continue;
-                }
-
-                ctx.beginPath();
-                if (i == numStep && j == 1) {
-                    ctx.fillStyle = "orange";
-                }
-                else {
-                    ctx.fillStyle = "purple";
-                }
-                ctx.arc(nodes[b].x, nodes[b].y, nodes[b].radius, nodes[b].startAng, nodes[b].endAng);
-                ctx.fill();
-
-                ctx.font = "bold 24px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillStyle = "white";
-                ctx.fillText(nodes[b].id, nodes[b].x, nodes[b].y);
+        for (let i = 0; i < y.length; ++i) {
+            console.log(`In the progress of coloring the path node`);
+            const b = parseInt(y[i], 10);
+            if (isNaN(b) || !nodes[b]) {
+                console.error(`Invalid node index: ${y[i]} at y.nodes[${i}]`);
+                continue;
             }
-        }
+            if (b == startNode.id || b == endNode.id) {
+                console.log(`Coloring the path, Same with the targeted node: ${b}`);
+                continue;
+            }
+            if (i == y.length - 1) {
+                ctx.fillStyle = "orange";
+            }
+            else {
+                ctx.fillStyle = "purple";
+            }
+            ctx.beginPath();
+            ctx.arc(nodes[b].x, nodes[b].y, nodes[b].radius, nodes[b].startAng, nodes[b].endAng);
+            ctx.fill();
 
+            ctx.font = "bold 24px sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillStyle = "white";
+            ctx.fillText(nodes[b].id, nodes[b].x, nodes[b].y);
+
+        }
+    }
+    //Write down the h_n in each node
+    for (let i = 0; i < nodes.length; ++i) {
+        ctx.beginPath();
+        ctx.font = "12px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "white";
+        ctx.fillText(`(${h_n[i]})`, nodes[i].x, nodes[i].y + 17);
     }
 }
-
 function reverseColor(ctx) {
     for (i = 0; i < nodes.length; ++i) {
         ctx.beginPath();
@@ -558,7 +475,7 @@ function drawShapes(ctx) {
 
         ctx.font = "bold 15px sans-serif";
         ctx.fillStyle = "orange";
-        ctx.fillText(Math.ceil(lines[i].weight * 100) / 100, 0, -5);
+        ctx.fillText(Math.ceil(lines[i].weight * 100) / 100, 0, -8);
         ctx.closePath;
 
         //Restore the context state
@@ -607,7 +524,7 @@ function genInt(upper) {
 }
 
 function genGraph() {
-    let nodesNum = Math.floor(Math.random() * 20) + 11;
+    let nodesNum = Math.floor(Math.random() * 3) + 11;
 
     console.log(panel.width);
     console.log(panel.height);
@@ -968,8 +885,11 @@ gen_graph_btn.addEventListener("click", (event) => {
 });
 
 prev_step_btn.addEventListener("click", (event) => {
+    if (numStep == 0) {
+        alert(`You can't go to the previous step`);
+    }
     //NEED TO CHECK IF WE'RE IN THE SEARCHING MODE
-    if (searchingmode) {
+    else if (searchingmode) {
         if (!startNode) {
             console.log("There is no start node to execute the algorithm");
             alert("You have to pick the start node");
@@ -988,17 +908,22 @@ prev_step_btn.addEventListener("click", (event) => {
 });
 
 next_step_btn.addEventListener("click", (event) => {
-    numStep++;
-    console.log("next step");
-    console.log(`Step: `, numStep);
+    if (numStep == totalStep - 1) {
+        alert(`Invalid step. You can't go to the next step`);
+    }
+    else {
+        numStep++;
+        console.log("next step");
+        console.log(`Step: `, numStep);
 
-    sendMessage();
+        sendMessage();
+    }
 });
 
 reset_btn.addEventListener("click", (event) => {
     nodes = [];
     lines = [];
-    arr = []; 
+    arr = [];
     id = 0;
     lineID = 0;
     startNode = null;
