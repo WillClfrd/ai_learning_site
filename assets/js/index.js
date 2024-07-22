@@ -1,5 +1,5 @@
-var pages = ["uni_cost_search","a_star_search","minmax_adv_search","stoch_grad_desc","id3_dec_tree","gen_algo","wsid","chess_test"];
-var pageScripts = {"uni_cost_search":["uni_cost_search"], "a_star_search":["a_star_search"], "minmax_adv_search":["minmax_adv_search"], "stoch_grad_desc":["stoch_grad_desc"], "id3_dec_tree":["id3_dec_tree"], "gen_algo":["gen_algo"], "wsid":["wsid"], "chess_test":["chess_test"]}
+var pages = ["uni_cost_search","a_star_search","minmax_adv_search","stoch_grad_desc","id3_dec_tree","gen_algo","wsid","chess_test","test"];
+var pageScripts = {"uni_cost_search":["uni_cost_search"], "a_star_search":["a_star_search"], "minmax_adv_search":["minmax_adv_search"], "stoch_grad_desc":["stoch_grad_desc"], "id3_dec_tree":["id3_dec_tree"], "gen_algo":["gen_algo"], "wsid":["wsid"], "chess_test":["chess_test"],"test":["test"]}
 
 function set_page_content(content,pageScript){
     pageContent = document.getElementById("page_content");
