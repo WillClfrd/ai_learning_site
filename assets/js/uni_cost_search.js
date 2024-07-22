@@ -39,11 +39,10 @@ ucsSocket.addEventListener("message", (event) => {
     console.log('Message from server: ', event.data);
 
     const res = JSON.parse(event.data);
+    
+    totalStep = res.steps.length;
 
-    if (numStep < 0 || numStep >= res.steps.length) {
-        alert("Invalid step");
-    }
-    else if (res && Array.isArray(res.steps)) {
+    if (res && Array.isArray(res.steps)) {
         const step = res.steps[numStep];
         console.log("Current step: ", step);
         if (step) {
@@ -155,6 +154,8 @@ var selEnd = false;
 var searchingmode = false;
 var numStep = 0;
 var instructions = ``;
+var totalStep;
+
 
 function endNodechecking() {
     return (!endNode) ? '-1' : String(endNode.id);
@@ -1014,6 +1015,9 @@ gen_graph_btn.addEventListener("click", (event) => {
 });
 
 prev_step_btn.addEventListener("click", (event) => {
+    if (numStep == 0){
+        alert(`You can't go to the previous step`);
+    }
     //NEED TO CHECK IF WE'RE IN THE SEARCHING MODE
     if (searchingmode) {
         if (!startNode) {
@@ -1034,11 +1038,16 @@ prev_step_btn.addEventListener("click", (event) => {
 });
 
 next_step_btn.addEventListener("click", (event) => {
-    numStep++;
-    console.log("next step");
-    console.log(`Step: `,numStep);
+    if (numStep == totalStep - 1) {
+        alert(`Invalid step. You can't go to the next step`);
+    }
+    else {
+        numStep++;
+        console.log("next step");
+        console.log(`Step: `, numStep);
 
-    sendMessage();
+        sendMessage();
+    }
 });
 
 reset_btn.addEventListener("click", (event) => {
