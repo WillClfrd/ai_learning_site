@@ -1,20 +1,77 @@
-<h2>ID3 Decision Tree</h2>
-<!-- Add div for table -->
-<div id="form_div">
-    <form id="data_form" action="/">
-        <table id="data_table">
-            
-        </table>
-    </form>
-</div>
-<!-- Add div for return to tree button -->
-<div id="change_view_btn_div">
-    <button class="btn btn-primary" id=""></button>
-</div>
-<!-- Add div for functionality buttons -->
-<div id="func_btn_div">
-    <button class="btn btn-primary" id="create_table_btn">Create Table</button>
-    <button class="btn btn-primary" id="gen_data_btn">Generate Data</button>
-    <button class="btn btn-primary" id="upload_data_btn">Upload Data</button>
-    <button class="btn btn-primary" id="build_tree_btn">Build Tree</button>
+<!-- <h2>ID3 Decision Tree</h2> -->
+<div class="id3_page_content">
+    <!-- Add div for table -->
+    <div class="id3_table">
+        <div class="form_div" id="form_div">
+            <form id="data_form" >
+                <table class="id3_data_table" id="id3_data_table"></table>
+            </form>
+        </div>
+    </div>
+    <!-- Add div for return to tree button -->
+    <div class="change_view_btn_div" style="float: right;right:0;">
+        <a href="index.html?page=id3_graph">
+            <img src="images/OIP.jpg" alt="Go to result"
+                style="width:40px; height:auto; border-radius: 8px; border: 1px solid yellow; margin-right: 20px;">
+        </a>
+    </div>
+
+    <div class="id3_control_div">
+        <div class="id3_factor_div">
+            <div class="id3_factor_box">
+                <form id="input_option">
+                    <div class="input_field">
+                        <label for="attributes">Attributes: </label>
+                        <input type="number" value="attribute" name="attribute" min="1" max="5" REQUIRED><br>
+                        <p></p>
+                    </div>
+                    <div class="input_field">
+                        <label for="row">Rows: </label>
+                        <input type="number" value="row" name="row" min="1" max="1000" required><br>
+                    </div>
+                    <button class="submit_btn" type="submit" value="submit_attribute_btn">Submit</button>
+                </form>
+            </div>
+        </div>
+    
+        <div class="id3_eachattr_box">
+            <div class="id3_factor_box">
+                <h style="font-weight: bold; font-size: 24px; text-decoration: underline;">Attribute</h>
+                <form id="input_attribute" >
+                    <output id="input_attribute_output"></output>
+                </form>
+                </div>
+            </div>
+        
+    
+        <div class="id3_input_box">
+            <div class="id3_factor_box">
+                <h style="font-weight: bold; font-size: 24px; text-decoration: underline;">Values</h>
+                <form id="input_value">
+                    <output id="input_value_form"></output>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Add div for functionality buttons  -->
+    <div class="func_btn_div">
+        <div class="id3_control_table">
+            <table class="id3_table_control">
+                <tr class="id3_btn_row">
+                    <td class="id3_btn_data"><button class="id3_btn-primary" id="create_empty_table_btn">Create Empty Table</button></td>
+                    <td class="id3_btn_data"><button class="id3_btn-primary" id="create_table_btn">Create Table</button>
+                    </td>
+                    <td class="id3_btn_data"><button class="id3_btn-primary" id="gen_data_btn">Generate Data</button>
+                    </td>
+                </tr>
+                <tr class="id3_btn_row">
+                    <td class="id3_btn_data"><button class="id3_btn-primary" id="upload_data_btn">Upload Data</button>
+                    </td>
+                    <td class="id3_btn_data"><button class="id3_btn-primary" id="build_tree_btn">Build Tree</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
 </div>

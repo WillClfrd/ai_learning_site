@@ -1,7 +1,9 @@
-html, body {
-    height:100%;
-    margin:0;
-    padding:0;
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 body {
@@ -9,70 +11,71 @@ body {
 }
 
 .game-container {
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 100%;
 }
 
-.left-col{
-    width:16.8%;
-    height:100%;
-    padding:20px;
-    color:white;
-    border:solid;
-    border-color:#2c1500;
-    border-radius:20px;
-    background-color:rgba(99, 67, 43,40%);
+.left-col {
+    width: 16.8%;
+    height: 100%;
+    padding: 20px;
+    color: white;
+    border: solid;
+    border-color: #2c1500;
+    border-radius: 20px;
+    background-color: rgba(99, 67, 43, 40%);
 }
 
-.mid-col{
-    width:60%;
-    height:100%;
-    padding:20px;
-    color:white;
-    border:solid;
-    border-color:rgb(44, 44, 44);
-    border-radius:20px;
-    background-color:rgb(44, 44, 44,50%);
+.mid-col {
+    width: 60%;
+    height: 100%;
+    padding: 20px;
+    color: white;
+    border: solid;
+    border-color: rgb(44, 44, 44);
+    border-radius: 20px;
+    background-color: rgb(44, 44, 44, 50%);
 }
 
-.right-col{
-    width:17.4%;
-    height:100%;
-    padding:20px;
-    color:white;
-    border:solid;
-    border-color:#2c1500;
-    border-radius:20px;
-    background-color:rgba(99, 67, 43,40%);
+.right-col {
+    width: 17.4%;
+    height: 100%;
+    padding: 20px;
+    color: white;
+    border: solid;
+    border-color: #2c1500;
+    border-radius: 20px;
+    background-color: rgba(99, 67, 43, 40%);
 }
 
-.board-top, .board-bottom {
-    padding:0;
-    margin:0;
-    height:10%;
+.board-top,
+.board-bottom {
+    padding: 0;
+    margin: 0;
+    height: 10%;
 }
 
 .board {
-    padding:0;
-    margin:0;
-    width:100%;
-    border-radius:5px;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    border-radius: 5px;
 }
 
 .header {
-    background-color:darkblue;
-    color:white;
-    border:solid;
-    display:block;
+    background-color: darkblue;
+    color: white;
+    border: solid;
+    display: block;
 }
 
 .sidebar {
-    float:left;
-    width:14%;
-    height:100%;
-    border-right:solid;
-    border-color:#0d6efd;
-    position:fixed;
+    float: left;
+    width: 14%;
+    height: 100%;
+    border-right: solid;
+    border-color: #0d6efd;
+    position: fixed;
 }
 
 .navbar-h2 {
@@ -80,211 +83,213 @@ body {
 }
 
 .content-panel {
-    float:right;
-    height:100%;
-    width:100%;
-    background-color:black;
-    color:white;
+    float: right;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    color: white;
     font-size: 15px;
     font-family: serif;
-    padding-top:2%;
-    padding-left:300px;
-    overflow:auto;
+    padding-top: 2%;
+    padding-left: 290px;
+    /* overflow: auto; */
 }
 
 .ucs_page_content {
-    height:100%;
-    width:100%;
-    padding:0;
-    margin:0;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 .ucs_graph_div {
     background-color: #212529;
-    height:70%;
-    width:70%;
-    border-radius: 10px;
+    height: 70%;
+    width: 70%;
+    border-radius: 15px;
     padding: 5px;
-    float:left;
+    float: left;
 }
 
 .ucs_graph {
-    background-color:whitesmoke;
-    border-radius: 5px;
-    height:100%;
-    width:100%;
+    background-color: whitesmoke;
+    border-radius: 15px;
+    height: 100%;
+    width: 100%;
 }
 
 .ucs_controls_div {
     background-color: #212529;
-    height:25%;
-    width:70%;
-    float:left;
-    margin-top:1%;
-    border-radius:10px;
+    height: 25%;
+    width: 70%;
+    float: left;
+    margin-top: 1%;
+    border-radius: 10px;
     padding: 5px;
 }
 
 .ucs_controls {
-    background-color:#2f3439;
+    background-color: #2f3439;
     border-radius: 5px;
-    height:100%;
-    width:100%;
+    height: 100%;
+    width: 100%;
 }
 
 .ucs_details_div {
     background-color: #212529;
-    height:96.7%;
-    width:20%;
-    float:right;
-    margin-right:9%;
-    border-radius:10px;
+    height: 96.7%;
+    width: 27%;
+    float: right;
+    margin-right: 2%;
+    border-radius: 10px;
     padding: 5px;
 }
 
 .ucs_details {
-    background-color:#2f3439;
+    background-color: #2f3439;
     border-radius: 5px;
-    height:100%;
-    width:100%;
+    height: 100%;
+    width: 100%;
     font-size: 15p;
     overflow: auto;
+    padding: 5%;
 }
 
 .ucs_table {
-    height:100%;
-    width:55%;
+    height: 100%;
+    width: 100%;
+    border: 0px;
 }
 
 .ucs_table_row {
-    height:50%;
-    width:100%;
+    height: 50%;
+    width: 100%;
 }
 
 .ucs_table_data {
-    height:40%;
-    width:10%;
-    padding-left:20px;
+    height: 40%;
+    width: 10%;
+    padding-left: 20px;
 }
 
 .ucs_btn {
-    background-color:#0d6efd;
+    background-color: #0d6efd;
     border: none;
     color: white;
-    padding:0;
+    padding: 0;
     text-align: center;
     font-size: 16px;
-    margin:0;
+    margin: 0;
     border-radius: 10px;
-    width:70%;
-    height:50%;
+    width: 70%;
+    height: 50%;
 }
 
 .chessboard_div {
     background-color: #212529;
-    height:fit-content;
-    width:50%;
+    height: fit-content;
+    width: 50%;
     border-radius: 10px;
     padding: 5px;
-    float:left;
+    float: left;
 }
 
 .chessboard_controls_div {
-    height:fit-content;
-    width:20%;
-    float:left;
-    margin-top:1%;
-    border-radius:10px;
+    height: fit-content;
+    width: 20%;
+    float: left;
+    margin-top: 1%;
+    border-radius: 10px;
     padding: 5px;
 }
 
 .chessboard_controls {
     border-radius: 5px;
-    height:100%;
-    width:100%;
+    height: 100%;
+    width: 100%;
 }
 
 .chessboard_btn {
-    background-color:#0d6efd;
+    background-color: #0d6efd;
     border: none;
     color: white;
-    padding:0;
+    padding: 0;
     text-align: center;
     font-size: 16px;
-    margin:1%;
+    margin: 1%;
     border-radius: 10px;
-    width:50%;
-    height:50px;
+    width: 50%;
+    height: 50px;
 }
 
 .chess_white_btn {
-    background-color:white;
+    background-color: white;
     border: solid;
     color: black;
-    border-color:black;
-    padding:0;
+    border-color: black;
+    padding: 0;
     text-align: center;
     font-size: 16px;
-    margin:1%;
+    margin: 1%;
     border-radius: 10px;
-    width:50%;
-    height:50px;
+    width: 50%;
+    height: 50px;
 }
 
 .chess_black_btn {
-    background-color:#212529;
+    background-color: #212529;
     border: solid;
     color: white;
-    border-color:black;
-    padding:0;
+    border-color: black;
+    padding: 0;
     text-align: center;
     font-size: 16px;
-    margin:1%;
+    margin: 1%;
     border-radius: 10px;
-    width:50%;
-    height:50px;
+    width: 50%;
+    height: 50px;
 }
 
 .chessboard_details_div {
     background-color: #212529;
     height: 75.7%;
-    width:30%;
-    float:left;
-    margin-left:1%;
-    border-radius:10px;
+    width: 30%;
+    float: left;
+    margin-left: 1%;
+    border-radius: 10px;
     padding: 5px;
 }
 
 .chessboard_details {
-    background-color:#2f3439;
+    background-color: #2f3439;
     border-radius: 5px;
-    height:100%;
-    width:100%;
+    height: 100%;
+    width: 100%;
 }
 
 .doc_content_div {
-    margin-left:3%;
-    margin-right:5%;
-    margin-top:2%;
-    margin-bottom:7%;
+    margin-left: 3%;
+    margin-right: 5%;
+    margin-top: 2%;
+    margin-bottom: 7%;
 }
 
 .doc_header_div {
-    margin:0%;
-    margin-bottom:0%;
+    margin: 0%;
+    margin-bottom: 0%;
 }
 
 .doc_module_div {
-    margin:0%;
-    margin-bottom:2%;
-    padding:2%;
-    width:100%;
-    height:fit-content;
-    border:solid;
-    background-color:rgba(255, 255, 255, 0.1);
-    border-color:#303030;
-    border-width:0.15em;
-    border-radius:7px;
+    margin: 0%;
+    margin-bottom: 2%;
+    padding: 2%;
+    width: 100%;
+    height: fit-content;
+    border: solid;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #303030;
+    border-width: 0.15em;
+    border-radius: 7px;
 }
 
 .add_module_div {
@@ -298,14 +303,14 @@ body {
 .add_module_btn_div {
     display: flex;
     align-items: center;
-    height:fit-content;
-    width:fit-content;
+    height: fit-content;
+    width: fit-content;
     justify-content: space-between;
 }
 
 .add_module_btn {
-    margin-left:5px;
-    margin-right:5px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .add_module_component_div {
@@ -328,42 +333,255 @@ body {
 
 .module_subcomponent_div {
     padding: 2%;
-    padding-top:0%;
-    padding-bottom:0%;
+    padding-top: 0%;
+    padding-bottom: 0%;
 }
 
 .method-div {
     background-color: rgba(255, 255, 255, 0.05);
     border: solid;
     border-color: #00284d;
-    border-radius:5px;
+    border-radius: 5px;
     padding: 20px;
     margin-top: 20px;
 }
 
 .parameters-list {
     background-color: rgba(255, 255, 255, 0.05);
-    padding-top:10px;
-    padding-right:30px;
-    padding-bottom:13px;
+    padding-top: 10px;
+    padding-right: 30px;
+    padding-bottom: 13px;
     list-style-type: none;
-    border-radius:5px;
-    width:fit-content;
+    border-radius: 5px;
+    width: fit-content;
 }
 
 .add-form {
     background-color: rgba(255, 255, 255, 0.1);
-    padding:2%;
+    padding: 2%;
     list-style-type: none;
-    border-radius:5px;
-    height:fit-content;
-    width:100%;
+    border-radius: 5px;
+    height: fit-content;
+    width: 100%;
 }
 
 .active {
-    background-color:red;
+    background-color: red;
 }
 
 h5 {
-    text-decoration:underline;
+    text-decoration: underline;
+}
+
+.id3_page_content {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.id3_table {
+    background-color: #212529;
+    height: 70%;
+    width: 70%;
+    border-radius: 15px;
+    float: left;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.id3_data_table {
+    margin: 30px;
+    width: 90%;
+    border-radius: 15px;
+    float: left;
+    box-sizing: border-box;
+}
+
+.form_div {
+    background-color: whitesmoke;
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+    overflow: auto;
+}
+
+table.id3_data_table {
+    border: 3px solid black;
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: auto;
+}
+
+.func_btn_div {
+    background-color: #212529;
+    height: 25%;
+    width: 70%;
+    padding: 5px;
+    margin-top: 2%;
+    border-radius: 15px;
+    float: left;
+}
+
+.id3_control_table {
+    background-color: #2f3439;
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+}
+
+table.id3_table_control {
+    height: 100%;
+    width: 100%;
+    border: 0px;
+}
+
+.id3_data_table td,
+.id3_data_table th {
+    color: black;
+    border: 1px solid black;
+    text-align: center;
+}
+
+.id3_btn_row {
+    height: 50%;
+    width: 100%;
+    position: relative;
+}
+
+.id3_btn_data {
+    text-align: center;
+    align-items: center;
+}
+
+.id3_btn-primary {
+    background-color: #0d6efd;
+    border: none;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    margin: 20px;
+    border-radius: 15px;
+    width: 70%;
+    height: 50%;
+}
+
+.change_view_btn_div {
+    position: absolute;
+    top: 5px;
+}
+
+.id3_control_div {
+    display: flex;
+    width: 27%;
+    flex-direction: column;
+    height: 94.25vh;
+    float: right;
+    margin-right: 2%;
+    overflow: hidden;
+    /* Prevent scrolling */
+}
+
+.id3_factor_div {
+    width: 100%;
+    height: auto;
+    background-color: #212529;
+    border-radius: 15px;
+    padding: 5px;
+}
+
+.id3_factor_box {
+    width: 100%;
+    height: 100%;
+    background-color: #2f3439;
+    padding: 10px 20px;
+    border-radius: 15px;
+    overflow: auto;
+}
+
+form .input_field,
+form .input_text {
+    position: relative;
+    height: 50px;
+    width: 100%;
+}
+
+.input_text input {
+    position: relative;
+    width: 100px;
+    height: 25px;
+    margin-top: 6%;
+}
+
+.input_field input {
+    position: relative;
+    height: 25px;
+    width: 60px;
+    margin-top: 2%;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    border-bottom: 2px solid whitesmoke;
+    border-top: 2px solid transparent;
+    color: whitesmoke;
+    font-size: 16px;
+}
+
+.submit_btn {
+    border: none;
+    width: 100%;
+    border-radius: 5px;
+    background-color: #212529;
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+.submit_btn:hover {
+    background-color: #0d6efd;
+}
+
+.id3_eachattr_box {
+    width: 100%;
+    height: 31%;
+    background-color: #212529;
+    margin-block: 2%;
+    padding: 5px;
+    border-radius: 15px;
+}
+
+.id3_input_box {
+    width: 100%;
+    flex-grow: 1;
+    background-color: #212529;
+    padding: 5px;
+    border-radius: 15px;
+    overflow: auto;
+}
+
+.dynamic_content {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    justify-content: space-between;
+}
+
+.id3_btn_graph {
+    height: 26%;
+    width: 100%;
+    float: right;
+    background-color: #212529;
+    padding: 5px;
+    border-radius: 15px;
+    margin-top: 9%;
+}
+
+.id3_sequence {
+    height: 73%;
+    width: 100%;
+    background-color: #212529;
+    float: right;
+    position: relative;
+    margin-right: 11px;
+    padding: 5px;
+    border-radius: 15px;
 }
