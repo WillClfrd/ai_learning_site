@@ -174,6 +174,10 @@ async def handle_req(websocket):
             print("stochastic gradient descent")
         elif req["method"] == "id3":
             print("id3 decision tree")
+            res["steps"]= [1,3,4]
+            res["error"] = 0
+            # res[steps]=
+            # res["method"]= "id3"
         elif req["method"] == "add_doc_module":
             try:
                 with open("html/wsid.html","r+") as base:

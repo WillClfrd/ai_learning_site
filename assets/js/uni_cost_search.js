@@ -30,7 +30,6 @@ class Line {
     }
 }
 
-
 ucsSocket.addEventListener("open", (event) => {
     console.log("UCS SOCKET HAHA CONNECTED");
 })
@@ -133,11 +132,11 @@ var panelParent = document.getElementById("drawing_panel_parent");
 
 var details = document.getElementById("ucs_details");
 details.innerHTML = `
-<style>
-    h1{font-size: 20px; font-weight: oblique;}
-</style>
-<h1>LETS START THE UCS ALGORITHM</h1>
-<span style="color: yellow; font-style: italic">Uniform Cost Search (UCS) algorithm - a pathfinding method that explores nodes in order of their cumulative cost from the start node, guaranteeing the shortest path in weighted graphs.</span>
+    <style>
+        h1{font-size: 20px; font-weight: oblique;}
+    </style>
+    <h1>LETS START THE UCS ALGORITHM</h1>
+    <span style="color: yellow; font-style: italic">Uniform Cost Search (UCS) algorithm - a pathfinding method that explores nodes in order of their cumulative cost from the start node, guaranteeing the shortest path in weighted graphs.</span>
 `;
 
 let parentPadding = 5;
