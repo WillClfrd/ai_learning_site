@@ -2,11 +2,13 @@ from site_python_files.engine import minimax_engine as me
 import site_python_files.uniform_cost as UCS
 import site_python_files.a_star as AS
 import site_python_files.minimax as mini
+import site_python_files.id3 as id3
 import asyncio
 from websockets.server import serve
 import json
 from bs4 import BeautifulSoup as bs
 import re
+from site_python_files.custom_error import CustomError
 
 pages = ["a_star_search","id3_dec_tree","minmax_adv_search","gen_algo","id3_graph", "stoch_grad_desc","uni_cost_search","home","wsid","chess_test","test"]
 js_scripts = ["a_star_search", "gen_algo", "home.js", "id3_dec_tree","id3_graph", "index.js", "minmax_adv_search", "model", "stoch_grad_desc", "uni_cost_search", "wsid","chess_test","test"]
@@ -172,12 +174,30 @@ async def handle_req(websocket):
                 res["error"] = -1
         elif req["method"] == "sgd":
             print("stochastic gradient descent")
-        elif req["method"] == "id3":
-            print("id3 decision tree")
-            res["steps"]= [1,3,4]
+        elif req["method"] == "id3_build":
+            try:
+                try:
+                    attributes = req["attributes"]
+                except:
+                    raise CustomError("id3_build method call missing attributes")
+                
+                try:
+                    values = req["values"]
+                except:
+                    raise CustomError("id3_build method call missing values")
+                
+                try:
+                    gtl = req["gtl"]
+                except:
+                    raise CustomError("id3_build method call missing ground truth labels")
+            except CustomError as e:
+                print(e)
+            
+            decider = id3.id3(attributes,values,gtl)
+            decider.build_tree()
+
+            res["steps"] = decider.steps
             res["error"] = 0
-            # res[steps]=
-            # res["method"]= "id3"
         elif req["method"] == "add_doc_module":
             try:
                 with open("html/wsid.html","r+") as base:
