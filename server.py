@@ -198,6 +198,37 @@ async def handle_req(websocket):
 
             res["steps"] = decider.steps
             res["error"] = 0
+        elif req["method"] == "id3_traverse":
+            try:
+                try:
+                    seq = req["seq"]
+                except:
+                    raise CustomError("ID3 Traverse missing search sequence.")
+                    
+                try:
+                    attributes = req["attributes"]
+                except:
+                    raise CustomError("ID3 Traverse missing attributes")
+
+                try:
+                    values = req["values"]
+                except:
+                    raise CustomError("ID3 Traverse missing values")
+
+                try:
+                    gtl = req["gtl"]
+                except:
+                    raise CustomError("ID3 Traverse missing ground truth labels")
+
+                decider = id3.id3(attributes,values,gtl)
+                decider.build_tree()
+                
+                res["steps"] = decider.steps
+                res["tree"] = decider.tree
+            except CustomError as e:
+                print(e)
+            
+            pass
         elif req["method"] == "add_doc_module":
             try:
                 with open("html/wsid.html","r+") as base:
