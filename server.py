@@ -222,7 +222,8 @@ async def handle_req(websocket):
 
                 decider = id3.id3(attributes,values,gtl)
                 decider.build_tree()
-                
+
+                res["decision"] = decider.traverse_tree(seq)
                 res["steps"] = decider.steps
                 res["tree"] = decider.tree
             except CustomError as e:
