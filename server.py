@@ -225,7 +225,7 @@ async def handle_req(websocket):
 
                 res["decision"] = decider.traverse_tree(seq)
                 res["steps"] = decider.steps
-                res["tree"] = decider.tree
+                res["tree"] = decider.tree.tree_to_dict()
             except CustomError as e:
                 print(e)
             
