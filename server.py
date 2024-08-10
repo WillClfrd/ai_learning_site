@@ -10,8 +10,8 @@ from bs4 import BeautifulSoup as bs
 import re
 from site_python_files.custom_error import CustomError
 
-pages = ["a_star_search","id3_dec_tree","minmax_adv_search","gen_algo","id3_graph", "stoch_grad_desc","uni_cost_search","home","wsid","chess_test","test"]
-js_scripts = ["a_star_search", "gen_algo", "home.js", "id3_dec_tree","id3_graph", "index.js", "minmax_adv_search", "model", "stoch_grad_desc", "uni_cost_search", "wsid","chess_test","test"]
+pages = ["a_star_search","id3_main_page","id3_dec_tree","id3_graph","minmax_adv_search","gen_algo", "stoch_grad_desc","uni_cost_search","home","wsid","chess_test","test"]
+js_scripts = ["a_star_search", "gen_algo", "home.js", "id3_main_page","index.js", "minmax_adv_search", "model", "stoch_grad_desc", "uni_cost_search", "wsid","chess_test","test"]
 tooltips = {
     "method-name": "Name must match exactly for method to function correctly.",
     "path": "Custom data structure of format {\"nodes\": [$classes$string@nodeID$,...,$classes$string@nodeID$], \"cost\": $classes$int@val$}",

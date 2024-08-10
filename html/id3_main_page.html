@@ -1,0 +1,31 @@
+<div id="id3_page_content">
+    <div id="id3_table_page">
+        <!-- <img scr="images.OIP.jpg" alt="Go to the result" onclick=switchPage() id='img_switch_to_id3graph'
+            style="width:40px; height:auto; border-radius: 8px; border: 1px solid yellow; margin-right: 20px;"> -->
+        <script>
+            document.getElementById('img_switch_to_id3graph').onclick = function switchPage() {
+                window.location.href = '/?page=id3_graph'
+            }
+            // document.addEventListener('readystatechange', event => {
+            //     const id3TablePage = document.getElementById('id3_table_page');
+
+            //     if (!id3TablePage) {
+            //         console.error('Element with ID "id3_table_page" not found.');
+            //         return;
+            //     }
+
+            //     id3TablePage.onload = function () {
+            //         console.log('onload event triggered for id3_table_page');
+            //         console.log('Current window location:', window.location);
+
+            //         // Redirect to the specified page
+            //         window.location.href = '/?page=id3_dec_tree';
+            //     };
+
+            //     // Manually trigger the onload event for debugging purposes
+            //     id3TablePage.onload();
+            // });
+        </script>
+    </div>
+    <div id="id3_graph_page"></div>
+</div>

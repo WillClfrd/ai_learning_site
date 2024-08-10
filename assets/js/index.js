@@ -1,5 +1,5 @@
-var pages = ["uni_cost_search","a_star_search","minmax_adv_search","z","stoch_grad_desc","id3_dec_tree","gen_algo","wsid","chess_test","test"];
-var pageScripts = {"uni_cost_search":["uni_cost_search"], "a_star_search":["a_star_search"],"id3_graph":["id3_graph"], "minmax_adv_search":["minmax_adv_search"], "stoch_grad_desc":["stoch_grad_desc"], "id3_dec_tree":["id3_dec_tree"], "gen_algo":["gen_algo"], "wsid":["wsid"], "chess_test":["chess_test"],"test":["test"]}
+var pages = ["uni_cost_search","a_star_search", "id3_dec_tree","id3_graph", "minmax_adv_search","stoch_grad_desc","id3_main_page","gen_algo","wsid","chess_test","test"];
+var pageScripts = {"uni_cost_search":["uni_cost_search"], "a_star_search":["a_star_search"], "id3_dec_tree":["id3_main_page"], "id3_graph":["id3_main_page"], "id3_main_page":["id3_main_page"], "minmax_adv_search":["minmax_adv_search"], "stoch_grad_desc":["stoch_grad_desc"], "gen_algo":["gen_algo"], "wsid":["wsid"], "chess_test":["chess_test"],"test":["test"]}
 
 function set_page_content(content,pageScript){
     pageContent = document.getElementById("page_content");
@@ -14,7 +14,14 @@ function set_page_content(content,pageScript){
 function set_active_link(page){
     if(pages.includes(page)){
         currLink = document.getElementById(page);
+        if (currLink){
         currLink.classList.add("active");
+
+        console.log(currLink)
+        }
+        else{
+            console.error(`Element with id${page} not found`)
+        }
     }
 }
 
@@ -34,7 +41,7 @@ ws.addEventListener("message", (event) => {
 })
 
 var params = new URLSearchParams(window.location.search);
-set_active_link(params.get("page"));
+set_active_link(params.get(page));
 
 var page = params.get("page");
 if(!page){

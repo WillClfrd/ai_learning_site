@@ -34,6 +34,7 @@ let attributeOutput = document.getElementById("input_attribute_output");
 var tableData = [];
 var AttrData = [];
 var gtlData = [];
+
 // var instructions = ``;
 
 // Functions
@@ -67,8 +68,6 @@ function uploadTable(col, row, value) {
     const numAttrValue = parseInt(numAttr.value.trim(), 10);
     const numRowValue = parseInt(numRow.value.trim(), 10)
 
-    console.log(`numAttr `, numAttrValue)
-
     //Add the editable gtl into numAttrValue
     if (row >= 0 && row < numRowValue && col >= 0 && col <= numAttrValue + 1 ) {
         tableData[row][col] = value;
@@ -78,24 +77,30 @@ function uploadTable(col, row, value) {
     }
 }
 
-function updateCell(event){
+function updateCell(x, event){
     var col = event.target.parentNode.rowIndex - 1;
-    var row = event.target.cellIndex -1;
+    var row = event.target.cellIndex - 1;
     var val = event.target.textContent.trim();
     var option = val.toLowerCase();
+    console.log(`updateCell col:` + col);
+    console.log(`updateCell row:` + row);
+    console.log(`updateCell val:` + val);
     var ans;
-    if (option == "yes"){
-        gtlData[col] = 1; 
-        ans = 1;
+    if(x == "class"){
+        if (option == "yes"){
+            gtlData[col] = 1; 
+            ans = 1;
+        }
+        else if (option == "no"){
+            gtlData[col] = 0;
+            ans = 0;
+        }
     }
-    else if (option == "no"){
-        gtlData[col] = 0;
-        ans = 0;
+    else if (x == "attr") {
+        uploadTable(col, row, option)
     }
-    else {
-        // alert(`Checking the class in value ${col}. JUST ONLY YES OR NO`);
-        console.log(`didnt save to the tableData`)
-        return;
+    else{
+        console.log(`Unable to update a cell`)
     }
 }
 
@@ -107,14 +112,33 @@ let gen_data_btn = document.getElementById("gen_data_btn");
 let upload_data_btn = document.getElementById("upload_data_btn");
 let build_tree_btn = document.getElementById("build_tree_btn");
 
-tableInfo.addEventListener("submit", function (event) {
+document.addEventListener('readystatechange', event=> {
+    console.log(`yea`)
+    const id3TablePage = document.querySelector('#id3_table_page');
+
+    if (!id3TablePage) {
+        console.error('Element with ID "id3_table_page" not found.');
+       
+    }
+
+    id3TablePage.onload = function() {
+        console.log('onload event triggered for id3_table_page');
+        console.log('Current window location:', window.location);
+
+        // Redirect to the specified page
+        window.location.href = '/?page=id3_dec_tree';
+    };
+
+    // Manually trigger the onload event for debugging purposes
+    id3TablePage.onload();
+});
+
+tableInfo.addEventListener("submit",  (event) => {
     event.preventDefault();
 
     const numAttrValue = parseInt(numAttr.value.trim(), 10)
     const numRowValue = parseInt(numRow.value.trim(), 10)
 
-    console.log(`# of attribute: ` + numAttrValue);
-    console.log(`# of Row: ` + numRowValue);
     var attr_input_form = ``;
 
     // Initialize the 2D array
@@ -144,7 +168,6 @@ tableInfo.addEventListener("submit", function (event) {
     }
     attr_input_form += `<button class="submit_btn" type="submit" value="unit_types">Submit units</button>`
     attributeOutput.innerHTML = attr_input_form;
-
 });
 
 attributeForm.addEventListener("submit", (event) => {
@@ -213,10 +236,10 @@ valueForm.addEventListener("submit", event => {
 //Dynamically create table with user input
 create_table_btn.addEventListener("click", event => {
     const numAttrValue = parseInt(numAttr.value.trim(), 10);
-    
-    const numRowValue = parseInt(numRow.value.trim(), 10)
-    console.log(`num of col: `, numAttrValue)
-    console.log(`num of Row: `, numRowValue)
+    const numRowValue = parseInt(numRow.value.trim(), 10);
+    if (!numAttrValue || !numRowValue){
+        alert("Unable to make the graph. Please fill in and submit the numbers of rows and attributes")
+    }
 
     //Clear existing table
     while (id3_data_table.firstChild) {
@@ -227,18 +250,26 @@ create_table_btn.addEventListener("click", event => {
     var headerRow = document.createElement("tr");
     for (let i = 0; i <= numAttrValue + 1; ++i) {
         var th = document.createElement("th");
+        var input = document.createElement("input");
         if (i == 0) {
             th.innerHTML += `Value`;
         }
         else if (i == numAttrValue + 1){
-            th.innerHTML += `Class`
+            input.setAttribute("type", "text");
+            input.setAttribute("class", "header_input")
+            input.setAttribute("placeholder", "CLASS")
+            th.append(input);
         }
         else{    
-            th.innerHTML += `Attribute ${i}`
+            input.setAttribute("type", "text");
+            input.setAttribute("class", "header_input")
+            input.setAttribute("placeholder", `Attribute ${i}`)
+            th.append(input);
         }
         headerRow.append(th);
     }
     id3_data_table.appendChild(headerRow)
+    console.log(id3_data_table)
 
     //create table row
     for (let i = 0; i < numRowValue; ++i) {
@@ -251,12 +282,15 @@ create_table_btn.addEventListener("click", event => {
                 }
                 else if (j == numAttrValue + 1 ) {
                     cell.setAttribute("contenteditable", "true");
-                    cell.setAttribute("class", "gtl-cell");
-                    cell.addEventListener("input", updateCell)
+                    // cell.setAttribute("class", "gtl-cell");
+                    cell.addEventListener("input", updateCell("class", event))
                 }
                 else{
                     console.log(`j after: `, j)
-                    cell.innerHTML += `${tableData[i][j - 1]}`;
+                    cell.setAttribute("contenteditable", "true");
+                    // cell.setAttribute("class", "");
+                    cell.addEventListener("input", updateCell("attr", event))
+                    // cell.innerHTML += `${tableData[i][j - 1]}`;
                 }
                 row.appendChild(cell);
                 console.log(`j: `, j)
@@ -267,28 +301,28 @@ create_table_btn.addEventListener("click", event => {
     console.log(`gtlData `, gtlData)
 });
 
-create_empty_table_btn.addEventListener("click", function ha() {
-   let table = ``;
-   for (let i = 0; i < 5; ++i) {
-        table += `
-        <style>
-        td.table_data, tr.table_row{
-            color:black;
-            border: 1px solid black;
-            text-align: center;
-            padding:10px;
-        }
-        </style>
-        <tr class="table_row">
-        `;
-        for (let j = 0; j < 5; ++j) {
-            let eachId = `i=${i},j=${j}`;
-            table += `<td  class ="table_data" id="${i}_${j}"></td>`;
-        }
-        table += `</tr>`;
-    }
-    id3_data_table.innerHTML = table;
-})
+// create_empty_table_btn.addEventListener("click", function ha() {
+//    let table = ``;
+//    for (let i = 0; i < 5; ++i) {
+//         table += `
+//         <style>
+//         td.table_data, tr.table_row{
+//             color:black;
+//             border: 1px solid black;
+//             text-align: center;
+//             padding:10px;
+//         }
+//         </style>
+//         <tr class="table_row">
+//         `;
+//         for (let j = 0; j < 5; ++j) {
+//             let eachId = `i=${i},j=${j}`;
+//             table += `<td  class ="table_data" id="${i}_${j}"></td>`;
+//         }
+//         table += `</tr>`;
+//     }
+//     id3_data_table.innerHTML = table;
+// })
 
 build_tree_btn.addEventListener("click", event =>{
 
@@ -310,3 +344,4 @@ upload_data_btn.addEventListener("click", event =>{
     // // Submit the form programmatically
     // valueForm.submit();
 })
+

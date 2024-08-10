@@ -391,7 +391,8 @@ h5 {
 }
 
 .id3_data_table {
-    margin: 30px;
+    margin: 15px;
+    margin-right: 15px;
     width: 90%;
     border-radius: 15px;
     float: left;
@@ -409,7 +410,7 @@ h5 {
 table.id3_data_table {
     border: 3px solid black;
     border-collapse: collapse;
-    width: 100%;
+    width: 96%;
     table-layout: auto;
 }
 
@@ -563,6 +564,14 @@ form .input_text {
     flex-direction: row;
     position: relative;
     justify-content: space-between;
+}
+
+.header_input{
+    width:100%;
+    box-sizing:border-box;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
 }
 
 .id3_btn_graph {
