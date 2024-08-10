@@ -228,8 +228,6 @@ async def handle_req(websocket):
                 res["tree"] = decider.tree.tree_to_dict()
             except CustomError as e:
                 print(e)
-            
-            pass
         elif req["method"] == "add_doc_module":
             try:
                 with open("html/wsid.html","r+") as base:
